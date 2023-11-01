@@ -1,0 +1,45 @@
+.img_circle {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+}
+
+.img_circle_small {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+}
+
+.img_circle_normal {
+    text-align: center;
+    border-radius: 100%;
+    width: 90px;
+    aspect-ratio: 1/1;
+}
+
+
+.img_square {
+    display: inline-block;
+    height:200px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.img_square_small {
+    text-align: center;
+    height:100px;
+    aspect-ratio: 3/2;
+}
+
+.img_square_big {
+    text-align: center;
+    height:500px;
+    aspect-ratio: 3/2;
+}
+
+
+.img_square_posts {
+    text-align: center;
+    height:200px;
+    aspect-ratio: 3/2;
+}

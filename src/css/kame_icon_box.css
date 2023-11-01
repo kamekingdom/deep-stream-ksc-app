@@ -1,0 +1,101 @@
+/*メモアイコンをつけた囲み枠*/
+.kame_memo {
+    max-width: 90%;
+    margin: 2em auto;
+    padding: 1em 1em 1em 1em;
+    background-color: #E8EAF0;
+    font-size: 2.5em;
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.kame_memo .box-title {
+    color: #b4bbce;
+    /* タイトル文字色 */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.kame_memo .box-title:before {
+    font-size: 18px;
+    margin: 0 3px 0 0;
+    font-weight: bold;
+}
+
+/*ビックリマークのアイコンをつけた囲み枠 */
+.kame_exclamation {
+    margin: 2em auto;
+    max-width: 90%;
+    font-size: 2.5em;
+    padding: 1em 1em 1em 1em;
+    background-color: #EFE3DF;
+    /* 背景色 */
+    border-radius: 20px;
+    /*ボックス角の丸み*/
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    /*ボックス影*/
+}
+
+.kame_exclamation .box-title {
+    color: #cca497;
+    /* タイトル文字色 */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.kame_exclamation .box-title:before {
+    font-size: 18px;
+    margin: 0 3px 0 0;
+    font-weight: bold;
+}
+
+/*はてなマークのアイコンをつけた囲み枠 */
+.kame_question {
+    max-width: 90%;
+    margin: 2em auto;
+    font-size: 2.5em;
+    padding: 1em 1em 1em 1em;
+    background-color: #e7f1f2;
+    /* 背景色 */
+    border-radius: 20px;
+    /*ボックス角の丸み*/
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    /*ボックス影*/
+}
+
+.kame_question .box-title {
+    color: #96a3a3;
+    /* タイトル文字色 */
+    font-size: 1.5em;
+    /*タイトル文字の大きさ*/
+    font-weight: bold;
+}
+
+.kame_question .box-title:before {
+    font-size: 18px;
+    /*アイコンの大きさ*/
+    margin: 0 3px 0 0;
+    font-weight: bold;
+}
+
+/*チェックマークのアイコンをつけた囲み枠 */
+.kame_check {
+    max-width: 90%;
+    margin: 2em auto;
+    padding: 1em 1em 1em 1em;
+    font-size: 2.5em;
+    background-color: #eee;
+    /* 背景色 */
+    border-radius: 20px;
+    /*ボックス角の丸み*/
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    /*ボックス影*/
+}
+
+.kame_check .box-title {
+    color: #555;
+    /* タイトル文字色 */
+    font-size: 1.5em;
+    /*タイトル文字の大きさ*/
+    font-weight: bold;
+}

@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.stuff {
+  width: 25vw;
+}
+
+.kame_textbox {
+  position: relative;
+  width: 100%;
+  padding-top: 10px;
+  height: 70px;
+  display: inline-flex;
+  margin-bottom: 3vh;
+}
+
+.kame_textbox .text {
+  font-weight: 500;
+  width: 100%;
+  height: 27px;
+  padding-left: 0.5vw;
+  background-color: transparent;
+  color: black;
+  position: absolute;
+  bottom: 0px;
+  outline: none;
+  border-style: solid;
+  border-color: #bed4e6;
+  border-width: 0px 0px 2px 0px;
+  font-size: 20px;
+  -webkit-transition: border-color 0.45s linear;
+  transition: border-color 0.45s linear;
+}
+
+@media screen and (min-width: 768px) {
+  .kame_textbox .text {
+    width: calc(100% - 2vw);
+  }
+}
+
+.kame_textbox>input.text:focus {
+  border-color: #A0C0E0;
+}
+
+.kame_textbox .label {
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 1;
+  color: #000000;
+  position: absolute;
+  padding-left: 0.5vw;
+  bottom: 3px;
+  font-size: 20px;
+  font-weight: 300;
+  -webkit-transition-property: opacity bottom font-size;
+  transition-property: opacity bottom font-size;
+  -webkit-transition-duration: 0.45s;
+  transition-duration: 0.45s;
+  -webkit-transition-timing-function: cubic-bezier(.68, -0.55, .27, 1.55);
+  transition-timing-function: cubic-bezier(.68, -0.55, .27, 1.55);
+}
+
+.kame_textbox .error {
+  position: absolute;
+  margin-top: 48px;
+  width: 100%;
+  color: #e74c3c;
+  text-align: center;
+}
+
+.kame_textbox>input.text:focus~.label,
+.kame_textbox>input.text:not([value=""])~.label {
+  opacity: 1;
+  z-index: 1;
+  bottom: 55%;
+  font-size: 12px;
+}
+
+.kame_textbox>input.text:focus~.label {
+  color: blue;
+}
+
+.kame_textbox ::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #2B2B2B;
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Roboto', sans-serif;
+}
+
+.kame_textbox ::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #2B2B2B;
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+.kame_textbox :-ms-input-placeholder {
+  /* IE 10+ */
+  color: #2B2B2B;
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Roboto', sans-serif;
+}
+
+.kame_textbox :-moz-placeholder {
+  /* Firefox 18- */
+  color: #2B2B2B;
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Roboto', sans-serif;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.kame_textarea-label,
+.kame_textarea {
+  color: #333;
+}
+
+.kame_textarea-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: .9em;
+}
+
+.kame_textarea {
+  resize: none;
+  width: 80%;
+  height: 300px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 3px;
+  background: #eff1f5;
+  font-size: 2.5em;
+  line-height: 1.5;
+}
+
+.kame_textarea::placeholder {
+  color: #999;
+}
+
+.kame_textarea_small-label,
+.kame_textarea_small {
+  color: #333;
+}
+
+.kame_textarea_small-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: .9em;
+}
+
+.kame_textarea_small {
+  resize: none;
+  width: 80%;
+  height: 90px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 3px;
+  background: #eff1f5;
+  font-size: 1.5em;
+  line-height: 1.5;
+}
+
+.kame_textarea_small::placeholder {
+  color: #999;
+}
+
+.kame_table_frame {
+  background: transparent;
+  background-color: none;
+  text-align: center;
+  width: auto;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  padding: 10px;
+}
+
+/*セロテープ風*/
+.kame_textbox_001 {
+  max-width: 90%;
+  font-size: 2.5em;
+  font-weight: 600;
+  margin: 2em auto;
+  /* ボックスの余白 */
+  background-color: #f3f9ff;
+  /* ボックス背景色 */
+  padding: 2.5em 2em 2em;
+  /* ボックス内側余白 */
+  position: relative;
+  /* 配置(ここを基準に) */
+}
+
+.kame_textbox_001 .box-title {
+  background-color: rgba(255, 255, 255, .1);
+  /* テープ背景色と透過*/
+  border-left: 2px dotted rgba(0, 0, 0, .1);
+  /* テープのギザギザ左*/
+  border-right: 2px dotted rgba(0, 0, 0, .1);
+  /* テープのギザギザ右*/
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  /*テープ影*/
+  transform: rotate(-2deg);
+  /*テープの傾き*/
+  font-size: 1.7em;
+  /*タイトル文字の大きさ*/
+  color: #00b5ad;
+  /*タイトル文字色 */
+  padding: 10px 20px;
+  /*タイトルの余白*/
+  line-height: 1;
+  /*タイトルの行の高さ*/
+  position: absolute;
+  /*配置(ここを動かす)*/
+  top: -15px;
+  /*上から（-10px）移動*/
+  left: 20px;
+  /*左から(20px)移動*/
+}
+
+.kame_textbox_002 {
+  max-width: 90%;
+  padding: 2.0em 0.5em;
+  margin: 2em 0;
+  background: #d6ebff;
+  box-shadow: 0px 0px 0px 10px #d6ebff;
+  border: dashed 2px white;
+}

@@ -1,0 +1,88 @@
+/* 色の設定 */
+
+:root {
+  --main-button-color: #b7c5db;
+  --main-button-clicked-color: #99aac5;
+}
+
+@import url("kame_header.css");
+@import url("kame_tab-bar.css");
+@import url("kame_line.css");
+@import url("kame_textbox.css");
+@import url("kame_button.css");
+@import url("kame_header.css");
+@import url("kame_font.css");
+@import url("kame_table.css");
+@import url("kame_loading.css");
+@import url("kame_image.css");
+@import url("kame_selector.css");
+@import url("kame_icon_box.css");
+@import url("kame_splash_screen.css");
+
+html {
+  box-sizing: border-box;
+  margin: 20px;
+  font-family: 'Roboto', sans-serif;
+  height: 90%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+
+.kame_line_010 {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+}
+
+a {
+  text-align: center;
+  text-decoration: none;
+  color: black
+}
+
+.right {
+  text-align: right;
+  float: right;
+}
+
+.left {
+  text-align: left;
+  float: left;
+}
+
+.kame_line {
+  border-bottom: solid 3px skyblue;
+  position: relative;
+}
+
+.kame_line:after {
+  position: absolute;
+  content: " ";
+  display: block;
+  border-bottom: solid 3px #ffc778;
+  bottom: -3px;
+  width: 30%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  flex: 1;
+  background-color: #f2f2f2;
+  padding: 10px;
+}

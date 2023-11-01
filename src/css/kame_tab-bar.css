@@ -1,0 +1,51 @@
+.tab-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #b7c5db;
+  border-right: 1px solid #ffffff;
+  height: 8vh;
+  padding: 0 20px;
+  position: fixed;
+  bottom: 2vh;
+  left: 0;
+  right: 0;
+}
+
+.tab {
+  text-decoration: none;
+  font-size: 1.7vh;
+  color: black;
+  font-weight: 600;
+  text-align: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  border-right: 1px solid black;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab.active {
+  background-color: #007aff;
+  color: #fff;
+}
+
+.footer {
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 1.5vh;
+  font-weight: 500;
+  color: rgb(160, 160, 160);
+}

@@ -1,0 +1,221 @@
+.kame_select_001 {
+    position: relative;
+    /*Don't really need this just for demo styling*/
+
+    float: left;
+    min-width: 200px;
+    margin: 50px 33%;
+}
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+    display: none;
+}
+
+.kame_select_001:after {
+    content: '<>';
+    font: 17px "Consolas", monospace;
+    color: #333;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: 11px;
+    /*Adjust for position however you want*/
+
+    top: 18px;
+    padding: 0 0 2px;
+    border-bottom: 1px solid #999;
+    /*left line */
+
+    position: absolute;
+    pointer-events: none;
+}
+
+
+.kame_select_002 {
+    position: relative;
+}
+
+.kame_select_002::before,
+.kame_select_002::after {
+    position: absolute;
+    content: '';
+    pointer-events: none;
+}
+
+.kame_select_002::before {
+    right: 0;
+    display: inline-block;
+    width: 2.8em;
+    height: 2.8em;
+    border-radius: 0 3px 3px 0;
+    background-color: #2589d0;
+    content: '';
+}
+
+.kame_select_002::after {
+    position: absolute;
+    top: 50%;
+    right: 1.4em;
+    transform: translate(50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-bottom: 3px solid #fff;
+    border-right: 3px solid #fff;
+    content: '';
+}
+
+.kame_select_002 select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 230px;
+    height: 2.8em;
+    padding: .4em 3.6em .4em .8em;
+    border: 2px solid #2589d0;
+    border-radius: 3px;
+    color: #333333;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.kame_select_002 select:focus {
+    outline: 1px solid #2589d0;
+}
+
+.kame_select_003 {
+    position: relative;
+    /*Don't really need this just for demo styling*/
+
+    float: left;
+    min-width: 200px;
+    margin: 50px 33%;
+}
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+    display: none;
+}
+
+.kame_select_003:after {
+    content: '<>';
+    font: 17px "Consolas", monospace;
+    color: #333;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: 11px;
+    /*Adjust for position however you want*/
+
+    top: 18px;
+    padding: 0 0 2px;
+    border-bottom: 1px solid #999;
+    /*left line */
+
+    position: absolute;
+    pointer-events: none;
+}
+
+.kame_select_003 select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Add some styling */
+
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: 50px;
+    float: right;
+    margin: 5px 0px;
+    padding: 0px 24px;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #333;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    -ms-word-break: normal;
+    word-break: normal;
+}
+
+.kame_select_004 {
+    position: relative;
+}
+
+.kame_select_004::before,
+.kame_select_004::after {
+    position: absolute;
+    content: '';
+    pointer-events: none;
+}
+
+.kame_select_004::before {
+    display: inline-block;
+    right: 0;
+    width: 2.8em;
+    height: 2.8em;
+    border-radius: 0 3px 3px 0;
+    background-color: #2589d0;
+}
+
+.kame_select_004::after {
+    position: absolute;
+    top: 50%;
+    right: 1.4em;
+    transform: translate(50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-bottom: 3px solid #fff;
+    border-right: 3px solid #fff;
+}
+
+.kame_select_004 select {
+    appearance: none;
+    min-width: 230px;
+    height: 2.8em;
+    padding: .4em 3.6em .4em .8em;
+    border: none;
+    border-radius: 3px;
+    background-color: #e6edf3;
+    color: #333;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.kame_select_004 select:focus {
+    outline: 2px solid #2589d0;
+}
+
+
+.kame_select_005 {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+
+.kame_select_005::after {
+    position: absolute;
+    right: 15px;
+    width: 10px;
+    height: 7px;
+    background-color: #535353;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    content: '';
+    pointer-events: none;
+}
+
+.kame_select_005 select {
+    appearance: none;
+    min-width: 400px;
+    height: 3em;
+    padding: .4em calc(.8em + 30px) .4em .8em;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    background-color: #fff;
+    color: #333333;
+    font-size: 2em;
+    cursor: pointer;
+}

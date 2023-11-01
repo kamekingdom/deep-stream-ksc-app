@@ -1,0 +1,141 @@
+.kame_button_light_blue {
+    display: block;
+    text-align: center;
+    background: transparent;
+    text-decoration: none;
+    border-radius: 20px;
+    margin: auto;
+    width: 600px;
+    padding: 0rem 6rem;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 6px solid var(--main-button-color);
+    color: var(--main-button-color);
+    transition: 0.5s;
+    box-shadow: #ddffea;
+}
+
+.kame_button_light_blue:hover {
+    color: #fff;
+    background: var(--main-button-color);
+}
+
+.kame_button_light_blue:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.kame_button_light_blue:active {
+    color: #fff;
+    background: var(--main-button-color);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.kame_button_blue {
+	display: block;
+	text-align: center;
+	border-radius: 20px;
+
+	text-decoration: none;
+	background: transparent;
+	margin: auto;
+	width: 300px;
+	padding: 0rem 6rem;
+	font-weight: bold;
+	border: 2px solid #313db8;
+	color: #313db8;
+	transition: 0.5s;
+}
+
+.kame_button_blue:hover {
+	color: #fff;
+	background: #313db8;
+}
+
+
+.kame_button_orange {
+	display: block;
+	text-align: center;
+	border-radius: 20px;
+	text-decoration: none;
+	margin: auto;
+	width: 300px;
+	padding: 0rem 6rem;
+	font-weight: bold;
+	border: 2px solid orange;
+	color: orange;
+	transition: 0.5s;
+}
+
+.kame_button_orange:hover {
+	color: #fff;
+	background: orange;
+}
+
+.kame_button_black {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 20px;
+	margin: auto;
+	width: 300px;
+	padding: 0rem 6rem;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	transition: 0.5s;
+}
+
+.kame_button_black:hover {
+	color: #fff;
+	background: black;
+}
+
+.kame_button_posts {
+	text-align: center;
+	margin: 10px;
+	background: transparent;
+	width: 400px;
+	aspect-ratio: 4/1;
+	border: 2px solid #27acd9;
+	color: black;
+	transition: 0.5s;
+}
+
+.kame_button_posts:hover {
+	color: #fff;
+	background: #27acd9;
+}
+
+
+
+.kame_button_black_no_hover {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	margin: auto;
+	width: 300px;
+	padding: 0rem 6rem;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+}
+
+.kame_button_001 {
+	width: 150px;
+	padding: 8px 16px;
+	background-color: #e4e4e4;
+	border: 1px solid #555555;
+	border-radius: 4px;
+	font-size: 30px;
+	font-weight: 600;
+	color: #555555;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.kame_button_001:hover {
+	background-color: #555555;
+	color: #ffffff;
+}
