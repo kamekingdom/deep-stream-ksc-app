@@ -186,7 +186,7 @@ function HomePage() {
         <span></span>
         <span></span>
         <p style={{ fontSize: "2.0em" }}>Deep Stream</p>
-        <p style={{ fontSize: "1.5em" }}>ver 1.2.0</p>
+        <p style={{ fontSize: "1.5em" }}>ver 2.1.0</p>
       </div>
     </div>
   ) : isMobile ? (
