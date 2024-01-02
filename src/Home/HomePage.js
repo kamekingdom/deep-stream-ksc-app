@@ -15,6 +15,13 @@ import moment from "moment";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import useIsMobile from "../function/isMobile";
+import {Swiper, SwiperSlide} from 'swiper/react';
+import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 async function fetchFilesFromDeepMagazine() {
   const storage = getStorage();
@@ -31,7 +38,7 @@ async function fetchFilesFromDeepMagazine() {
 
     // 名前の降順でソート
     fileUrls.sort((a, b) => (a < b ? 1 : -1));
-    console.log(fileUrls);
+    // console.log(fileUrls);
 
     return fileUrls;
   } catch (error) {
@@ -126,12 +133,13 @@ function HomePage() {
     fetchFirestoreData();
   }, []);
 
-  // const imageUrls = [
+  // const data = [
   //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine003.jpg',
   //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine004.jpg',
   //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine001.jpg',
   //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine002.jpg'
   // ];
+
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
     if (imageUrls.length > 0) {
@@ -146,6 +154,8 @@ function HomePage() {
       img.src = imageUrls[page + 1];
     }
   }, [page, imageUrls]);
+  
+
 
   const nextPage = () => {
     const nowPage = (page + 1) % imageUrls.length;
@@ -162,6 +172,8 @@ function HomePage() {
     setPage(prevPage);
   };
 
+
+
   return show ? (
     <div>
       <script
@@ -174,7 +186,7 @@ function HomePage() {
         <span></span>
         <span></span>
         <p style={{ fontSize: "2.0em" }}>Deep Stream</p>
-        <p style={{ fontSize: "1.5em" }}>ver 2.2.1</p>
+        <p style={{ fontSize: "1.5em" }}>ver 1.2.0</p>
       </div>
     </div>
   ) : isMobile ? (
@@ -197,14 +209,54 @@ function HomePage() {
 
         {/*<iframe style={{aspectRatio:"8/4"}} width="80%" src="https://www.youtube.com/embed/oJKhbRFKIjQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>*/}
 
-        <img
-          style={{ width: "75%" }}
-          src={imageUrl}
-          alt="Image"
-          onClick={nextPage}
-        />
 
-        <p className="kame_font_003">
+
+      <Swiper
+      spaceBetween={30}
+      slidesPerView={1}
+      modules={[Autoplay, Pagination, Navigation]}
+      pagination={{ clickable: true }}
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={(swiper) => console.log(swiper)}
+      navigation
+      pagination={{ clickable: true } }
+      scrollbar={{ draggable: true }}
+      autoplay={{
+        delay: 4000,
+        disableOnInteraction: false,
+      }}
+      height={'1500px'}
+    >
+      {imageUrls.map((url, index) => (
+        <SwiperSlide key={index}>
+          <img
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            src={url}
+            alt={`Slide ${index + 1}`}
+          />
+        </SwiperSlide>
+      ))}
+
+      {/* <div className="autoplay-progress" slot="container-end">
+          <svg viewBox="0 0 48 48" ref={progressCircle}>
+            <circle cx="24" cy="24" r="20"></circle>
+          </svg>
+          <span ref={progressContent}></span>
+        </div> */}
+    </Swiper>
+    
+        {/* <img
+        style={{ width: "75%", cursor: "grab" }}
+        src={imageUrl}
+        alt="Image"
+      />
+       */}
+
+        {/* <div>
+          <SwiperImage data={data}/>
+        </div> */}
+
+        {/* <p className="kame_font_003">
           <button
             style={{
               background: "transparent",
@@ -250,7 +302,7 @@ function HomePage() {
               />
             </svg>
           </button>
-        </p>
+        </p> */}
       </center>
       <Footer />
     </>
@@ -259,7 +311,7 @@ function HomePage() {
       <center>
         <p className="kame_font_002 my-5">Please access from a smartphone.</p>
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="http://www.w3.org/2  0 00/svg"
           width="132"
           height="132"
           fill="currentColor"
