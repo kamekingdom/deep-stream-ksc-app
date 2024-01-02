@@ -91,7 +91,7 @@ function Footer() {
           </div>
           <div class="footer">
             <p class="footer-text">
-              Copyright © 2023 KameKingdom. All Rights Reserved.
+              Copyright © 2023 KameKingdom & Sunghwa. All Rights Reserved.
             </p>
           </div>
         </>
