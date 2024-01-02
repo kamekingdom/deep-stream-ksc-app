@@ -5,6 +5,7 @@ import { ReservationContext } from '../App';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import "../css/kame.css";
+import pdfFile from "../assets/2023部室利用規約.pdf";
 
 function Reservation() {
     const linkStyle = { color: "#e4e4e4", background: "white", fontSize: "2.3em" };
@@ -27,6 +28,9 @@ function Reservation() {
 
     const [reservationNum, setReservationNum] = useState("");
 
+    const [pdfUrl, setPdfUrl] = useState('');
+
+
     for (let i = 0; i < DAYOFWEEKSTR.length; i++) {
         if (i <= DayOfWeekStrIndex - 1) {
             IsAvailableReservationDay.push(false);
@@ -34,6 +38,7 @@ function Reservation() {
             IsAvailableReservationDay.push(true);
         }
     }
+
     useEffect(() => {
         async function findFirestoreData() {
             try {
@@ -121,6 +126,8 @@ function Reservation() {
                 )}
             </table >
             <a href="http://deepstream.boo.jp/kame_kingdom/DeepStreamApplication/Documents/2023部室利用規約.pdf"><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a>
+            
+            <a href="gs://deep-stream-ksc.appspot.com/Documents/2023部室利用規約.pdf"><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a>
             <Footer />
         </>
     )

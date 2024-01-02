@@ -1,180 +1,177 @@
 .header-3 {
-    background-color: white;
-    box-sizing: border-box;
-    width: 100%;
-    height: 10vh;
-    border-bottom: 1px solid #ccc;
-    margin-top: 0px;
-    position: fixed;
-    top: 0;
+  background-color: white;
+  box-sizing: border-box;
+  width: 100%;
+  height: 10vh;
+  border-bottom: 1px solid #ccc;
+  margin-top: 0px;
+  position: fixed;
+  top: 0;
 }
 
 .empty-header-3 {
-    height: 10.1vh;
+  height: 10.1vh;
 }
 
-
 .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1024px;
-    height: 10.0vh;
-    padding: 0 0.8em;
-    margin: 0 auto;
-    font-size: 3.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1024px;
+  height: 10vh;
+  padding: 0 0.8em;
+  margin: 0 auto;
+  font-size: 3.5em;
 }
 
 .header-nav {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .header-nav-item {
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
 }
 
 .header-button {
-    box-sizing: border-box;
-    display: inline-block;
-    padding: 0.8em 2.3em;
-    font-size: 0.5em;
-    text-decoration: none;
-    cursor: pointer;
-    user-select: none;
-  }
-  
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0.8em 2.3em;
+  font-size: 0.5em;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
 
 .header-login {
-    color: #b7c5db;
+  color: #b7c5db;
 }
 
 .header-post {
-    font-weight: bold;
-    color: black;
-    background: var(--main-button-color);
-    border: 1px var(--main-button-color) solid;
-    border-radius: 15px;
+  font-weight: bold;
+  color: black;
+  background: var(--main-button-color);
+  border: 1px var(--main-button-color) solid;
+  border-radius: 15px;
 }
 
 @media screen and (max-width: 480px) {
-    .header-post {
-        display: none;
-    }
+  .header-post {
+    display: none;
+  }
 }
 
-
 .kame_header_001 {
-    color: #364e96;
-    border: solid 2px #364e96;
-    padding: 0.5em;
-    border-radius: 0.5em;
+  color: #364e96;
+  border: solid 2px #364e96;
+  padding: 0.5em;
+  border-radius: 0.5em;
 }
 
 .kame_header_002 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 26px;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  text-align: center;
 }
 
 .kame_header_002::before,
 .kame_header_002::after {
-    content: '';
-    width: 70px;
-    height: 3px;
-    background-color: #e3bf00;
+  content: "";
+  width: 70px;
+  height: 3px;
+  background-color: #e3bf00;
 }
 
 .kame_header_002::before {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .kame_header_002::after {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .kame_header_003 {
-    text-align: center;
-    border-bottom: solid 3px #cce4ff;
-    position: relative;
+  text-align: center;
+  border-bottom: solid 3px #cce4ff;
+  position: relative;
 }
 
 .kame_header_003:after {
-    position: absolute;
-    content: " ";
-    display: block;
-    border-bottom: solid 3px #5472cd;
-    bottom: -3px;
-    width: 20%;
+  position: absolute;
+  content: " ";
+  display: block;
+  border-bottom: solid 3px #5472cd;
+  bottom: -3px;
+  width: 20%;
 }
 
 .kame_header_004 {
-    font-size: 40px;
-    color: #6cb4e4;
-    text-align: center;
-    width: 40%;
-    padding: 0.25em;
-    border-bottom: solid 2px #6cb4e4;
+  font-size: 40px;
+  color: #6cb4e4;
+  text-align: center;
+  width: 40%;
+  padding: 0.25em;
+  border-bottom: solid 2px #6cb4e4;
 }
 
 .kame_header_005 {
-    /* flexboxで要素を真ん中に指定 */
-    font-size: 20px;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    /* 幅を100%に指定し、横幅が可変しても親要素の中央に表示されるようにする */
-    position: relative;
-    width: 88%;
-    left: 50%;
-    transform: translateX(-50%);
+  /* flexboxで要素を真ん中に指定 */
+  font-size: 20px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  /* 幅を100%に指定し、横幅が可変しても親要素の中央に表示されるようにする */
+  position: relative;
+  width: 88%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .kame_header_005 ul {
-    width: 100%;
+  width: 100%;
 }
 
 .kame_header_005_button {
-    display: block;
-    padding: 10px;
-    background: white;
-    width: 20%;
-    float: left;
-    /* カーソルを離した際のアニメーションの速度調整 */
-    transition: .2s all;
+  display: block;
+  padding: 10px;
+  background: white;
+  width: 20%;
+  float: left;
+  /* カーソルを離した際のアニメーションの速度調整 */
+  transition: 0.2s all;
 }
 
 .kame_header_005_button p {
-    height: 10px;
-    font-weight: 300;
+  height: 10px;
+  font-weight: 300;
 }
 
 .kame_header_005_button a {
-    color: #333333;
-    /* リンク指定した要素のスタイルを削除 */
-    text-decoration: none;
+  color: #333333;
+  /* リンク指定した要素のスタイルを削除 */
+  text-decoration: none;
 }
 
 .kame_header_005:hover .kame_header_005_button {
-    /* ナビゲーションをマウスオーバーした際のアニメーションの動きを指定 */
-    opacity: .2;
-    /* 全てのボタンが少し小さくなる */
-    transform: scale(.98);
+  /* ナビゲーションをマウスオーバーした際のアニメーションの動きを指定 */
+  opacity: 0.2;
+  /* 全てのボタンが少し小さくなる */
+  transform: scale(0.98);
 }
 
 .kame_header_005:hover .kame_header_005_button:hover {
-    transition: .2s;
-    /* hover時の速度調整 */
-    transform: scale(1.5);
-    /* hoverしたボタンのみサイズを拡大する指定 */
-    opacity: 1;
+  transition: 0.2s;
+  /* hover時の速度調整 */
+  transform: scale(1.5);
+  /* hoverしたボタンのみサイズを拡大する指定 */
+  opacity: 1;
 }
 
-.kame_header_005:hover .kame_header_005_button:hover>p {
-    font-weight: bold;
+.kame_header_005:hover .kame_header_005_button:hover > p {
+  font-weight: bold;
 }
