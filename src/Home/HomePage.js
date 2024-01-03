@@ -15,13 +15,19 @@ import moment from "moment";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import useIsMobile from "../function/isMobile";
-import {Swiper, SwiperSlide} from 'swiper/react';
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Autoplay,
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+} from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 async function fetchFilesFromDeepMagazine() {
   const storage = getStorage();
@@ -33,7 +39,7 @@ async function fetchFilesFromDeepMagazine() {
 
     // URLを取得する非同期操作
     const fileUrls = await Promise.all(
-      files.map((fileRef) => getDownloadURL(fileRef))
+      files.map((fileRef) => getDownloadURL(fileRef)),
     );
 
     // 名前の降順でソート
@@ -154,8 +160,6 @@ function HomePage() {
       img.src = imageUrls[page + 1];
     }
   }, [page, imageUrls]);
-  
-
 
   const nextPage = () => {
     const nowPage = (page + 1) % imageUrls.length;
@@ -171,8 +175,6 @@ function HomePage() {
     setImageUrl(imageUrls[prevPage]);
     setPage(prevPage);
   };
-
-
 
   return show ? (
     <div>
@@ -207,44 +209,42 @@ function HomePage() {
           &nbsp;&nbsp;Deep Magazine&nbsp;&nbsp;
         </p>
 
-        {/*<iframe style={{aspectRatio:"8/4"}} width="80%" src="https://www.youtube.com/embed/oJKhbRFKIjQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>*/}
+        {/* <iframe style={{aspectRatio:"8/4"}} width="80%" src="https://www.youtube.com/embed/oJKhbRFKIjQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
 
+        <Swiper
+          spaceBetween={30}
+          slidesPerView={1}
+          modules={[Autoplay, Pagination, Navigation]}
+          pagination={{ clickable: true }}
+          onSlideChange={() => console.log("slide change")}
+          onSwiper={(swiper) => console.log(swiper)}
+          navigation
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          height={"1500px"}
+        >
+          {imageUrls.map((url, index) => (
+            <SwiperSlide key={index}>
+              <img
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                src={url}
+                alt={`Slide ${index + 1}`}
+              />
+            </SwiperSlide>
+          ))}
 
-
-      <Swiper
-      spaceBetween={30}
-      slidesPerView={1}
-      modules={[Autoplay, Pagination, Navigation]}
-      pagination={{ clickable: true }}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
-      navigation
-      pagination={{ clickable: true } }
-      scrollbar={{ draggable: true }}
-      autoplay={{
-        delay: 4000,
-        disableOnInteraction: false,
-      }}
-      height={'1500px'}
-    >
-      {imageUrls.map((url, index) => (
-        <SwiperSlide key={index}>
-          <img
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            src={url}
-            alt={`Slide ${index + 1}`}
-          />
-        </SwiperSlide>
-      ))}
-
-      {/* <div className="autoplay-progress" slot="container-end">
+          {/* <div className="autoplay-progress" slot="container-end">
           <svg viewBox="0 0 48 48" ref={progressCircle}>
             <circle cx="24" cy="24" r="20"></circle>
           </svg>
           <span ref={progressContent}></span>
         </div> */}
-    </Swiper>
-    
+        </Swiper>
+
         {/* <img
         style={{ width: "75%", cursor: "grab" }}
         src={imageUrl}
@@ -307,22 +307,20 @@ function HomePage() {
       <Footer />
     </>
   ) : (
-    <>
-      <center>
-        <p className="kame_font_002 my-5">Please access from a smartphone.</p>
-        <svg
-          xmlns="http://www.w3.org/2  0 00/svg"
-          width="132"
-          height="132"
-          fill="currentColor"
-          class="bi bi-phone"
-          viewBox="0 0 16 16"
-        >
-          <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
-          <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-        </svg>
-      </center>
-    </>
+    <center>
+      <p className="kame_font_002 my-5">Please access from a smartphone.</p>
+      <svg
+        xmlns="http://www.w3.org/2  0 00/svg"
+        width="132"
+        height="132"
+        fill="currentColor"
+        class="bi bi-phone"
+        viewBox="0 0 16 16"
+      >
+        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
+        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+      </svg>
+    </center>
   );
 }
 
