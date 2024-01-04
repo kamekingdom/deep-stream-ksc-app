@@ -1,0 +1,15 @@
+{
+  "short_name": "Deep Stream",
+  "name": "Deep Stream Application",
+  "icons": [
+    {
+      "src": "DeepStreamICON.jpg",
+      "sizes": "DeepStreamICON.jpg",
+      "type": "image/jpg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
