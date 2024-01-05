@@ -67,7 +67,7 @@ function HomePage() {
 
         const data = await fetchFilesFromDeepMagazine();
         setFiles(data);
-
+        console.log(data)
         const elapsed = Date.now() - startTime; // データ取得にかかった時間を計算
         const delay = Math.max(0, 3000 - elapsed); // 3秒経過するまでに残りの時間を計算
 
@@ -188,7 +188,7 @@ function HomePage() {
         <span></span>
         <span></span>
         <p style={{ fontSize: "2.0em" }}>Deep Stream</p>
-        <p style={{ fontSize: "1.5em" }}>ver 2.1.0</p>
+        <p style={{ fontSize: "1.5em" }}>ver 2.1.1</p>
       </div>
     </div>
   ) : isMobile ? (
