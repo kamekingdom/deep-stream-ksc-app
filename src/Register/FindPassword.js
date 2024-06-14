@@ -19,15 +19,14 @@ export default function FindPassword() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className='font-bold mb-15'>パスワードを忘れた場合</h1>
+            <h1 className='font-bold mb-20 text-6xl'>パスワードを忘れた場合</h1>
             <input
-                className="my-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="my-2 p-5 text-2xl border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
                 type="email"
-                placeholder="メールアドレスを入力してください"
-                value={email}
+                placeholder="メールアドレスを入力"
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <button className="my-2" onClick={sendResetEmail}>送信</button>
+            <button className="mt-20 my-2 text-2xl border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 p-4" onClick={sendResetEmail}>送信</button>
         </div>
     );
 }

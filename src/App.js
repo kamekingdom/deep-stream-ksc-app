@@ -11,7 +11,7 @@ import FindPassword from "./Register/FindPassword";
 import Key from "./Home/Key";
 import Tool from "./Home/Tool";
 import AddReservation from "./Reservation/AddReservation";
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect } from "react";
 import ReservationDetail from "./Reservation/ReservationDetail";
 import AdminEventPost from "./Administrator/AdminEventPost";
 import AdminHome from "./Administrator/AdminHome";
@@ -21,8 +21,6 @@ import AdminSchedulePost from "./Administrator/AdminSchedulePost";
 import ScheduleDetail from "./Schedule/ScheduleDetail";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import UserProfile from "./Register/UserProfile";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "./firebase";
 
 const SettingInfo = {
   Year: "2023"
