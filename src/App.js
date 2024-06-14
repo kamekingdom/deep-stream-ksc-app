@@ -7,6 +7,7 @@ import TermsOfService from "./Document/TermsOfService";
 import Calendar from "./Home/Calendar";
 import Reservation from "./Home/Reservation";
 import Notification from "./Home/Notification";
+import FindPassword from "./Register/FindPassword";
 import Key from "./Home/Key";
 import Tool from "./Home/Tool";
 import AddReservation from "./Reservation/AddReservation";
@@ -81,6 +82,8 @@ function App() {
           <Route exact path="/register" element={<Register />}></Route>
           <Route exact path="/userprofile" element={<UserProfile />}></Route>
           <Route exact path="/termsofservice" element={<TermsOfService />}></Route>
+
+          <Route exact path="/findpassword" element={<FindPassword/>}></Route>
 
         </Routes>
       </Router>

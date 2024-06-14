@@ -28,7 +28,7 @@
     "react-iframe": "^1.8.5",
     "react-material-ui-carousel": "^3.4.2",
     "react-pdf": "^7.3.3",
-    "react-router-dom": "^6.10.0",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "react-transition-group": "^4.4.5",
     "swiper": "^11.0.5",

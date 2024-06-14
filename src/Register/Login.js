@@ -5,7 +5,7 @@ import "../css/kame_login.css";
 import { Link } from "react-router-dom";
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Footer, Header } from '../PageParts';
+import { Header } from '../PageParts';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 function Login() {
@@ -41,6 +41,7 @@ function Login() {
                                 <br />
                                 <p class="message">未登録の方は<Link to="/register">会員登録</Link></p>
                                 <p class="message">利用規約は<Link to="/termsofservice">こちら</Link></p>
+                                <p class="message">パスワードを忘れた場合<Link to="/findpassword">こちら</Link></p>
                             </>
                         }
                     </center>
