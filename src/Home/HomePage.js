@@ -10,9 +10,9 @@ import {
   query,
   writeBatch,
 } from "firebase/firestore";
-import { auth, db, storage } from "../firebase";
+import {  db,  } from "../firebase";
 import moment from "moment";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {  } from "react-firebase-hooks/auth";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import useIsMobile from "../function/isMobile";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,8 +20,6 @@ import {
   Autoplay,
   Navigation,
   Pagination,
-  Scrollbar,
-  A11y,
 } from "swiper/modules";
 
 import "swiper/css";
@@ -153,28 +151,7 @@ function HomePage() {
     }
   }, [imageUrls]);
 
-  const [page, setPage] = useState(0);
-  useEffect(() => {
-    if (imageUrls.length > 0 && page < imageUrls.length - 1) {
-      const img = new Image();
-      img.src = imageUrls[page + 1];
-    }
-  }, [page, imageUrls]);
 
-  const nextPage = () => {
-    const nowPage = (page + 1) % imageUrls.length;
-    setImageUrl(imageUrls[nowPage]);
-    setPage(nowPage);
-  };
-
-  const previousPage = () => {
-    let prevPage = page - 1;
-    if (prevPage < 0) {
-      prevPage = imageUrls.length - 1;
-    }
-    setImageUrl(imageUrls[prevPage]);
-    setPage(prevPage);
-  };
 
   return show ? (
     <div>
@@ -219,7 +196,6 @@ function HomePage() {
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
           navigation
-          pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           autoplay={{
             delay: 4000,
