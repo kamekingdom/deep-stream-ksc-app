@@ -10,9 +10,9 @@ import {
   query,
   writeBatch,
 } from "firebase/firestore";
-import {  db,  } from "../firebase";
+import { db, } from "../firebase";
 import moment from "moment";
-import {  } from "react-firebase-hooks/auth";
+import { } from "react-firebase-hooks/auth";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import useIsMobile from "../function/isMobile";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -58,6 +58,7 @@ function HomePage() {
   // Deep Magazineの取得
   const [show, setShow] = useState(true); // スプラッシュスクリーンをshowするか否か
   const [imageUrls, setFiles] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -80,6 +81,84 @@ function HomePage() {
     fetchData();
   }, []);
 
+  // Firestoreから予約設定データを取得し、自動予約を行う
+  async function addReservations() {
+    let batch = writeBatch(db);
+    let batchSize = 0;
+    const maxBatchSize = 500; // Firestoreのバッチサイズの制限
+
+    // 1. Firestoreから予約スケジュールを取得
+    const schedulesSnapshot = await getDocs(collection(db, 'ReservationSchedules'));
+
+    for (const scheduleDoc of schedulesSnapshot.docs) {
+      const day = scheduleDoc.id;
+      const { Reservations } = scheduleDoc.data();  // 各日の `Reservations` 配列を取得
+
+      // 2. `Reservations` 配列の各テンプレートIDごとに予約を実行
+      for (const reservation of Reservations) {
+        const { TemplateID, TimeSlots } = reservation;
+
+        // 3. Firestoreからテンプレートを取得
+        const templateDoc = await getDoc(doc(db, 'ReservationTemplate', TemplateID));
+        if (!templateDoc.exists()) {
+          console.error(`テンプレートID ${TemplateID} に該当するテンプレートが見つかりません。`);
+          continue;
+        }
+
+        const templateData = templateDoc.data();
+
+        // 4. 各タイムスロットに対して予約を作成
+        for (const timeSlot of TimeSlots) {
+          const reservationDoc = doc(db, day, timeSlot);  // 各タイムスロットのドキュメント
+          batch.set(reservationDoc, {
+            ...templateData,  // テンプレートの内容をコピー
+            TimeSlot: timeSlot,
+            WeekDay: day,
+            ReservationNum: 0  // 初期状態の予約数
+          });
+
+          batchSize++;
+
+          // バッチのサイズが上限に達したらコミットし、新しいバッチを作成
+          if (batchSize >= maxBatchSize) {
+            await batch.commit();
+            batch = writeBatch(db);
+            batchSize = 0;
+          }
+        }
+      }
+    }
+
+    // 最後のバッチをコミット
+    if (batchSize > 0) {
+      await batch.commit();
+    }
+
+    console.log('予約処理が完了しました。');
+  }
+
+  // ReservationSettings コレクションを削除する処理
+  async function deleteReservationSettings() {
+    try {
+      // FirestoreからReservationSettingsコレクションのすべてのドキュメントを取得
+      const settingsSnapshot = await getDocs(collection(db, 'ReservationSettings'));
+
+      // ドキュメントを一つずつ削除
+      const deleteOps = settingsSnapshot.docs.map(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+
+      // 全ての削除操作が完了するまで待機
+      await Promise.all(deleteOps);
+
+      console.log('ReservationSettingsが削除されました。');
+    } catch (error) {
+      console.error('ReservationSettingsの削除中にエラーが発生しました:', error);
+    }
+  }
+
+
+  // ここでリセット
   useEffect(() => {
     async function fetchFirestoreData() {
       const today = moment();
@@ -132,17 +211,17 @@ function HomePage() {
       await Promise.all(deleteOps);
       await batch.commit();
       console.log("fin");
+
+      // 初期化後に複数の曜日に予約を追加する
+      await addReservations();
+
+      // ReservationSettingsを削除
+      await deleteReservationSettings();
     }
+
 
     fetchFirestoreData();
   }, []);
-
-  // const data = [
-  //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine003.jpg',
-  //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine004.jpg',
-  //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine001.jpg',
-  //     'http://deepstream.boo.jp/kame_kingdom/DeepMagazine/DeepMagazine002.jpg'
-  // ];
 
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
@@ -336,9 +415,8 @@ function createCarousel(imageUrls) {
     const h5 = document.createElement("h5");
     h5.innerText = `Slide ${index + 1} label`;
     const p = document.createElement("p");
-    p.innerText = `Some representative placeholder content for slide ${
-      index + 1
-    }.`;
+    p.innerText = `Some representative placeholder content for slide ${index + 1
+      }.`;
 
     caption.appendChild(h5);
     caption.appendChild(p);
