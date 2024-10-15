@@ -25,6 +25,7 @@ import CreateReservationSettings from "./Administrator/CreateReservationSettings
 import CreateReservationTemplate from "./Administrator/CreateReservationTemplate";
 import ReservationStatusPage from "./Administrator/ReservationStatusPage";
 import FixTimeSlots from "./Administrator/FixTimeSlots";
+import UploadPage from "./Administrator/UploadPage";
 
 const SettingInfo = {
   Year: "2023"
@@ -76,6 +77,7 @@ function App() {
           <Route exact path="/create-reservation-template" element={<CreateReservationTemplate />}></Route>
           <Route exact path="/reservation-check" element={<ReservationStatusPage />}></Route>
           <Route exact path="/fix-time-slots" element={<FixTimeSlots />}></Route>
+          <Route exact path="/upload-page" element={<UploadPage />}></Route>
 
           <Route exact path="/calendar" element={<Calendar />}></Route>
           <Route exact path="/key" element={<Key />}></Route>
