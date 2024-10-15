@@ -62,3 +62,63 @@ button:disabled {
         transform: rotate(360deg);
     }
 }
+
+.upload-container {
+    margin: 10px;
+    padding: 10px;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3列に固定 */
+    gap: 20px;
+    /* サムネイル間のスペースを調整 */
+    margin-top: 20px;
+}
+
+.page-item {
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    position: relative;
+    max-width: 100%;
+    /* 幅を自動調整 */
+}
+
+.page-thumbnail {
+    width: 100%;
+    /* サムネイルをコンテナの幅にフィット */
+    height: 200px;
+    /* 高さを指定して大きく表示 */
+    object-fit: cover;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.file-name {
+    font-size: 1rem;
+    /* ファイル名のフォントサイズを少し大きく */
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* ファイル名が長い場合は省略表示 */
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    /* ボタンのサイズを調整 */
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}
