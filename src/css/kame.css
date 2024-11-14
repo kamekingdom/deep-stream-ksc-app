@@ -1,7 +1,7 @@
 /* 色の設定 */
 
 :root {
-  --main-button-color: #b7c5db;
+  --main-button-color: #97aac8;
   --main-button-clicked-color: #99aac5;
 }
 
@@ -38,30 +38,22 @@ html {
 .kame_line_010 {
   border: 0;
   height: 1px;
-  background-image: -webkit-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-  background-image: -moz-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-  background-image: -ms-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-  background-image: -o-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
+  background-image: -webkit-linear-gradient(left,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 0));
 }
 
 a {

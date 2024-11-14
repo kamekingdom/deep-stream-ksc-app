@@ -29,44 +29,44 @@ function Reservation() {
     const [reservationNum, setReservationNum] = useState("");
 
     const [pdfUrl, setPdfUrl] = useState([]);
-   
+
     async function fetchFilesFromDeepDocuments() {
         const storage = getStorage();
         const deepDocumentRef = ref(storage, "Documents");
-      
+
         try {
-          const result = await listAll(deepDocumentRef);
-          const files = result.items;
-      
-          // URLを取得する非同期操作
-          const fileUrls = await Promise.all(
-            files.map((fileRef) => getDownloadURL(fileRef))
-          );
-      
-          // 名前の降順でソート
-          // console.log(fileUrls);
-      
-          return fileUrls;
+            const result = await listAll(deepDocumentRef);
+            const files = result.items;
+
+            // URLを取得する非同期操作
+            const fileUrls = await Promise.all(
+                files.map((fileRef) => getDownloadURL(fileRef))
+            );
+
+            // 名前の降順でソート
+            // console.log(fileUrls);
+
+            return fileUrls;
         } catch (error) {
-          console.error("Error fetching files:", error);
-          throw error; // <-- 追加：エラーをスロー
+            console.error("Error fetching files:", error);
+            throw error; // <-- 追加：エラーをスロー
         }
-      }
+    }
 
-      useEffect(() => {
+    useEffect(() => {
         async function fetchData() {
-          try {
-            const data = await fetchFilesFromDeepDocuments();
-            setPdfUrl(data);
-            console.log(data)
+            try {
+                const data = await fetchFilesFromDeepDocuments();
+                setPdfUrl(data);
+                console.log(data)
 
-          } catch (error) {
-            console.error("Failed to fetch data:", error);
-          }
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
         }
 
         fetchData();
-  }, []);
+    }, []);
 
     for (let i = 0; i < DAYOFWEEKSTR.length; i++) {
         if (i <= DayOfWeekStrIndex - 1) {
@@ -142,10 +142,10 @@ function Reservation() {
                                     reserve[num + 1][index] === auth.currentUser.email ? (
                                         <Link to="/reservationdetail" onClick={() => setReservationInfo(weekday, timeslot, TimeList[index])} style={starStyle}>★</Link>
                                     ) : (
-                                        reserve[num + 1][index] ? 
-                                        <Link to="/reservationdetail" onClick={() => setReservationInfo(weekday, timeslot, TimeList[index])} style={linkStyle}>×</Link>
-                                        :
-                                        <Link to="/addreservation" onClick={() => setReservationInfo(weekday, timeslot, TimeList[index])} style={linkStyle}>o</Link>
+                                        reserve[num + 1][index] ?
+                                            <Link to="/reservationdetail" onClick={() => setReservationInfo(weekday, timeslot, TimeList[index])} style={linkStyle}>×</Link>
+                                            :
+                                            <Link to="/addreservation" onClick={() => setReservationInfo(weekday, timeslot, TimeList[index])} style={linkStyle}>o</Link>
                                     ))
                                 }
                                 {!IsAvailableReservationDay[num] && (
@@ -163,13 +163,13 @@ function Reservation() {
                 )}
             </table >
             {/* <a href="http://deepstream.boo.jp/kame_kingdom/DeepStreamApplication/Documents/2023部室利用規約.pdf"><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a> */}
-{/*             
+            {/*             
             {pdfUrl.map((url, index) => (
                 <a key={index} href={url} target="_blank" rel="noopener noreferrer">
                 <p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約 {index + 1}</p>
                 </a>
             ))} */}
-            
+
             <a href={pdfUrl}><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a>
             <Footer />
         </>

@@ -1,0 +1,83 @@
+.qr-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    /* 適宜サイズを調整 */
+    margin: auto;
+}
+
+.qr-frame {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    right: 100px;
+    bottom: 50px;
+    pointer-events: none;
+}
+
+.qr-frame .corner {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 10px solid #000000;
+    /* 枠の色を指定 */
+}
+
+.qr-frame .top-left {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.qr-frame .top-right {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+}
+
+.qr-frame .bottom-left {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+}
+
+.qr-frame .bottom-right {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}
+
+.camera-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.camera-selection label {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.camera-selection select {
+    padding: 8px 12px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camera-selection select:focus {
+    border-color: #007BFF;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+}

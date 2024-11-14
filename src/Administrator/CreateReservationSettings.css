@@ -62,7 +62,7 @@ td.selected {
 }
 
 /* ボタンのスタイル */
-button {
+.create-reservation-button {
     padding: 10px 20px;
     background-color: #4caf50;
     color: white;

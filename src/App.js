@@ -26,6 +26,8 @@ import CreateReservationTemplate from "./Administrator/CreateReservationTemplate
 import ReservationStatusPage from "./Administrator/ReservationStatusPage";
 import FixTimeSlots from "./Administrator/FixTimeSlots";
 import UploadPage from "./Administrator/UploadPage";
+import KeyAccess from "./Home/KeyAccess";
+import ReservationPreview from "./Home/ReservationPreview";
 
 const SettingInfo = {
   Year: "2023"
@@ -64,6 +66,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<HomePage />}></Route>
           <Route exact path="/reservation" element={<Reservation />}></Route>
+          <Route exact path="/reservation-preview" element={<ReservationPreview />}></Route>
           <Route exact path="/addreservation" element={<AddReservation />}></Route>
           <Route exact path="/reservationdetail" element={<ReservationDetail />}></Route>
           <Route exact path="/alertreservation" element={<AlertReservation />}></Route>
@@ -80,6 +83,7 @@ function App() {
 
           <Route exact path="/calendar" element={<Calendar />}></Route>
           <Route exact path="/key" element={<Key />}></Route>
+          <Route exact path="/key-access" element={<KeyAccess />}></Route>
           <Route exact path="/scheduleDetail" element={<ScheduleDetail />}></Route>
           <Route exact path="/notification" element={<Notification />}></Route>
           <Route exact path="/tool" element={<Tool />}></Route>

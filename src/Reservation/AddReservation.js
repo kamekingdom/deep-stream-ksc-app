@@ -1,10 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { doc, updateDoc, setDoc, getDoc} from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { Footer, Header } from '../PageParts';
 import { ReservationContext, useBlockBrowserBack } from '../App';
 import '../css/kame.css';
+import { ref, uploadString } from 'firebase/storage';
+import { db, auth, storage } from '../firebase'; // Import storage from Firebase setup
+
 
 const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -61,11 +63,11 @@ function AddReservation() {
         const TimeSlot = ReservationInfo.TimeSlot;
         const WeekDay = ReservationInfo.WeekDay;
 
-        // Firestoreに投稿を追加
+        // Firestore references
         const postDocRef = doc(db, WeekDay, TimeSlot);
         const userDocRef = doc(db, "users", auth.currentUser.email);
 
-        // 追加: すでに予約が存在するかチェック
+        // Check if reservation already exists
         const reservationExists = await getDoc(postDocRef);
         if (reservationExists.exists()) {
             setIsAlreadyExisted(true);
@@ -88,7 +90,7 @@ function AddReservation() {
             });
         }
 
-        // ポストを追加
+        // Post reservation to Firestore
         await setDoc(postDocRef, {
             PostUserMail: auth.currentUser.email,
             WeekDay: ReservationInfo.WeekDay,
@@ -99,9 +101,32 @@ function AddReservation() {
             NickName: nickname
         });
 
+        // Prepare reservation data as text for storage
+        const reservationText = `
+            Reservation Details:
+            - User Email: ${auth.currentUser.email}
+            - WeekDay: ${ReservationInfo.WeekDay}
+            - TimeSlot: ${ReservationInfo.TimeSlot}
+            - Name: ${personalname}
+            - Category: ${category}
+            - Memo: ${memo}
+            - NickName: ${nickname}
+        `;
+
+        // Create a reference to the text file in Firebase Storage
+        const storageRef = ref(storage, `reservations/${WeekDay}_${TimeSlot}_${personalname}.txt`);
+
+        // Upload the text content to Firebase Storage
+        await uploadString(storageRef, reservationText)
+            .then(() => {
+                console.log("Reservation saved to Firebase Storage as text.");
+            })
+            .catch((error) => {
+                console.error("Error saving reservation to Storage:", error);
+            });
+
         setIsAlreadyUploaded(true);
     };
-
 
     return (
         <>
@@ -115,7 +140,7 @@ function AddReservation() {
                 :
                 <>
                     <center>
-                        <div class="kame_header_003"><p class="kame_font_004">{ReservationInfo.WeekDay}曜日</p></div>
+                        <div class="kame_header_003"><p class="kame_font_003">{ReservationInfo.WeekDay}曜日</p></div>
                         <p class="kame_font_003">{ReservationInfo.TimeSlot}({ReservationInfo.Time})</p>
                         <form>
                             <label class="kame_select_005">
@@ -133,9 +158,9 @@ function AddReservation() {
                             <textarea class="kame_textarea" onChange={handleSelectChange3} placeholder="(例) ずっと真夜中でいいのに。" minLength={"0"} maxLength={"20"} value={memo} />
                         </label>
                         <br /><br /><br />
-                        
+
                         {canReserve && !isalreadyuploaded && !isclicked &&
-                            <button to="/" class="kame_button_black" onClick={PostButtonClick}><p class="kame_font_002">予約</p></button>
+                            <button to="/" class="kame_button_light_blue" onClick={PostButtonClick}><p class="kame_font_002">予約</p></button>
                         }
                         {!canReserve && // 追加: 予約上限に達していない場合にエラーメッセージを表示
                             <p class="kame_font_002">予約は週に2回までです</p>
@@ -149,7 +174,7 @@ function AddReservation() {
 
                         }
                         {isloaded && isalreadyuploaded &&
-                            <Link to="/reservation" class="kame_button_black"><p class="kame_font_002">完了</p></Link>
+                            <Link to="/reservation" class="kame_button_light_blue"><p class="kame_font_002">完了</p></Link>
                         }
                     </center>
                 </>

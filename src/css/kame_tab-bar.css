@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #b7c5db;
+  background-color: var(--main-button-color);
   border-right: 1px solid #ffffff;
   height: 8vh;
   padding: 0 20px;
@@ -10,6 +10,7 @@
   bottom: 2vh;
   left: 0;
   right: 0;
+  z-index: 1000;
 }
 
 .tab {
@@ -42,6 +43,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .footer-text {

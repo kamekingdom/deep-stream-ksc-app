@@ -27,6 +27,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
+import packageInfo from '../../package.json';
+
 async function fetchFilesFromDeepMagazine() {
   const storage = getStorage();
   const deepMagazineRef = ref(storage, "DeepMagazine");
@@ -244,7 +246,7 @@ function HomePage() {
         <span></span>
         <span></span>
         <p style={{ fontSize: "2.0em" }}>Deep Stream</p>
-        <p style={{ fontSize: "1.5em" }}>ver 3.1.1</p>
+        <p style={{ fontSize: "1.5em" }}>ver {packageInfo.version}</p>
       </div>
     </div>
   ) : isMobile ? (
@@ -255,109 +257,36 @@ function HomePage() {
           @import
           url('https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap');
         </style>
-        <p
-          style={{
-            fontSize: "6.0em",
-            fontFamily: "Qwitcher Grypen",
-            // height: "0.5em",
-          }}
-        >
-          &nbsp;&nbsp;Deep Magazine&nbsp;&nbsp;
-        </p>
-
-        {/* <iframe style={{aspectRatio:"8/4"}} width="80%" src="https://www.youtube.com/embed/oJKhbRFKIjQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
 
         <Swiper
           spaceBetween={30}
           slidesPerView={1}
           modules={[Autoplay, Pagination, Navigation]}
           pagination={{ clickable: true }}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
           navigation
-          scrollbar={{ draggable: true }}
           autoplay={{
             delay: 4000,
             disableOnInteraction: false,
           }}
-          height={"1500px"}
+          style={{
+            height: "calc(70vh - 100px)",  // ヘッダーとフッターの高さを考慮
+            overflow: "hidden",             // スクロールを無効化
+          }}
         >
           {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
               <img
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
                 src={url}
                 alt={`Slide ${index + 1}`}
               />
             </SwiperSlide>
           ))}
-
-          {/* <div className="autoplay-progress" slot="container-end">
-          <svg viewBox="0 0 48 48" ref={progressCircle}>
-            <circle cx="24" cy="24" r="20"></circle>
-          </svg>
-          <span ref={progressContent}></span>
-        </div> */}
         </Swiper>
-
-        {/* <img
-        style={{ width: "75%", cursor: "grab" }}
-        src={imageUrl}
-        alt="Image"
-      />
-       */}
-
-        {/* <div>
-          <SwiperImage data={data}/>
-        </div> */}
-
-        {/* <p className="kame_font_003">
-          <button
-            style={{
-              background: "transparent",
-              border: "none",
-              outline: "none",
-            }}
-            onClick={previousPage}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
-              fill="currentColor"
-              class="bi bi-arrow-left-square"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
-              />
-            </svg>
-          </button>
-          &emsp;{page + 1}&nbsp;/&nbsp;{imageUrls.length}&emsp;
-          <button
-            style={{
-              background: "transparent",
-              border: "none",
-              outline: "none",
-            }}
-            onClick={nextPage}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
-              fill="currentColor"
-              class="bi bi-arrow-right-square"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
-              />
-            </svg>
-          </button>
-        </p> */}
       </center>
       <Footer />
     </>
@@ -369,7 +298,7 @@ function HomePage() {
         width="132"
         height="132"
         fill="currentColor"
-        class="bi bi-phone"
+        className="bi bi-phone"
         viewBox="0 0 16 16"
       >
         <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
@@ -379,52 +308,5 @@ function HomePage() {
   );
 }
 
-function createCarousel(imageUrls) {
-  const carouselIndicator = document.querySelector(".carousel-indicators");
-  const carouselInner = document.querySelector(".carousel-inner");
-
-  // Clear previous items
-  carouselIndicator.innerHTML = "";
-  carouselInner.innerHTML = "";
-
-  imageUrls.forEach((url, index) => {
-    // Add carousel indicators
-    const indicatorButton = document.createElement("button");
-    indicatorButton.setAttribute("type", "button");
-    indicatorButton.setAttribute("data-bs-target", "#carouselExampleDark");
-    indicatorButton.setAttribute("data-bs-slide-to", index);
-    indicatorButton.setAttribute("aria-label", `Slide ${index + 1}`);
-    if (index === 0) {
-      indicatorButton.classList.add("active");
-      indicatorButton.setAttribute("aria-current", "true");
-    }
-    carouselIndicator.appendChild(indicatorButton);
-
-    // Add carousel items
-    const carouselItem = document.createElement("div");
-    carouselItem.classList.add("carousel-item");
-    if (index === 0) carouselItem.classList.add("active");
-
-    const img = document.createElement("img");
-    img.src = url;
-    img.classList.add("d-block", "w-100");
-    img.alt = `Slide ${index + 1}`;
-
-    const caption = document.createElement("div");
-    caption.classList.add("carousel-caption", "d-none", "d-md-block");
-    const h5 = document.createElement("h5");
-    h5.innerText = `Slide ${index + 1} label`;
-    const p = document.createElement("p");
-    p.innerText = `Some representative placeholder content for slide ${index + 1
-      }.`;
-
-    caption.appendChild(h5);
-    caption.appendChild(p);
-    carouselItem.appendChild(img);
-    carouselItem.appendChild(caption);
-
-    carouselInner.appendChild(carouselItem);
-  });
-}
 
 export default HomePage;

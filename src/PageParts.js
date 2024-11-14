@@ -14,12 +14,7 @@ function Header() {
           <div class="logo">
             <b>
               <Link to="/" style={{ textDecoration: "none" }}>
-                <p
-                  className="kame_font_001"
-                  style={{ fontFamily: "Comic Sans MS", color: "black" }}
-                >
-                  Deep Stream
-                </p>
+                Deep Stream
               </Link>
             </b>
           </div>
@@ -39,7 +34,7 @@ function Header() {
             )}
           </nav>
         </div>
-      </header>
+      </header >
       <div class="empty-header-3" />
     </>
   );
@@ -58,10 +53,10 @@ function Footer() {
               部室予約
             </Link>
             <Link to="/key" class="tab">
-              鍵管理
+              部室利用
             </Link>
-            <Link to="/calendar" class="tab">
-              イベント
+            <Link to="/notification" class="tab">
+              提出書類
             </Link>
             <Link to="/tool" class="tab">
               ツール
@@ -80,10 +75,10 @@ function Footer() {
               部室予約
             </Link>
             <Link to="/login" class="tab">
-              鍵管理
+              部室利用
             </Link>
             <Link to="/login" class="tab">
-              イベント
+              提出書類
             </Link>
             <Link to="/login" class="tab">
               ツール
