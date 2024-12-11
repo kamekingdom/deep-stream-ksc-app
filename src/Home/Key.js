@@ -175,8 +175,6 @@ function Key() {
             <>
                 <Header />
                 <div className="kame_header_003"><p className="kame_font_003">鍵の場所</p></div>
-                <br /><br /><br />
-
                 {/* カメラ選択ドロップダウン */}
                 {/* <div className="camera-selection">
                     <label htmlFor="cameraSelect">カメラを選択してください：</label>
@@ -202,21 +200,40 @@ function Key() {
                         <div className="corner bottom-right"></div>
                     </div>
                 </div> */}
+                <center>
+                    <p
+                        style={{
+                            display: "inline-block",
+                            border: "5px solid",
+                            borderColor: name ? "#ad4241" : "#446ead", // 利用中: 赤, 利用可能: 緑
+                            borderRadius: "10px",
+                            padding: "20px 100px",
+                            textAlign: "center",
+                            fontSize: "3.0em",
+                            color: name ? "#ad4241" : "#446ead",
+                            backgroundColor: name ? "#ffdef4" : "#def4ff"
+                        }}
+                    >
+                        {name ? "利用中" : "利用可能"}
+                    </p>
+                </center>
                 {
                     name ?
                         <>
                             <center>
                                 <table className="kame_table_001">
                                     <tr>
-                                        <th><p className="kame_font_002">氏名</p></th>
-                                        <td><p className="kame_font_002">{name}</p></td>
+                                        <th>
+                                            <p className="kame_font_002">所持者</p>
+                                        </th>
+                                        <td>
+                                            <p className="kame_font_002">{name}</p>
+                                            <p className="kame_font_002">{nickname}</p>
+
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th><p className="kame_font_002">ユーザー</p></th>
-                                        <td><p className="kame_font_002">{nickname}</p></td>
-                                    </tr>
-                                    <tr>
-                                        <th><p className="kame_font_002">借用時刻</p></th>
+                                        <th><p className="kame_font_002">開始時刻</p></th>
                                         <td><p className="kame_font_002">{time}</p></td>
                                     </tr>
                                 </table>
@@ -245,13 +262,17 @@ function Key() {
                         <>
                             <center>
                                 <table className="kame_table_001">
-                                    <tr>
-                                        <th><p className="kame_font_002">氏名</p></th>
+                                    {/* <tr>
+                                        <th><p className="kame_font_002">所持者</p></th>
                                         <td><p className="kame_font_002">管理人さん</p></td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
                                         <th><p className="kame_font_002">最終利用</p></th>
-                                        <td><p className="kame_font_002">{nickname}</p></td>
+                                        <td>
+                                            <p className="kame_font_002">{name}</p>
+                                            <p className="kame_font_002">{nickname}</p>
+
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th><p className="kame_font_002">返却時刻</p></th>

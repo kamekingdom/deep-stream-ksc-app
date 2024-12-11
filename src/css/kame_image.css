@@ -20,26 +20,26 @@
 
 .img_square {
     display: inline-block;
-    height:200px;
+    height: 200px;
     margin-right: 15px;
     margin-bottom: 15px;
 }
 
 .img_square_small {
     text-align: center;
-    height:100px;
+    height: 100px;
     aspect-ratio: 3/2;
 }
 
 .img_square_big {
     text-align: center;
-    height:500px;
+    height: 500px;
     aspect-ratio: 3/2;
 }
 
 
 .img_square_posts {
     text-align: center;
-    height:200px;
+    height: 200px;
     aspect-ratio: 3/2;
 }

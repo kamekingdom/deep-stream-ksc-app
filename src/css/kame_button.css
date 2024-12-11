@@ -1,34 +1,34 @@
 .kame_button_light_blue {
-    display: block;
-    text-align: center;
-    background: transparent;
-    text-decoration: none;
-    border-radius: 20px;
-    margin: auto;
-    width: 600px;
-    padding: 0rem 6rem;
-    font-weight: bold;
-    font-size: 1.2em;
-    border: 6px solid var(--main-button-color);
-    color: var(--main-button-color);
-    transition: 0.5s;
-    box-shadow: #ddffea;
+	display: block;
+	text-align: center;
+	background: transparent;
+	text-decoration: none;
+	border-radius: 20px;
+	margin: auto;
+	width: 600px;
+	padding: 0rem 6rem;
+	font-weight: bold;
+	font-size: 1.2em;
+	border: 6px solid var(--main-button-color);
+	color: var(--main-button-color);
+	transition: 0.5s;
+	box-shadow: #ddffea;
 }
 
 .kame_button_light_blue:hover {
-    color: #fff;
-    background: var(--main-button-color);
+	color: #fff;
+	background: var(--main-button-color);
 }
 
 .kame_button_light_blue:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
 .kame_button_light_blue:active {
-    color: #fff;
-    background: var(--main-button-color);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	color: #fff;
+	background: var(--main-button-color);
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 

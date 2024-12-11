@@ -49,11 +49,11 @@ function Footer() {
       {user ? (
         <>
           <div class="tab-bar">
-            <Link to="/reservation" class="tab">
-              部室予約
-            </Link>
             <Link to="/key" class="tab">
               部室利用
+            </Link>
+            <Link to="/reservation" class="tab">
+              部室予約
             </Link>
             <Link to="/notification" class="tab">
               提出書類
@@ -72,10 +72,10 @@ function Footer() {
         <>
           <div class="tab-bar">
             <Link to="/login" class="tab">
-              部室予約
+              部室利用
             </Link>
             <Link to="/login" class="tab">
-              部室利用
+              部室予約
             </Link>
             <Link to="/login" class="tab">
               提出書類
