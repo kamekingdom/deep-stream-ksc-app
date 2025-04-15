@@ -1,0 +1,109 @@
+.schedule-detail-container {
+    font-size: 2.4rem;
+    margin: 20px;
+}
+
+.schedule-detail-title {
+    text-align: center;
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.schedule-detail-date-picker {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.date-picker-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.custom-date-picker {
+    width: 400px;
+    text-align: center;
+    font-size: 2.0rem;
+    padding: 10px;
+}
+
+.schedule-detail-list {
+    list-style: none;
+    padding: 0;
+}
+
+.schedule-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 3.0rem;
+}
+
+.schedule-detail-date {
+    font-weight: 600;
+}
+
+.schedule-detail-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.custom-button {
+    font-size: 3.0rem;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-button.selected {
+    color: white;
+}
+
+.selected-green {
+    background-color: #28a745;
+}
+
+.selected-yellow {
+    background-color: #28a745;
+    /* background-color: #ffc107; */
+}
+
+.selected-red {
+    background-color: #28a745;
+    /* background-color: #dc3545; */
+}
+
+.selected-white {
+    background-color: white;
+}
+
+.custom-button:hover {
+    opacity: 0.8;
+}
+
+.schedule-detail-save {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.save-button {
+    font-size: 2.4rem;
+    padding: 20px 40px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}

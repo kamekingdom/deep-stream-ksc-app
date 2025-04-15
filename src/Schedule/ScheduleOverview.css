@@ -1,0 +1,236 @@
+.schedule-overview-container {
+    padding: 20px;
+    font-size: 1.2rem;
+}
+
+.schedule-overview-title {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+}
+
+.member-selection {
+    margin-bottom: 30px;
+}
+
+.member-list {
+    list-style: none;
+    padding: 0;
+}
+
+.member-list li {
+    margin: 10px 0;
+}
+
+.schedule-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+}
+
+.schedule-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.member-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    position: relative;
+    width: 50%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.search-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.member-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    position: relative;
+    width: 70%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 2.4rem;
+    /* フォントサイズを拡大 */
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.search-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+    font-size: 2.4rem;
+    /* プレースホルダーも大きく */
+}
+
+.member-selection {
+    font-size: 2.4rem;
+    /* メンバーリストのフォントサイズを拡大 */
+}
+
+.member-list li {
+    margin: 15px 0;
+}
+
+.member-list input {
+    transform: scale(1.2);
+    /* チェックボックスを拡大 */
+}
+
+.schedule-table th,
+.schedule-table td {
+    font-size: 2.4rem;
+    /* テーブルのフォントサイズを拡大 */
+    padding: 15px;
+}
+
+.schedule-overview-title {
+    text-align: center;
+    font-size: 3.0rem;
+    /* タイトルをさらに大きく */
+    margin-bottom: 20px;
+}
+
+.selected-members {
+    margin: 20px 0;
+    font-size: 1.5rem;
+}
+
+.selected-members-list {
+    list-style: none;
+    padding: 0;
+}
+
+.selected-members-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.remove-member-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.remove-member-button:hover {
+    background-color: #bd2130;
+}
+
+/* ✕がない日の行の色付け */
+.no-x {
+    background-color: #d4edda;
+    /* 緑系の薄い背景色 */
+}
+
+/* ✕の割合が少ない日の行の色付け */
+.low-x {
+    background-color: #fff3cd;
+    /* 黄色系の薄い背景色 */
+}
+
+/* 通常のテーブル行 */
+.schedule-table tbody tr {
+    background-color: white;
+}
+
+/* テーブルの境界線を整える */
+.schedule-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+}
+
+.schedule-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.member-list input[type="checkbox"] {
+    transform: scale(2.0);
+    /* チェックボックスを1.5倍に拡大 */
+    margin-right: 10px;
+    /* ラベルとの間に余白を追加 */
+    cursor: pointer;
+    /* ポインターを表示してクリック可能であることを示す */
+}
+
+.member-list label {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    /* ラベルのフォントサイズを大きく */
+}
+
+.member-list li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.member-list li:hover {
+    background-color: #f1f1f1;
+    /* ホバー時の背景色変更 */
+}

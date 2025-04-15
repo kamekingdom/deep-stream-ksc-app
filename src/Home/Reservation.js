@@ -6,8 +6,10 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import "../css/kame.css";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import useIsMobile from '../function/isMobile';
 
 function Reservation() {
+    const isMobile = useIsMobile();
     const linkStyle = { color: "#e4e4e4", background: "white", fontSize: "2.3em" };
     const starStyle = { color: "#acacac", background: "white", fontSize: "1.9em" };
 
