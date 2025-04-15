@@ -1,65 +1,67 @@
+# 🎵 Deep Stream KSC App
 
+An all-in-one management web application built for a 300+ member light music club at Kwansei Gakuin University.  
+This React-based system streamlines internal communication, scheduling, and document sharing—tailored for large-scale student organizations.
 
-## Git Rules
+---
 
-### Prefixes
+## 📌 Overview
 
-```
-fix: バグ等の修正
-feat: 新機能
-refactor: 動作に影響のないコード変更
-docs: ドキュメントのみの変更
-style: スタイルのみの変更
-perf: パフォーマンス向上関連の変更
-chore: ライブラリ等の変更
-test: テスト関連の変更
-**!: 破壊的変更
-```
+**Deep Stream KSC** is an integrated club management platform developed to support the daily operations of a large music society. It enables real-time room booking, member administration, material distribution, announcements, and more—all in a single platform.
 
-### Branch Name
+---
 
-```
-ex) {your_name}/feat_***
-```
+## 🧑‍💻 Tech Stack
 
-### Commit Message
+- **Frontend**: React + Tailwind CSS
+- **Backend & Auth**: Firebase (Authentication / Firestore)
+- **Deployment**: Firebase Hosting (supports Web / Mobile)
+- **CI/CD & Management**: GitHub Actions, Firebase CLI
 
-```
-ex) feat: xxxx
-```
+---
 
-### `npm start`
+## 🚀 Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 🧾 **Member Management** for 300+ users
+- 🏠 **Practice Room Booking System** with real-time sync and concurrency control
+- 📤 **Document Sharing & Role-Based Access Control**
+- 🔔 **Announcement Delivery with Auto Notification**
+- 🔒 Authentication & secure role-based data visibility
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🎯 Role & Contributions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I led the entire development process — from initial design to implementation and deployment.
 
-### `npm run build`
+- Designed the UX/UI tailored for large student organizations
+- Implemented real-time collision avoidance in the booking feature using Firebase transactions
+- Set up permission-based access for different club roles (e.g., officers, general members)
+- Integrated push notifications and weekly announcements
+- Built for long-term internal use with maintainable code and scalable architecture
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📱 Live Demo & Repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 🔗 [Live Web App](https://deep-stream-ksc.web.app/)
+- 📦 [GitHub Repository](https://github.com/DeepStream-KSC/deepstreamksc)
 
-### `npm run eject`
+> You may need a verified club account to access internal features.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
+## ✨ Future Plans
 
-### Deployment
+- Mobile-native version using React Native or Flutter
+- Admin dashboard for analytics and scheduling insights
+- Weekly digest & calendar integration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT License  
+Created by [@kamekingdom](https://github.com/kamekingdom)
+
+---
