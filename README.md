@@ -1,4 +1,4 @@
-# 🎵 Deep Stream KSC App (2024)
+# 🎵 Deep Stream KSC App (2022)
 
 An all-in-one management web application built for a 300+ member light music club at Kwansei Gakuin University.  
 This React-based system streamlines internal communication, scheduling, and document sharing—tailored for large-scale student organizations.
