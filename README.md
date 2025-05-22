@@ -13,7 +13,7 @@ This React-based system streamlines internal communication, scheduling, and docu
 
 ## Tech Stack
 
-- **Frontend**: React + Tailwind CSS
+- **Frontend**: React
 - **Backend & Auth**: Firebase (Authentication / Firestore)
 - **Deployment**: Firebase Hosting (supports Web / Mobile)
 - **CI/CD & Management**: GitHub Actions, Firebase CLI
