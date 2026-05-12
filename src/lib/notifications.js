@@ -2,16 +2,16 @@ const NOTIFICATION_STATE_KEY = "deepstream_notification_state";
 const NOTIFICATION_ENABLED_KEY = "deepstream_notification_enabled";
 const TIME_SLOT_LIST = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
 const TIME_SLOT_SCHEDULE = {
-  朝練: { start: "08:00", end: "08:50" },
-  "１限": { start: "09:00", end: "10:40" },
-  チャペル: { start: "10:40", end: "11:10" },
-  "２限": { start: "11:10", end: "12:50" },
-  昼練: { start: "12:50", end: "13:30" },
-  "３限": { start: "13:30", end: "15:10" },
-  "４限": { start: "15:20", end: "17:00" },
-  "５限": { start: "17:05", end: "18:45" },
-  夜練Ⅰ: { start: "18:50", end: "19:50" },
-  夜練Ⅱ: { start: "20:00", end: "21:00" },
+  朝練: { start: "08:00", end: "09:00" },
+  "１限": { start: "09:00", end: "10:30" },
+  チャペル: { start: "10:30", end: "11:00" },
+  "２限": { start: "11:00", end: "12:30" },
+  昼練: { start: "12:30", end: "13:30" },
+  "３限": { start: "13:30", end: "15:00" },
+  "４限": { start: "15:10", end: "16:40" },
+  "５限": { start: "16:50", end: "18:20" },
+  夜練Ⅰ: { start: "18:30", end: "19:45" },
+  夜練Ⅱ: { start: "19:45", end: "21:00" },
 };
 const DAY_OF_WEEK_LIST = ["日", "月", "火", "水", "木", "金", "土"];
 

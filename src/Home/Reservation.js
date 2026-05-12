@@ -15,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { getCurrentUserEmail, useCurrentUser } from "../lib/session-auth";
 
 const TIME_SLOT_LIST = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
-const TIME_LIST = ["8:00 ~ 8:50", "9:00 ~ 10:40", "10:40 ~ 11:10", "11:10 ~ 12:50", "12:50 ~ 13:30", "13:30 ~ 15:10", "15:20 ~ 17:00", "17:05 ~ 18:45", "18:50 ~ 19:50", "20:00 ~ 21:00"];
+const TIME_LIST = ["8:00 ~ 9:00", "9:00 ~ 10:30", "10:30 ~ 11:00", "11:00 ~ 12:30", "12:30 ~ 13:30", "13:30 ~ 15:00", "15:10 ~ 16:40", "16:50 ~ 18:20", "18:30 ~ 19:45", "19:45 ~ 21:00"];
 const WEEK_DAY_LIST = ["　　　　", "日", "月", "火", "水", "木", "金", "土"];
 const DAY_OF_WEEK_LIST = ["日", "月", "火", "水", "木", "金", "土"];
 

@@ -33,7 +33,7 @@ function PrivacyPolicy() {
         </div>
         <div>
           <p className="font-semibold text-foreground">6. お問い合わせ</p>
-          <p>deepstream.ksc [ at ] gmail.com までご連絡ください。</p>
+          <p>deepstream.ksc [ at ] gmail.com までお気軽にご連絡ください。</p>
         </div>
       </CardContent>
     </Card>

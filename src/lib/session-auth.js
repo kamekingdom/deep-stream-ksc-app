@@ -7,29 +7,70 @@ import { auth, db } from "../firebase";
 const MANUAL_SESSION_KEY = "deepstream_manual_session";
 const SESSION_EVENT = "deepstream:manual-session-changed";
 const FIRESTORE_LOGIN_TIMEOUT_MS = 8000;
+const MANUAL_SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 
-function getSessionStorage() {
+function getStorage() {
   if (typeof window === "undefined") {
     return null;
   }
 
-  return window.sessionStorage;
+  return window.localStorage;
 }
 
-function readManualSession() {
-  const sessionStorage = getSessionStorage();
-  if (!sessionStorage) {
+function readManualSessionCookie() {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const cookie = document.cookie
+    .split("; ")
+    .find((item) => item.startsWith(`${MANUAL_SESSION_KEY}=`));
+
+  if (!cookie) {
+    return null;
+  }
+
+  const value = cookie.slice(`${MANUAL_SESSION_KEY}=`.length);
+  if (!value) {
     return null;
   }
 
   try {
-    window.localStorage.removeItem(MANUAL_SESSION_KEY);
-    const raw = sessionStorage.getItem(MANUAL_SESSION_KEY);
-    if (!raw) {
-      return null;
+    return JSON.parse(decodeURIComponent(value));
+  } catch (_error) {
+    return null;
+  }
+}
+
+function writeManualSessionCookie(session) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  document.cookie = `${MANUAL_SESSION_KEY}=${encodeURIComponent(JSON.stringify(session))}; path=/; max-age=${MANUAL_SESSION_COOKIE_MAX_AGE}; SameSite=Lax`;
+}
+
+function clearManualSessionCookie() {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  document.cookie = `${MANUAL_SESSION_KEY}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+function readManualSession() {
+  const storage = getStorage();
+  try {
+    const raw = storage?.getItem(MANUAL_SESSION_KEY);
+    let parsed = raw ? JSON.parse(raw) : null;
+
+    if (!parsed?.email) {
+      parsed = readManualSessionCookie();
+      if (parsed?.email && storage) {
+        storage.setItem(MANUAL_SESSION_KEY, JSON.stringify(parsed));
+      }
     }
 
-    const parsed = JSON.parse(raw);
     if (!parsed?.email) {
       return null;
     }
@@ -51,24 +92,17 @@ function notifySessionChanged() {
 }
 
 function writeManualSession(email) {
-  const sessionStorage = getSessionStorage();
-  if (!sessionStorage) {
-    return;
-  }
-
-  window.localStorage.removeItem(MANUAL_SESSION_KEY);
-  sessionStorage.setItem(MANUAL_SESSION_KEY, JSON.stringify({ email }));
+  const storage = getStorage();
+  const session = { email };
+  storage?.setItem(MANUAL_SESSION_KEY, JSON.stringify(session));
+  writeManualSessionCookie(session);
   notifySessionChanged();
 }
 
 function clearManualSession() {
-  const sessionStorage = getSessionStorage();
-  if (!sessionStorage) {
-    return;
-  }
-
-  window.localStorage.removeItem(MANUAL_SESSION_KEY);
-  sessionStorage.removeItem(MANUAL_SESSION_KEY);
+  const storage = getStorage();
+  storage?.removeItem(MANUAL_SESSION_KEY);
+  clearManualSessionCookie();
   notifySessionChanged();
 }
 
@@ -109,7 +143,11 @@ function useCurrentUser() {
     };
 
     window.addEventListener(SESSION_EVENT, syncManualUser);
-    return () => window.removeEventListener(SESSION_EVENT, syncManualUser);
+    window.addEventListener("storage", syncManualUser);
+    return () => {
+      window.removeEventListener(SESSION_EVENT, syncManualUser);
+      window.removeEventListener("storage", syncManualUser);
+    };
   }, []);
 
   return [firebaseUser || manualUser, firebaseLoading && !manualUser];

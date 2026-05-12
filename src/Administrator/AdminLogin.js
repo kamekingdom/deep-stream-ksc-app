@@ -111,7 +111,7 @@ function AdminLogin() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-base text-muted-foreground">
-                  困ったことや不具合があれば、開発者までご連絡ください。
+                  困ったことや不具合があれば、開発者までお気軽にご連絡ください。
                 </p>
                 <div className="space-y-2">
                   <a

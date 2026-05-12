@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { APP_BUILD_TIME } from "../generated/version";
 
 const CHECK_INTERVAL_MS = 60 * 1000;
+const DISMISSED_BUILD_KEY = "deepstream_dismissed_update_build";
 
 async function clearAppCaches() {
   if ("caches" in window) {
@@ -32,20 +33,52 @@ async function fetchLatestVersion() {
   return response.json();
 }
 
+function readDismissedBuildTime() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem(DISMISSED_BUILD_KEY);
+}
+
+function writeDismissedBuildTime(buildTime) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (!buildTime) {
+    window.localStorage.removeItem(DISMISSED_BUILD_KEY);
+    return;
+  }
+
+  window.localStorage.setItem(DISMISSED_BUILD_KEY, buildTime);
+}
+
 function UpdateBanner() {
   const [latestVersion, setLatestVersion] = React.useState(null);
   const [isReloading, setIsReloading] = React.useState(false);
 
   React.useEffect(() => {
+    const dismissedBuildTime = readDismissedBuildTime();
+    if (dismissedBuildTime && dismissedBuildTime === APP_BUILD_TIME) {
+      writeDismissedBuildTime(null);
+    }
+
     let cancelled = false;
 
     const checkVersion = async () => {
       try {
         const latest = await fetchLatestVersion();
         const hasNewBuild = latest?.buildTime && latest.buildTime !== APP_BUILD_TIME;
+        const isDismissedBuild = latest?.buildTime && latest.buildTime === readDismissedBuildTime();
 
-        if (!cancelled && hasNewBuild) {
+        if (!cancelled && hasNewBuild && !isDismissedBuild) {
           setLatestVersion(latest);
+          return;
+        }
+
+        if (!cancelled) {
+          setLatestVersion(null);
         }
       } catch (_error) {
         // Silent fail: lack of connectivity should not disturb normal app usage.
@@ -79,6 +112,7 @@ function UpdateBanner() {
   const handleReload = async () => {
     setIsReloading(true);
     try {
+      writeDismissedBuildTime(latestVersion?.buildTime || null);
       await clearAppCaches();
     } finally {
       window.location.replace(`/?updatedAt=${Date.now()}`);
