@@ -67,11 +67,20 @@ function ReservationStatusPage() {
                         return (
                           <TableCell key={day}>
                             {reservation ? (
+                              reservation.IsBlocked ? (
+                                <div className="space-y-1 text-sm">
+                                  <p className="font-semibold">予約不可</p>
+                                  <p className="text-muted-foreground">
+                                    {reservation.BlockReason || "管理者設定"}
+                                  </p>
+                                </div>
+                              ) : (
                               <div className="space-y-1 text-sm">
                                 <p className="font-semibold">{reservation.NickName}</p>
                                 <p className="text-muted-foreground">{reservation.Category}</p>
                                 <p className="text-muted-foreground">{reservation.PersonalName}</p>
                               </div>
+                              )
                             ) : (
                               "空き"
                             )}

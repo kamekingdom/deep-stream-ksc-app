@@ -22,7 +22,15 @@ function AlertReservation() {
           </CardHeader>
           <CardContent className="space-y-5">
             <p className="text-sm text-muted-foreground">{reservationInfo.Time}</p>
-            <Textarea readOnly value="※過去の投稿は編集できません" className="resize-none" />
+            <Textarea
+              readOnly
+              value={
+                reservationInfo.Category === "予約不可"
+                  ? reservationInfo.Memo || "管理者によって予約できないように設定されています。"
+                  : "※過去の投稿は編集できません"
+              }
+              className="resize-none"
+            />
             <Link to="/reservation" className="block">
               <Button fullWidth>部室予約へ</Button>
             </Link>

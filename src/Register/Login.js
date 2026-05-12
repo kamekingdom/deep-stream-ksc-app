@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Header } from "../PageParts";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
-import { loginWithEmailFallback, signOutCurrentUser, useCurrentUser } from "../lib/session-auth";
+import { loginWithEmailFallback, useCurrentUser } from "../lib/session-auth";
 
 function Login() {
   const [user] = useCurrentUser();
 
-  const handleLogout = async () => {
-    try {
-      await signOutCurrentUser();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (user) {
+    return <Navigate to="/reservation" replace />;
+  }
 
   return (
     <div>
@@ -37,45 +33,29 @@ function Login() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {user ? (
-              <div className="space-y-3">
-                <Link to="/tool" className="block">
-                  <Button fullWidth>登録情報</Button>
-                </Link>
-                <Link to="/" className="block">
-                  <Button fullWidth variant="secondary">
-                    ホーム
-                  </Button>
-                </Link>
-                <Button fullWidth variant="outline" onClick={handleLogout}>
-                  ログアウト
-                </Button>
+            <>
+              <EmailLogin />
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>
+                  未登録の方は{" "}
+                  <Link to="/register" className="font-semibold text-primary">
+                    会員登録
+                  </Link>
+                </p>
+                <p>
+                  利用規約は{" "}
+                  <Link to="/termsofservice" className="font-semibold text-primary">
+                    こちら
+                  </Link>
+                </p>
+                <p>
+                  パスワードを忘れた場合は{" "}
+                  <Link to="/findpassword" className="font-semibold text-primary">
+                    こちら
+                  </Link>
+                </p>
               </div>
-            ) : (
-              <>
-                <EmailLogin />
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>
-                    未登録の方は{" "}
-                    <Link to="/register" className="font-semibold text-primary">
-                      会員登録
-                    </Link>
-                  </p>
-                  <p>
-                    利用規約は{" "}
-                    <Link to="/termsofservice" className="font-semibold text-primary">
-                      こちら
-                    </Link>
-                  </p>
-                  <p>
-                    パスワードを忘れた場合は{" "}
-                    <Link to="/findpassword" className="font-semibold text-primary">
-                      こちら
-                    </Link>
-                  </p>
-                </div>
-              </>
-            )}
+            </>
           </CardContent>
         </Card>
       </Page>

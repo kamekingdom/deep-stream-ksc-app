@@ -24,6 +24,11 @@ import {
   themeOptions,
   writeStoredAppearance,
 } from "../lib/appearance";
+import {
+  canUseNotifications,
+  getNotificationPermission,
+  requestNotificationPermission,
+} from "../lib/notifications";
 import { clearManualSession, signOutCurrentUser, useCurrentUser } from "../lib/session-auth";
 
 const quickLinks = [
@@ -39,6 +44,7 @@ function Tool() {
   const [savingProfile, setSavingProfile] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [notificationPermission, setNotificationPermission] = useState(getNotificationPermission());
   const [profileMessage, setProfileMessage] = useState("");
   const [appearance, setAppearance] = useState(defaultAppearance);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -48,6 +54,21 @@ function Tool() {
     personalName: "",
     nickName: "",
   });
+
+  useEffect(() => {
+    const syncNotificationPermission = () => {
+      setNotificationPermission(getNotificationPermission());
+    };
+
+    syncNotificationPermission();
+    window.addEventListener("focus", syncNotificationPermission);
+    document.addEventListener("visibilitychange", syncNotificationPermission);
+
+    return () => {
+      window.removeEventListener("focus", syncNotificationPermission);
+      document.removeEventListener("visibilitychange", syncNotificationPermission);
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -175,6 +196,11 @@ function Tool() {
     } finally {
       setIsLoggingOut(false);
     }
+  };
+
+  const handleEnableNotifications = async () => {
+    const permission = await requestNotificationPermission();
+    setNotificationPermission(permission);
   };
 
   const handleDeleteAccount = async () => {
@@ -432,6 +458,35 @@ function Tool() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader>
+              <CardTitle>通知</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-[1.05rem] font-medium text-foreground/90 sm:text-[1.15rem]">
+                予約の10分前に「利用開始」、終了時間に「返却」を促す通知を出します。
+              </p>
+              <p className="text-base font-semibold text-muted-foreground">
+                状態: {notificationPermissionLabel(notificationPermission)}
+              </p>
+              {notificationPermission === "granted" ? (
+                <p className="text-base font-medium text-muted-foreground">
+                  ログイン時に自動で通知が有効になります。
+                </p>
+              ) : null}
+              {canUseNotifications() && notificationPermission !== "granted" ? (
+                <Button fullWidth variant="secondary" onClick={handleEnableNotifications}>
+                  通知を許可する
+                </Button>
+              ) : null}
+              {!canUseNotifications() ? (
+                <p className="text-base font-medium text-muted-foreground">
+                  このブラウザでは通知に対応していません。
+                </p>
+              ) : null}
+            </CardContent>
+          </Card>
+
           {user ? (
             <Card>
               <CardHeader>
@@ -452,6 +507,22 @@ function Tool() {
       <Footer />
     </>
   );
+}
+
+function notificationPermissionLabel(permission) {
+  if (permission === "granted") {
+    return "有効";
+  }
+
+  if (permission === "denied") {
+    return "拒否されています";
+  }
+
+  if (permission === "unsupported") {
+    return "未対応";
+  }
+
+  return "未設定";
 }
 
 function SettingRow({ label, value }) {

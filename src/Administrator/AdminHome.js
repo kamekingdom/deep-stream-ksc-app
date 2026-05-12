@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Page, PageHero } from "../components/page";
 
 const actions = [
-  { label: "緊急予約", to: "/create-reservation-settings" },
-  { label: "予約テンプレ", to: "/create-reservation-template" },
+  { label: "予約不可設定", to: "/create-reservation-settings" },
 ];
 
 function AdminHome() {

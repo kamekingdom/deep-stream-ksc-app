@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { Circle, Clock3, Star, X } from "lucide-react";
+import { Ban, Circle, Clock3, Star, X } from "lucide-react";
 import { Footer, Header } from "../PageParts";
 import { ReservationContext } from "../App";
 import { db } from "../firebase";
@@ -62,7 +62,7 @@ function Reservation() {
               TIME_SLOT_LIST.map(async (slot) => {
                 const docRef = doc(db, weekday, slot);
                 const docSnap = await getDoc(docRef);
-                return docSnap.exists() ? docSnap.data().PostUserMail : false;
+                return docSnap.exists() ? docSnap.data() : null;
               })
             )
           )
@@ -80,16 +80,41 @@ function Reservation() {
     return <Navigate to="/login" replace />;
   }
 
-  function setReservationMeta(weekday, timeslot, time) {
+  function setReservationMeta(weekday, timeslot, time, details = {}) {
     reservationInfo.WeekDay = weekday;
     reservationInfo.TimeSlot = timeslot;
     reservationInfo.Time = time;
+    reservationInfo.Category = details.category || "";
+    reservationInfo.Memo = details.memo || "";
   }
 
   const renderCell = (weekday, weekdayIndex, timeSlot, slotIndex) => {
-    const targetEmail = reserve[weekdayIndex + 1][slotIndex];
+    const reservation = reserve[weekdayIndex + 1][slotIndex];
+    const targetEmail = reservation?.PostUserMail;
+    const isBlocked = Boolean(reservation?.IsBlocked);
     const isFutureOrToday = isAvailableReservationDay[weekdayIndex];
     const currentUserEmail = getCurrentUserEmail();
+
+    if (isBlocked) {
+      return (
+        <Link
+          className="block w-full"
+          to="/alertreservation"
+          onClick={() =>
+            setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex], {
+              category: "予約不可",
+              memo: reservation?.BlockReason || reservation?.Memo || "管理者によって予約できないように設定されています。",
+            })
+          }
+        >
+          <StatusBadge
+            variant="outline"
+            label="予約不可"
+            icon={<Ban className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.2} />}
+          />
+        </Link>
+      );
+    }
 
     if (isFutureOrToday) {
       if (targetEmail && targetEmail === currentUserEmail) {
@@ -171,6 +196,10 @@ function Reservation() {
                   <span className="inline-flex items-center gap-1.5">
                     <Clock3 className="h-4 w-4" strokeWidth={2.2} />
                     締切
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Ban className="h-4 w-4" strokeWidth={2.2} />
+                    予約不可
                   </span>
                 </div>
               </div>
