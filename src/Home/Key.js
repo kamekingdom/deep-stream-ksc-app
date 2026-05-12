@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { Footer, Header } from "../PageParts";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Page, PageHero } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { Table, TableBody, TableCell, TableRow } from "../components/ui/table";
+import { getCurrentUserEmail } from "../lib/session-auth";
 
 function Key() {
   const [name, setName] = useState("");
@@ -34,7 +35,7 @@ function Key() {
   }, []);
 
   const isUsing = Boolean(name);
-  const isCurrentUserHolder = email === auth.currentUser?.email;
+  const isCurrentUserHolder = email === getCurrentUserEmail();
 
   return (
     <>

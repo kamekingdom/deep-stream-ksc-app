@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Footer, Header } from "../PageParts";
 import { ReservationContext } from "../App";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { Textarea } from "../components/ui/textarea";
 import { Table, TableBody, TableCell, TableRow } from "../components/ui/table";
+import { getCurrentUserEmail } from "../lib/session-auth";
 
 function ReservationDetail() {
   const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
@@ -30,6 +31,11 @@ function ReservationDetail() {
   const [reservationNum, setReservationNum] = useState(null);
 
   const handleClick = async () => {
+    const currentUserEmail = getCurrentUserEmail();
+    if (!currentUserEmail) {
+      return;
+    }
+
     setIsClicked(true);
     try {
       setIsDeleting(true);
@@ -37,7 +43,7 @@ function ReservationDetail() {
       await deleteDoc(docRef);
       const updatedCount =
         currentDay === reservationInfo.WeekDay ? reservationNum : reservationNum - 1;
-      await updateDoc(doc(db, "users", auth.currentUser.email), {
+      await updateDoc(doc(db, "users", currentUserEmail), {
         ReservationNum: updatedCount,
       });
       setIsDeleting(false);
@@ -52,6 +58,7 @@ function ReservationDetail() {
   useEffect(() => {
     async function fetchFirestoreData() {
       try {
+        const currentUserEmail = getCurrentUserEmail();
         let docRef = doc(db, reservationInfo.WeekDay, reservationInfo.TimeSlot);
         let docSnap = await getDoc(docRef, { source: "cache" });
         if (docSnap.exists()) {
@@ -60,10 +67,15 @@ function ReservationDetail() {
           setMemo(docData.Memo);
           setNickName(docData.NickName);
           setPersonalName(docData.PersonalName);
-          setCanEdit(docData.PostUserMail === auth.currentUser.email);
+          setCanEdit(docData.PostUserMail === currentUserEmail);
         }
 
-        docRef = doc(db, "users", auth.currentUser.email);
+        if (!currentUserEmail) {
+          setIsLoaded(true);
+          return;
+        }
+
+        docRef = doc(db, "users", currentUserEmail);
         docSnap = await getDoc(docRef, { source: "cache" });
         if (docSnap.exists()) {
           const docData = docSnap.data();

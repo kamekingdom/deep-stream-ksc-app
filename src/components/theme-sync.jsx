@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import {
   applyAppearanceToDocument,
   defaultAppearance,
@@ -10,9 +9,10 @@ import {
   sanitizeAppearance,
   writeStoredAppearance,
 } from "../lib/appearance";
+import { useCurrentUser } from "../lib/session-auth";
 
 function ThemeSync() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
 
   useEffect(() => {
     applyAppearanceToDocument(readStoredAppearance());

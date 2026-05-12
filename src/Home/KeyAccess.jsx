@@ -1,22 +1,18 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import { Spinner } from "../components/ui/spinner";
 import { Page } from "../components/page";
+import { useCurrentUser } from "../lib/session-auth";
 
 function KeyAccess() {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useCurrentUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleAccess = async () => {
       if (loading) return;
-      if (error) {
-        console.error("Error with auth state:", error);
-        return;
-      }
       if (!user) {
         navigate("/login");
         return;
@@ -48,7 +44,7 @@ function KeyAccess() {
         } else {
           await updateDoc(keyDocRef, {
             email: user.email,
-            image: user.photoURL,
+            image: user.photoURL || null,
             name: personalName,
             nickname: nickName,
             time: new Date().toLocaleString(),
@@ -57,7 +53,7 @@ function KeyAccess() {
       } else {
         await setDoc(keyDocRef, {
           email: user.email,
-          image: user.photoURL,
+          image: user.photoURL || null,
           name: personalName,
           nickname: nickName,
           time: new Date().toLocaleString(),
@@ -68,7 +64,7 @@ function KeyAccess() {
     };
 
     handleAccess();
-  }, [user, loading, error, navigate]);
+  }, [user, loading, navigate]);
 
   return (
     <Page className="flex min-h-screen items-center justify-center">

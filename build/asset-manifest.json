@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.62eebbe7.css",
-    "main.js": "/static/js/main.4486b897.js",
+    "main.css": "/static/css/main.84c23f79.css",
+    "main.js": "/static/js/main.5802f56c.js",
     "static/media/2023部室利用規約.pdf": "/static/media/2023部室利用規約.3c70d2a429919970d9ea.pdf",
     "index.html": "/index.html",
-    "main.62eebbe7.css.map": "/static/css/main.62eebbe7.css.map",
-    "main.4486b897.js.map": "/static/js/main.4486b897.js.map"
+    "main.84c23f79.css.map": "/static/css/main.84c23f79.css.map",
+    "main.5802f56c.js.map": "/static/js/main.5802f56c.js.map"
   },
   "entrypoints": [
-    "static/css/main.62eebbe7.css",
-    "static/js/main.4486b897.js"
+    "static/css/main.84c23f79.css",
+    "static/js/main.5802f56c.js"
   ]
 }

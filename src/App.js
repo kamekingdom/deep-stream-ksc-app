@@ -19,6 +19,7 @@ import FixTimeSlots from "./Administrator/FixTimeSlots";
 import KeyAccess from "./Home/KeyAccess";
 import ReservationPreview from "./Home/ReservationPreview";
 import { isAdminAuthorized } from "./lib/admin";
+import { useCurrentUser } from "./lib/session-auth";
 
 const SettingInfo = {
   Year: "2023"
@@ -42,17 +43,37 @@ function RequireAdmin({ children }) {
   return isAdminAuthorized() ? children : <Navigate to="/adminlogin" replace />;
 }
 
+function RequireLogin({ children }) {
+  const [user, loading] = useCurrentUser();
+
+  if (loading) {
+    return null;
+  }
+
+  return user ? children : <Navigate to="/login" replace />;
+}
+
+function LandingRedirect() {
+  const [user, loading] = useCurrentUser();
+
+  if (loading) {
+    return null;
+  }
+
+  return <Navigate to={user ? "/reservation" : "/login"} replace />;
+}
+
 function App() {
   return (
     <>
       <Router basename="/">
         <Routes>
-          <Route exact path="/" element={<Navigate to="/reservation" replace />}></Route>
-          <Route exact path="/reservation" element={<Reservation />}></Route>
-          <Route exact path="/reservation-preview" element={<ReservationPreview />}></Route>
-          <Route exact path="/addreservation" element={<AddReservation />}></Route>
-          <Route exact path="/reservationdetail" element={<ReservationDetail />}></Route>
-          <Route exact path="/alertreservation" element={<AlertReservation />}></Route>
+          <Route exact path="/" element={<LandingRedirect />}></Route>
+          <Route exact path="/reservation" element={<RequireLogin><Reservation /></RequireLogin>}></Route>
+          <Route exact path="/reservation-preview" element={<RequireLogin><ReservationPreview /></RequireLogin>}></Route>
+          <Route exact path="/addreservation" element={<RequireLogin><AddReservation /></RequireLogin>}></Route>
+          <Route exact path="/reservationdetail" element={<RequireLogin><ReservationDetail /></RequireLogin>}></Route>
+          <Route exact path="/alertreservation" element={<RequireLogin><AlertReservation /></RequireLogin>}></Route>
 
           <Route exact path="/adminhome" element={<RequireAdmin><AdminHome /></RequireAdmin>}></Route>
           <Route exact path="/adminlogin" element={<AdminLogin />}></Route>
@@ -61,9 +82,9 @@ function App() {
           <Route exact path="/reservation-check" element={<RequireAdmin><ReservationStatusPage /></RequireAdmin>}></Route>
           <Route exact path="/fix-time-slots" element={<RequireAdmin><FixTimeSlots /></RequireAdmin>}></Route>
 
-          <Route exact path="/key" element={<Key />}></Route>
-          <Route exact path="/key-access" element={<KeyAccess />}></Route>
-          <Route exact path="/tool" element={<Tool />}></Route>
+          <Route exact path="/key" element={<RequireLogin><Key /></RequireLogin>}></Route>
+          <Route exact path="/key-access" element={<RequireLogin><KeyAccess /></RequireLogin>}></Route>
+          <Route exact path="/tool" element={<RequireLogin><Tool /></RequireLogin>}></Route>
 
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/register" element={<Register />}></Route>

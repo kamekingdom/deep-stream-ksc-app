@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Header } from "../PageParts";
-import { auth } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Textarea } from "../components/ui/textarea";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
+import { getCurrentUserEmail, useCurrentUser } from "../lib/session-auth";
 
 function UserProfile() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
   const [profile, setProfile] = useState(null);
   const firestore = getFirestore();
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user && !profile) {
-        const userDocRef = doc(firestore, "users", auth.currentUser.email);
+        const userDocRef = doc(firestore, "users", getCurrentUserEmail());
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setProfile(userDoc.data());

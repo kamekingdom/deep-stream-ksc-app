@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { Footer, Header } from "../PageParts";
 import { ReservationContext } from "../App";
-import { db, auth } from "../firebase";
+import { db } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { Textarea } from "../components/ui/textarea";
+import { getCurrentUserEmail } from "../lib/session-auth";
 
 const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -31,7 +32,13 @@ function AddReservation() {
 
   useEffect(() => {
     async function fetchFirestoreData() {
-      const docRef = doc(db, "users", auth.currentUser.email);
+      const currentUserEmail = getCurrentUserEmail();
+      if (!currentUserEmail) {
+        setIsLoaded(true);
+        return;
+      }
+
+      const docRef = doc(db, "users", currentUserEmail);
       const docSnap = await getDoc(docRef, { source: "cache" });
       if (docSnap.exists()) {
         const docData = docSnap.data();
@@ -52,10 +59,16 @@ function AddReservation() {
   }, [currentDay, reservationInfo.WeekDay]);
 
   const handleUploadClick = async () => {
+    const currentUserEmail = getCurrentUserEmail();
+    if (!currentUserEmail) {
+      setIsClicked(false);
+      return;
+    }
+
     const timeSlot = reservationInfo.TimeSlot;
     const weekDay = reservationInfo.WeekDay;
     const postDocRef = doc(db, weekDay, timeSlot);
-    const userDocRef = doc(db, "users", auth.currentUser.email);
+    const userDocRef = doc(db, "users", currentUserEmail);
 
     const reservationExists = await getDoc(postDocRef);
     if (reservationExists.exists()) {
@@ -81,7 +94,7 @@ function AddReservation() {
     }
 
     await setDoc(postDocRef, {
-      PostUserMail: auth.currentUser.email,
+      PostUserMail: currentUserEmail,
       WeekDay: reservationInfo.WeekDay,
       TimeSlot: reservationInfo.TimeSlot,
       PersonalName: personalName,

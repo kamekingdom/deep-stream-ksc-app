@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { Circle, Clock3, Star, X } from "lucide-react";
 import { Footer, Header } from "../PageParts";
 import { ReservationContext } from "../App";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import termsOfServicePdf from "../assets/2023部室利用規約.pdf";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
+import { getCurrentUserEmail, useCurrentUser } from "../lib/session-auth";
 
 const TIME_SLOT_LIST = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
 const TIME_LIST = ["8:00 ~ 8:50", "9:00 ~ 10:40", "10:40 ~ 11:10", "11:10 ~ 12:50", "12:50 ~ 13:30", "13:30 ~ 15:10", "15:20 ~ 17:00", "17:05 ~ 18:45", "18:50 ~ 19:50", "20:00 ~ 21:00"];
@@ -32,6 +33,7 @@ function StatusBadge({ variant = "default", icon, label, className = "" }) {
 }
 
 function Reservation() {
+  const [user, userLoading] = useCurrentUser();
   const [loading, setLoading] = useState(true);
   const reservationInfo = useContext(ReservationContext);
 
@@ -47,6 +49,11 @@ function Reservation() {
   }
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     async function findFirestoreData() {
       try {
         const newData = await Promise.all(
@@ -67,7 +74,11 @@ function Reservation() {
       }
     }
     findFirestoreData();
-  }, []);
+  }, [user]);
+
+  if (!userLoading && !user) {
+    return <Navigate to="/login" replace />;
+  }
 
   function setReservationMeta(weekday, timeslot, time) {
     reservationInfo.WeekDay = weekday;
@@ -78,9 +89,10 @@ function Reservation() {
   const renderCell = (weekday, weekdayIndex, timeSlot, slotIndex) => {
     const targetEmail = reserve[weekdayIndex + 1][slotIndex];
     const isFutureOrToday = isAvailableReservationDay[weekdayIndex];
+    const currentUserEmail = getCurrentUserEmail();
 
     if (isFutureOrToday) {
-      if (targetEmail === auth.currentUser.email) {
+      if (targetEmail && targetEmail === currentUserEmail) {
         return (
           <Link className="block w-full" to="/reservationdetail" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
             <StatusBadge
@@ -112,7 +124,7 @@ function Reservation() {
       );
     }
 
-    if (targetEmail === auth.currentUser.email) {
+    if (targetEmail && targetEmail === currentUserEmail) {
       return (
         <Link className="block w-full" to="/alertreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
           <StatusBadge

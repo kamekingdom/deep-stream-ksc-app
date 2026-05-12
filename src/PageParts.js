@@ -1,8 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { CalendarDays, KeyRound, Settings2, Shield } from "lucide-react";
-import { auth } from "./firebase";
+import { CalendarDays, KeyRound, Settings2, Shield, UserRound } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { cn } from "./lib/utils";
 import {
@@ -11,16 +9,17 @@ import {
   getIconOption,
   readStoredAppearance,
 } from "./lib/appearance";
+import { useCurrentUser } from "./lib/session-auth";
 
 const navItems = [
-  { label: "部室予約", to: "/reservation", fallback: "/reservation", icon: CalendarDays },
+  { label: "部室予約", to: "/reservation", fallback: "/login", icon: CalendarDays },
   { label: "部室利用", to: "/key", fallback: "/login", icon: KeyRound },
   { label: "設定", to: "/tool", fallback: "/login", icon: Settings2 },
   { label: "管理者", to: "/adminlogin", fallback: "/adminlogin", icon: Shield, admin: true },
 ];
 
 function Header() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
   const [appearance, setAppearance] = React.useState(readStoredAppearance());
 
   React.useEffect(() => {
@@ -52,8 +51,13 @@ function Header() {
               <AccountIcon className="h-8 w-8" style={{ color: accountIconColor }} strokeWidth={2.2} />
             </Button>
           ) : (
-            <Button variant="secondary" size="sm" className="h-14 rounded-xl border border-border px-6 text-[1.55rem]">
-              アカウント
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-16 w-16 rounded-full border border-border bg-accent text-muted-foreground"
+              aria-label="アカウント"
+            >
+              <UserRound className="h-8 w-8" strokeWidth={2.2} />
             </Button>
           )}
         </Link>
@@ -63,7 +67,7 @@ function Header() {
 }
 
 function Footer() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
   const location = useLocation();
   const currentYear = new Date().getFullYear();
 

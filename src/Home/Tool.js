@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { deleteUser } from "firebase/auth";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { Footer, Header } from "../PageParts";
 import { auth, db } from "../firebase";
 import { Button } from "../components/ui/button";
@@ -24,6 +24,7 @@ import {
   themeOptions,
   writeStoredAppearance,
 } from "../lib/appearance";
+import { clearManualSession, signOutCurrentUser, useCurrentUser } from "../lib/session-auth";
 
 const quickLinks = [
   { label: "資料", to: "https://1drv.ms/f/s!AtMlHWLLja-6f3QqsYbzs7NejHc?e=cZDkyF" },
@@ -31,10 +32,13 @@ const quickLinks = [
 ];
 
 function Tool() {
-  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const [user] = useCurrentUser();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
   const [appearance, setAppearance] = useState(defaultAppearance);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -158,6 +162,59 @@ function Tool() {
   const previewColor = getIconColorOption(appearance.profileIconColor).value;
   const previewTheme = getThemeOption(appearance.themeId);
   const PreviewIcon = previewIcon;
+
+  const handleLogout = async () => {
+    setProfileMessage("");
+    setIsLoggingOut(true);
+
+    try {
+      await signOutCurrentUser();
+      navigate("/login");
+    } catch (error) {
+      setProfileMessage("ログアウトに失敗しました。");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user?.email) {
+      return;
+    }
+
+    const confirmed = window.confirm("アカウントを削除します。よろしいですか？");
+    if (!confirmed) {
+      return;
+    }
+
+    setProfileMessage("");
+    setIsDeletingAccount(true);
+
+    try {
+      if (auth.currentUser) {
+        const currentUser = auth.currentUser;
+        await deleteUser(currentUser);
+      } else {
+        clearManualSession();
+      }
+
+      try {
+        await deleteDoc(doc(db, "users", user.email));
+      } catch (deleteDocError) {
+        console.error(deleteDocError);
+      }
+
+      navigate("/register");
+    } catch (error) {
+      if (error.code === "auth/requires-recent-login") {
+        setProfileMessage("アカウント削除には再ログインが必要です。いったんログアウトしてから再度お試しください。");
+      } else {
+        setProfileMessage("アカウント削除に失敗しました。");
+      }
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
 
   return (
     <>
@@ -374,6 +431,22 @@ function Tool() {
               ))}
             </CardContent>
           </Card>
+
+          {user ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>アカウント操作</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-3 sm:grid-cols-2">
+                <Button fullWidth variant="secondary" onClick={handleLogout} disabled={isLoggingOut}>
+                  {isLoggingOut ? "ログアウト中..." : "ログアウト"}
+                </Button>
+                <Button fullWidth variant="destructive" onClick={handleDeleteAccount} disabled={isDeletingAccount}>
+                  {isDeletingAccount ? "削除中..." : "アカウント削除"}
+                </Button>
+              </CardContent>
+            </Card>
+          ) : null}
         </div>
       </Page>
       <Footer />

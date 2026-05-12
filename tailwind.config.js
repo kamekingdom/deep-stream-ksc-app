@@ -43,7 +43,7 @@ module.exports = {
         soft: "0 24px 60px rgba(15, 23, 42, 0.10)",
       },
       fontFamily: {
-        sans: ['"Noto Sans JP"', "system-ui", "sans-serif"],
+        sans: ['"Hiragino Sans"', '"Yu Gothic UI"', '"Yu Gothic"', "system-ui", "sans-serif"],
       },
       backgroundImage: {
         "hero-glow":

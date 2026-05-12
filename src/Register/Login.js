@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Header } from "../PageParts";
-import { auth } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
+import { loginWithEmailFallback, signOutCurrentUser, useCurrentUser } from "../lib/session-auth";
 
 function Login() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await signOutCurrentUser();
     } catch (error) {
       console.log(error);
     }
@@ -96,9 +94,10 @@ function EmailLogin() {
     setError(null);
     setIsSubmitting(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await loginWithEmailFallback(email, password);
     } catch (error) {
-      setError(translateFirebaseError(error.code));
+      console.error("Fallback login failed:", error);
+      setError(translateFirebaseError(error?.code));
     } finally {
       setIsSubmitting(false);
     }
@@ -131,6 +130,13 @@ function EmailLogin() {
 
 function translateFirebaseError(errorCode) {
   const errorMessages = {
+    "auth/firestore-timeout": "ログイン情報の確認に時間がかかっています。Firestore へ接続できていない可能性があります",
+    "auth/persistence-timeout": "端末の認証設定に時間がかかっています。もう一度お試しください",
+    "auth/request-timeout": "認証に時間がかかっています。通信状態を確認して、もう一度お試しください",
+    "auth/network-request-failed": "通信に失敗しました。時間をおいてもう一度お試しください",
+    "auth/internal-error": "認証の内部エラーが発生しました。ブラウザを変えるか、時間をおいてお試しください",
+    "auth/too-many-requests": "試行回数が多いため一時的に制限されています。時間をおいてお試しください",
+    "auth/invalid-credential": "メールアドレスまたはパスワードが正しくありません",
     "auth/email-already-in-use": "このメールアドレスは既に使用されています",
     "auth/invalid-email": "メールアドレスが無効です",
     "auth/operation-not-allowed": "メール/パスワード認証が無効です",
@@ -140,7 +146,10 @@ function translateFirebaseError(errorCode) {
     "auth/wrong-password": "パスワードが間違っています",
   };
 
-  return errorMessages[errorCode] || "予期しないエラーが発生しました";
-}
+  if (errorCode) {
+    return errorMessages[errorCode] || `ログインに失敗しました (${errorCode})`;
+  }
 
+  return "ログインに失敗しました。通信環境かブラウザ設定をご確認ください";
+}
 export default Login;

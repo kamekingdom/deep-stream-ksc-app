@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc, query, collection, where, getDocs } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Header } from "../PageParts";
 import { auth } from "../firebase";
 import { Button } from "../components/ui/button";
@@ -12,9 +11,10 @@ import { Input } from "../components/ui/input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { defaultAppearance, serializeAppearanceForFirestore } from "../lib/appearance";
+import { useCurrentUser } from "../lib/session-auth";
 
 function Register() {
-  const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
 
   return (
     <div>
