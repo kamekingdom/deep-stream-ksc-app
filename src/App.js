@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
 import HomePage from "./Home/HomePage";
 import Login from "./Register/Login";
 import Register from "./Register/Register";
@@ -25,7 +24,6 @@ import CreateReservationSettings from "./Administrator/CreateReservationSettings
 import CreateReservationTemplate from "./Administrator/CreateReservationTemplate";
 import ReservationStatusPage from "./Administrator/ReservationStatusPage";
 import FixTimeSlots from "./Administrator/FixTimeSlots";
-import UploadPage from "./Administrator/UploadPage";
 import KeyAccess from "./Home/KeyAccess";
 import ReservationPreview from "./Home/ReservationPreview";
 
@@ -79,7 +77,6 @@ function App() {
           <Route exact path="/create-reservation-template" element={<CreateReservationTemplate />}></Route>
           <Route exact path="/reservation-check" element={<ReservationStatusPage />}></Route>
           <Route exact path="/fix-time-slots" element={<FixTimeSlots />}></Route>
-          <Route exact path="/upload-page" element={<UploadPage />}></Route>
 
           <Route exact path="/calendar" element={<Calendar />}></Route>
           <Route exact path="/key" element={<Key />}></Route>

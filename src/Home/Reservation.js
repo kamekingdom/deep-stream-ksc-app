@@ -5,7 +5,7 @@ import { ReservationContext } from '../App';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import "../css/kame.css";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import termsOfServicePdf from "../assets/2023部室利用規約.pdf";
 
 function Reservation() {
     const linkStyle = { color: "#e4e4e4", background: "white", fontSize: "2.3em" };
@@ -27,46 +27,6 @@ function Reservation() {
     const IsAvailableReservationDay = [];
 
     const [reservationNum, setReservationNum] = useState("");
-
-    const [pdfUrl, setPdfUrl] = useState([]);
-
-    async function fetchFilesFromDeepDocuments() {
-        const storage = getStorage();
-        const deepDocumentRef = ref(storage, "Documents");
-
-        try {
-            const result = await listAll(deepDocumentRef);
-            const files = result.items;
-
-            // URLを取得する非同期操作
-            const fileUrls = await Promise.all(
-                files.map((fileRef) => getDownloadURL(fileRef))
-            );
-
-            // 名前の降順でソート
-            // console.log(fileUrls);
-
-            return fileUrls;
-        } catch (error) {
-            console.error("Error fetching files:", error);
-            throw error; // <-- 追加：エラーをスロー
-        }
-    }
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const data = await fetchFilesFromDeepDocuments();
-                setPdfUrl(data);
-                console.log(data)
-
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            }
-        }
-
-        fetchData();
-    }, []);
 
     for (let i = 0; i < DAYOFWEEKSTR.length; i++) {
         if (i <= DayOfWeekStrIndex - 1) {
@@ -170,7 +130,7 @@ function Reservation() {
                 </a>
             ))} */}
 
-            <a href={pdfUrl}><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a>
+            <a href={termsOfServicePdf} target="_blank" rel="noopener noreferrer"><p style={{ fontSize: "1.7em", color: "green" }}>部室の利用規約</p></a>
             <Footer />
         </>
     )

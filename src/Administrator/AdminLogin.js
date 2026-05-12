@@ -6,8 +6,7 @@ import { auth } from '../firebase';
 function AdminLogin() {
     const [Command, setCommand] = useState("");
     const adminCommand = "iamkamekingdom";
-    const magazineCommand = "DeepMagazine";
-    var date = new Date;
+    var date = new Date();
     var NowHour = date.getHours();
     var NowMinute = date.getMinutes();
 
@@ -27,11 +26,6 @@ function AdminLogin() {
             {Command === adminCommand && (
                 <Link to="/adminhome" className="kame_button_light_blue">
                     <p className="kame_font_002">管理者画面</p>
-                </Link>
-            )}
-            {Command === magazineCommand && (
-                <Link to="/upload-page" className="kame_button_light_blue">
-                    <p className="kame_font_002">マガジン編集画面</p>
                 </Link>
             )}
             {Command.toLowerCase() === "preview" && (

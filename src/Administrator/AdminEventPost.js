@@ -4,7 +4,6 @@ import { db, auth } from "../firebase";
 import "../css/kame.css";
 import { Link } from 'react-router-dom';
 import { Footer, Header } from '../PageParts';
-import { ref } from 'firebase/storage';
 
 function AdminEventPost() {
     const date = new Date();

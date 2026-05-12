@@ -4,8 +4,7 @@ import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { Footer, Header } from '../PageParts';
 import { ReservationContext, useBlockBrowserBack } from '../App';
 import '../css/kame.css';
-import { ref, uploadString } from 'firebase/storage';
-import { db, auth, storage } from '../firebase'; // Import storage from Firebase setup
+import { db, auth } from '../firebase';
 
 
 const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
@@ -100,30 +99,6 @@ function AddReservation() {
             Memo: memo,
             NickName: nickname
         });
-
-        // Prepare reservation data as text for storage
-        const reservationText = `
-            Reservation Details:
-            - User Email: ${auth.currentUser.email}
-            - WeekDay: ${ReservationInfo.WeekDay}
-            - TimeSlot: ${ReservationInfo.TimeSlot}
-            - Name: ${personalname}
-            - Category: ${category}
-            - Memo: ${memo}
-            - NickName: ${nickname}
-        `;
-
-        // Create a reference to the text file in Firebase Storage
-        const storageRef = ref(storage, `reservations/${WeekDay}_${TimeSlot}_${personalname}.txt`);
-
-        // Upload the text content to Firebase Storage
-        await uploadString(storageRef, reservationText)
-            .then(() => {
-                console.log("Reservation saved to Firebase Storage as text.");
-            })
-            .catch((error) => {
-                console.error("Error saving reservation to Storage:", error);
-            });
 
         setIsAlreadyUploaded(true);
     };

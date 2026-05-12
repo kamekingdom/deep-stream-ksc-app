@@ -4,8 +4,7 @@ import { ReservationContext } from '../App';
 import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import "../css/kame.css";
 import { Link } from 'react-router-dom';
-import { ref, deleteObject } from 'firebase/storage';
-import { auth, db, storage } from '../firebase';
+import { auth, db } from '../firebase';
 
 function ReservationDetail() {
   const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
@@ -43,16 +42,6 @@ function ReservationDetail() {
       await updateDoc(doc(db, "users", auth.currentUser.email), {
         ReservationNum: updatedCount
       });
-
-      // Delete the text file from Firebase Storage based on WeekDay, TimeSlot, and personalName
-      const storageRef = ref(storage, `reservations/${ReservationInfo.WeekDay}_${ReservationInfo.TimeSlot}_${personalName}.txt`);
-      await deleteObject(storageRef)
-        .then(() => {
-          console.log("Reservation text file deleted from Firebase Storage.");
-        })
-        .catch((error) => {
-          console.error("Error deleting reservation text file:", error);
-        });
 
       setIsDeleting(false);
       setIsAlreadyDeleted(true);

@@ -12,75 +12,22 @@ import {
 } from "firebase/firestore";
 import { db, } from "../firebase";
 import moment from "moment";
-import { } from "react-firebase-hooks/auth";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import useIsMobile from "../function/isMobile";
-import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Autoplay,
-  Navigation,
-  Pagination,
-} from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 
 import packageInfo from '../../package.json';
-
-async function fetchFilesFromDeepMagazine() {
-  const storage = getStorage();
-  const deepMagazineRef = ref(storage, "DeepMagazine");
-
-  try {
-    const result = await listAll(deepMagazineRef);
-    const files = result.items;
-
-    // URLを取得する非同期操作
-    const fileUrls = await Promise.all(
-      files.map((fileRef) => getDownloadURL(fileRef)),
-    );
-
-    // 名前の降順でソート
-    fileUrls.sort((a, b) => (a < b ? 1 : -1));
-    // console.log(fileUrls);
-
-    return fileUrls;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    throw error; // <-- 追加：エラーをスロー
-  }
-}
 
 function HomePage() {
   const isMobile = useIsMobile();
 
   /* スプラッシュスクリーンの表示設定 */
-  // Deep Magazineの取得
   const [show, setShow] = useState(true); // スプラッシュスクリーンをshowするか否か
-  const [imageUrls, setFiles] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const startTime = Date.now(); // データ取得の開始時間を記録
+    const timeoutId = setTimeout(() => {
+      setShow(false);
+    }, 3000);
 
-        const data = await fetchFilesFromDeepMagazine();
-        setFiles(data);
-        console.log(data)
-        const elapsed = Date.now() - startTime; // データ取得にかかった時間を計算
-        const delay = Math.max(0, 3000 - elapsed); // 3秒経過するまでに残りの時間を計算
-
-        setTimeout(() => {
-          setShow(false); // データが正常に取得され、3秒経過した後にスプラッシュスクリーンを非表示にする
-        }, delay);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    }
-
-    fetchData();
+    return () => clearTimeout(timeoutId);
   }, []);
 
   // Firestoreから予約設定データを取得し、自動予約を行う
@@ -225,15 +172,6 @@ function HomePage() {
     fetchFirestoreData();
   }, []);
 
-  const [imageUrl, setImageUrl] = useState(null);
-  useEffect(() => {
-    if (imageUrls.length > 0) {
-      setImageUrl(imageUrls[0]);
-    }
-  }, [imageUrls]);
-
-
-
   return show ? (
     <div>
       <script
@@ -253,40 +191,36 @@ function HomePage() {
     <>
       <Header />
       <center>
-        <style>
-          @import
-          url('https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap');
-        </style>
-
-        <Swiper
-          spaceBetween={30}
-          slidesPerView={1}
-          modules={[Autoplay, Pagination, Navigation]}
-          pagination={{ clickable: true }}
-          navigation
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: false,
-          }}
+        <div
           style={{
-            height: "calc(70vh - 100px)",  // ヘッダーとフッターの高さを考慮
-            overflow: "hidden",             // スクロールを無効化
+            minHeight: "calc(70vh - 100px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "32px 20px",
           }}
         >
-          {imageUrls.map((url, index) => (
-            <SwiperSlide key={index}>
-              <img
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                }}
-                src={url}
-                alt={`Slide ${index + 1}`}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          <img
+            src="/DeepStreamICON.jpg"
+            alt="Deep Stream"
+            style={{
+              width: "min(260px, 72vw)",
+              borderRadius: "24px",
+              boxShadow: "0 16px 32px rgba(0, 0, 0, 0.12)",
+              marginBottom: "24px",
+            }}
+          />
+          <p
+            className="kame_font_003"
+            style={{ marginBottom: "12px" }}
+          >
+            Deep Stream
+          </p>
+          <p style={{ fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>
+            イベント確認や部室予約は、下のメニューから利用できます。
+          </p>
+        </div>
       </center>
       <Footer />
     </>
