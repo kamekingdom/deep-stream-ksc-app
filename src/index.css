@@ -1,13 +1,65 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+@layer base {
+  :root {
+    --background: 220 16% 97%;
+    --foreground: 220 19% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 19% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 19% 12%;
+    --primary: 193 78% 34%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 11% 92%;
+    --secondary-foreground: 220 19% 12%;
+    --muted: 220 12% 94%;
+    --muted-foreground: 220 10% 40%;
+    --accent: 193 62% 92%;
+    --accent-foreground: 220 19% 12%;
+    --destructive: 0 58% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 84%;
+    --input: 220 10% 84%;
+    --ring: 193 78% 34%;
+    --theme-glow: 8, 145, 178;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-size: 20px;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    @apply min-h-screen bg-background font-sans text-foreground antialiased;
+    width: 100%;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at top, rgba(var(--theme-glow), 0.08), transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(244, 247, 249, 0.98));
+  }
+
+  #root {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+
+  .brand-wordmark {
+    font-family: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+  }
 }

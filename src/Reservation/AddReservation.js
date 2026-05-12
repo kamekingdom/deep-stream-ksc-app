@@ -1,163 +1,232 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
-import { Footer, Header } from '../PageParts';
-import { ReservationContext, useBlockBrowserBack } from '../App';
-import '../css/kame.css';
-import { db, auth } from '../firebase';
-
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
+import { Footer, Header } from "../PageParts";
+import { ReservationContext } from "../App";
+import { db } from "../firebase";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page } from "../components/page";
+import { Spinner } from "../components/ui/spinner";
+import { Textarea } from "../components/ui/textarea";
+import { getCurrentUserEmail } from "../lib/session-auth";
 
 const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
 
 function AddReservation() {
-    var date = new Date();
-    var dayOfWeek = date.getDay();
-    var DayOfWeekStr = DAYOFWEEKSTR[dayOfWeek];
+  const date = new Date();
+  const dayOfWeek = date.getDay();
+  const currentDay = DAYOFWEEKSTR[dayOfWeek];
+  const reservationInfo = useContext(ReservationContext);
 
-    const [category, setCategory] = useState("バンド");
-    const [memo, setMemo] = useState(null);
-    const [isalreadyuploaded, setIsAlreadyUploaded] = useState(false);
-    const [isAlreadyExisted, setIsAlreadyExisted] = useState(false);
-    const [isclicked, setIsClicked] = useState(false);
+  const [category, setCategory] = useState("バンド");
+  const [memo, setMemo] = useState("");
+  const [isAlreadyUploaded, setIsAlreadyUploaded] = useState(false);
+  const [isAlreadyExisted, setIsAlreadyExisted] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [nickname, setNickName] = useState("");
+  const [personalName, setPersonalName] = useState("");
+  const [reservationNum, setReservationNum] = useState(null);
+  const [canReserve, setCanReserve] = useState(true);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockMessage, setBlockMessage] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
-    const handleSelectChange1 = (e) => { setCategory(e.target.value); setIsAlreadyUploaded(false); setIsClicked(false); }
-    const handleSelectChange3 = (e) => { setMemo(e.target.value); setIsAlreadyUploaded(false); setIsClicked(false); }
+  useEffect(() => {
+    async function fetchFirestoreData() {
+      const currentUserEmail = getCurrentUserEmail();
+      const reservationDocRef = doc(db, reservationInfo.WeekDay, reservationInfo.TimeSlot);
 
-    function PostButtonClick() {
-        setIsClicked(true);
-        handleUploadClick();
+      const reservationDocSnap = await getDoc(reservationDocRef);
+      if (reservationDocSnap.exists()) {
+        const reservationDocData = reservationDocSnap.data();
+        if (reservationDocData.IsBlocked) {
+          setIsBlocked(true);
+          setBlockMessage(
+            reservationDocData.BlockReason
+            || reservationDocData.Memo
+            || "管理者によって予約できないように設定されています。"
+          );
+        } else {
+          setIsBlocked(false);
+          setBlockMessage("");
+        }
+      } else {
+        setIsBlocked(false);
+        setBlockMessage("");
+      }
+
+      if (!currentUserEmail) {
+        setIsLoaded(true);
+        return;
+      }
+
+      const docRef = doc(db, "users", currentUserEmail);
+      const docSnap = await getDoc(docRef, { source: "cache" });
+      if (docSnap.exists()) {
+        const docData = docSnap.data();
+        setNickName(docData.NickName);
+        setPersonalName(docData.PersonalName);
+        setReservationNum(docData.ReservationNum);
+        setCanReserve(
+          isNaN(docData.ReservationNum) ||
+            docData.ReservationNum === undefined ||
+            docData.ReservationNum === null
+            ? true
+            : docData.ReservationNum <= 1 || currentDay === reservationInfo.WeekDay
+        );
+      }
+      setIsLoaded(true);
+    }
+    fetchFirestoreData();
+  }, [currentDay, reservationInfo.TimeSlot, reservationInfo.WeekDay]);
+
+  const handleUploadClick = async () => {
+    const currentUserEmail = getCurrentUserEmail();
+    if (!currentUserEmail) {
+      setIsClicked(false);
+      return;
     }
 
-    const [nickname, setNickName] = useState("");
-    const [personalname, setPersonalName] = useState("");
-    const [reservationNum, setReservationNum] = useState(null);
-    const [canReserve, setCanReserve] = useState(true);
+    const timeSlot = reservationInfo.TimeSlot;
+    const weekDay = reservationInfo.WeekDay;
+    const postDocRef = doc(db, weekDay, timeSlot);
+    const userDocRef = doc(db, "users", currentUserEmail);
 
-    const [isloaded, setIsLoaded] = useState(false)
-    useEffect(() => {
-        async function fetchFirestoreData() {
-            const docRef = doc(db, 'users', auth.currentUser.email);
-            const docSnap = await getDoc(docRef, { source: 'cache' });
-            if (docSnap.exists()) {
-                const docData = docSnap.data();
-                setNickName(docData.NickName);
-                setPersonalName(docData.PersonalName);
-                setReservationNum(docData.ReservationNum);
-                setCanReserve(
-                    isNaN(docData.ReservationNum) ||
-                        docData.ReservationNum === undefined ||
-                        docData.ReservationNum === null
-                        ? true
-                        : docData.ReservationNum <= 1 || DayOfWeekStr === ReservationInfo.WeekDay
-                );
-            }
-            setIsLoaded(true);
-        }
-        fetchFirestoreData();
-    }, []);
+    const reservationExists = await getDoc(postDocRef);
+    if (reservationExists.exists()) {
+      const reservationData = reservationExists.data();
+      if (reservationData.IsBlocked) {
+        setIsBlocked(true);
+        setBlockMessage(
+          reservationData.BlockReason
+          || reservationData.Memo
+          || "管理者によって予約できないように設定されています。"
+        );
+        setIsClicked(false);
+        return;
+      }
 
-    const ReservationInfo = useContext(ReservationContext);
+      setIsAlreadyExisted(true);
+      setIsClicked(false);
+      return;
+    }
 
-    const handleUploadClick = async (e) => {
-        const TimeSlot = ReservationInfo.TimeSlot;
-        const WeekDay = ReservationInfo.WeekDay;
+    let count = 0;
+    if (currentDay === reservationInfo.WeekDay) {
+      count = reservationNum;
+    } else if (isNaN(reservationNum) || reservationNum <= 0) {
+      count = 1;
+    } else {
+      count = reservationNum + 1;
+    }
 
-        // Firestore references
-        const postDocRef = doc(db, WeekDay, TimeSlot);
-        const userDocRef = doc(db, "users", auth.currentUser.email);
+    const userDocSnap = await getDoc(userDocRef, { source: "cache" });
+    if (userDocSnap.exists()) {
+      await updateDoc(userDocRef, { ReservationNum: count });
+    } else {
+      await setDoc(userDocRef, { ReservationNum: count });
+    }
 
-        // Check if reservation already exists
-        const reservationExists = await getDoc(postDocRef);
-        if (reservationExists.exists()) {
-            setIsAlreadyExisted(true);
-            return;
-        }
+    await setDoc(postDocRef, {
+      PostUserMail: currentUserEmail,
+      WeekDay: reservationInfo.WeekDay,
+      TimeSlot: reservationInfo.TimeSlot,
+      PersonalName: personalName,
+      Category: category,
+      Memo: memo,
+      NickName: nickname,
+    });
 
-        let count = 0;
-        if (DayOfWeekStr === ReservationInfo.WeekDay) { count = reservationNum; }
-        else if (isNaN(reservationNum) || reservationNum <= 0) { count = 1; }
-        else { count = reservationNum + 1; }
+    setIsAlreadyUploaded(true);
+    setIsClicked(false);
+  };
 
-        const userDocSnap = await getDoc(userDocRef, { source: 'cache' });
-        if (userDocSnap.exists()) {
-            await updateDoc(userDocRef, {
-                ReservationNum: count
-            });
-        } else {
-            await setDoc(userDocRef, {
-                ReservationNum: count
-            });
-        }
+  const postButtonClick = async () => {
+    setIsClicked(true);
+    await handleUploadClick();
+  };
 
-        // Post reservation to Firestore
-        await setDoc(postDocRef, {
-            PostUserMail: auth.currentUser.email,
-            WeekDay: ReservationInfo.WeekDay,
-            TimeSlot: ReservationInfo.TimeSlot,
-            PersonalName: personalname,
-            Category: category,
-            Memo: memo,
-            NickName: nickname
-        });
+  return (
+    <>
+      <Header />
+      <Page className="max-w-2xl">
+        {!isLoaded ? (
+          <Spinner label="予約情報を読み込んでいます..." />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className="leading-tight">
+                {reservationInfo.WeekDay}曜日 / {reservationInfo.TimeSlot}
+              </CardTitle>
+              <p className="text-[1rem] font-medium text-muted-foreground sm:text-[1.1rem]">
+                {reservationInfo.Time}
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <p className="text-base font-semibold text-muted-foreground">練習カテゴリ</p>
+                <select
+                  className="flex h-14 w-full rounded-xl border border-input bg-background px-4 text-[1.1rem] font-medium text-foreground"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setIsAlreadyUploaded(false);
+                    setIsClicked(false);
+                  }}
+                >
+                  <option value="バンド">バンド</option>
+                  <option value="個人">個人</option>
+                  <option value="パート">パート</option>
+                  <option value="その他">その他</option>
+                </select>
+              </div>
 
-        setIsAlreadyUploaded(true);
-    };
+              <div className="space-y-2">
+                <p className="text-base font-semibold text-muted-foreground">メモ</p>
+                <Textarea
+                  placeholder="(例) ずっと真夜中でいいのに。"
+                  maxLength={20}
+                  value={memo}
+                  className="min-h-[160px] rounded-xl px-4 py-4 text-[1.05rem]"
+                  onChange={(e) => {
+                    setMemo(e.target.value);
+                    setIsAlreadyUploaded(false);
+                    setIsClicked(false);
+                  }}
+                />
+              </div>
 
-    return (
-        <>
-            <Header />
+              {!canReserve ? <p className="text-base font-medium text-destructive">予約は週に2回までです。</p> : null}
+              {isBlocked ? <p className="text-base font-medium text-destructive">{blockMessage}</p> : null}
+              {isAlreadyExisted ? <p className="text-base font-medium text-destructive">既に予約されています。</p> : null}
 
-            {!isloaded ?
-                <>
-                    {[...Array(8)].map((a, i) => <br key={i} />)}
-                    <div class="loader">Loading...</div>
-                </>
-                :
-                <>
-                    <center>
-                        <div class="kame_header_003"><p class="kame_font_003">{ReservationInfo.WeekDay}曜日</p></div>
-                        <p class="kame_font_003">{ReservationInfo.TimeSlot}({ReservationInfo.Time})</p>
-                        <form>
-                            <label class="kame_select_005">
-                                <select onChange={handleSelectChange1}>
-                                    <option value="バンド"><p class="kame_font_002"></p>バンド</option>
-                                    <option value="個人">個人</option>
-                                    <option value="パート">パート</option>
-                                    <option value="その他">その他</option>
-                                </select>
-                            </label>
-                        </form>
-                        <br /><br />
-                        {!category && <p class="kame_font_error">※練習内容を選択してください</p>}
-                        <label>
-                            <textarea class="kame_textarea" onChange={handleSelectChange3} placeholder="(例) ずっと真夜中でいいのに。" minLength={"0"} maxLength={"20"} value={memo} />
-                        </label>
-                        <br /><br /><br />
+              {isClicked && !isAlreadyUploaded ? <Spinner className="py-3" label="予約を確定しています..." /> : null}
 
-                        {canReserve && !isalreadyuploaded && !isclicked &&
-                            <button to="/" class="kame_button_light_blue" onClick={PostButtonClick}><p class="kame_font_002">予約</p></button>
-                        }
-                        {!canReserve && // 追加: 予約上限に達していない場合にエラーメッセージを表示
-                            <p class="kame_font_002">予約は週に2回までです</p>
-                        }
-                        {isAlreadyExisted && // 追加: 予約上限に達した場合のエラーメッセージ
-                            <p class="kame_font_002">既に予約されました</p>
-                        }
-                        {
-                            isclicked && !isalreadyuploaded &&
-                            <div class="loader">Loading...</div>
+              {canReserve && !isBlocked && !isAlreadyExisted && !isAlreadyUploaded && !isClicked ? (
+                <Button fullWidth size="lg" onClick={postButtonClick}>
+                  予約
+                </Button>
+              ) : null}
 
-                        }
-                        {isloaded && isalreadyuploaded &&
-                            <Link to="/reservation" class="kame_button_light_blue"><p class="kame_font_002">完了</p></Link>
-                        }
-                    </center>
-                </>
-            }
-            <Footer />
-        </>
+              {(isBlocked || isAlreadyExisted) && !isAlreadyUploaded ? (
+                <Link to="/reservation" className="block">
+                  <Button fullWidth size="lg" variant="secondary">部室予約へ戻る</Button>
+                </Link>
+              ) : null}
 
-    )
+              {isAlreadyUploaded ? (
+                <Link to="/reservation" className="block">
+                  <Button fullWidth size="lg">完了</Button>
+                </Link>
+              ) : null}
+            </CardContent>
+          </Card>
+        )}
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
 export default AddReservation;

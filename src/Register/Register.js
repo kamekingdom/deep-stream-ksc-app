@@ -1,206 +1,227 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import "../css/kame.css";
-import { Header } from '../PageParts';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc, query, collection, where, getDocs, addDoc } from 'firebase/firestore';
+import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc, query, collection, where, getDocs } from "firebase/firestore";
+import { Header } from "../PageParts";
+import { auth } from "../firebase";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Page } from "../components/page";
+import { Spinner } from "../components/ui/spinner";
+import { defaultAppearance, serializeAppearanceForFirestore } from "../lib/appearance";
+import { useCurrentUser } from "../lib/session-auth";
 
 function Register() {
-    const [user] = useAuthState(auth);
+  const [user] = useCurrentUser();
 
-    return (
-        <div>
-            <Helmet><title>会員登録</title></Helmet>
-            <Header /><br /><br />
-            <div class="login-page">
-                <div class="form">
-                    <center>
-                        {user ?
-                            <>
-                                <p class="kame_font_002">会員登録</p>
-                                <EmailRegister />
-                                <br />
-                                <p class="message">アカウントをお持ちの方は<Link to="/login">ログイン</Link></p>
-                                <p class="message">利用規約は<Link to="/termsofservice">こちら</Link></p><br />
-
-                            </>
-                            :
-                            <>
-                                <p class="kame_font_002">会員登録</p>
-                                <EmailRegister />
-                                <br />
-                                <p class="message">アカウントをお持ちの方は<Link to="/login">ログイン</Link></p>
-                                <p class="message">利用規約は<Link to="/termsofservice">こちら</Link></p>
-                            </>
-                        }
-                    </center>
-                </div>
+  return (
+    <div>
+      <Helmet>
+        <title>会員登録</title>
+      </Helmet>
+      <Header />
+      <Page className="max-w-2xl">
+        <Card>
+          <CardHeader>
+            <CardTitle>会員登録</CardTitle>
+            <CardDescription>
+              {user
+                ? "別アカウントを登録する場合はログアウト後に進めてください。"
+                : "関学メールで Deep Stream のアカウントを作成します。"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <EmailRegister />
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p>
+                アカウントをお持ちの方は{" "}
+                <Link to="/login" className="font-semibold text-primary">
+                  ログイン
+                </Link>
+              </p>
+              <p>
+                利用規約は{" "}
+                <Link to="/termsofservice" className="font-semibold text-primary">
+                  こちら
+                </Link>
+              </p>
             </div>
-        </div>
-    )
+          </CardContent>
+        </Card>
+      </Page>
+    </div>
+  );
 }
 
 function EmailRegister() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [personalName, setPersonalName] = useState('');
-    const [personalNameKana, setPersonalNameKana] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [studentNumber, setStudentNumber] = useState('');
-    const [error, setError] = useState("");
-    const [isalreadyuploaded, setIsAlreadyUploaded] = useState(false);
-    const [isclicked, setIsClicked] = useState(false)
-    const firestore = getFirestore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [personalName, setPersonalName] = useState("");
+  const [personalNameKana, setPersonalNameKana] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [studentNumber, setStudentNumber] = useState("");
+  const [error, setError] = useState("");
+  const [isAlreadyUploaded, setIsAlreadyUploaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const firestore = getFirestore();
 
-    // Check if a student number already exists
-    const isStudentNumberExists = async (studentNumber) => {
-        const studentNumberRef = await query(collection(firestore, 'users'), where('StudentNumber', '==', studentNumber));
-        const studentNumberSnapshot = await getDocs(studentNumberRef);
-        return !studentNumberSnapshot.empty;
-    };
-
-    // Check if a nickname already exists
-    const isNicknameExists = async (nickname) => {
-        const nicknameRef = await query(collection(firestore, 'users'), where('NickName', '==', nickname));
-        const nicknameSnapshot = await getDocs(nicknameRef);
-        return !nicknameSnapshot.empty;
-    };
-
-    // Validate if a string consists of katakana and spaces only
-    const validateKatakana = (str) => {
-        return /^[\u30A0-\u30FF\s]+$/.test(str);
-    };
-
-    const resetForm = () => {
-        setError('');
-        setIsClicked(false);
-        setIsAlreadyUploaded(false);
-    };
-
-    const validateStudentNumber = (str) => {
-        return /^\d{8}$/.test(str);
-    };
-
-    const registerWithEmail = async (e) => {
-        setIsAlreadyUploaded(false);
-        setIsClicked(true);
-        e.preventDefault();
-        setError(null);
-        if (!validateKatakana(personalNameKana)) {
-            setError('氏名(カタカナ)はカタカナで入力してください🐢');
-            return;
-        }
-        if (!validateStudentNumber(studentNumber)) {
-            setError('学籍番号は8桁の半角数字で入力してください🐢');
-            return;
-        }
-        if (await isStudentNumberExists(studentNumber)) {
-            setError('この学籍番号は既に登録されています🐢');
-            return;
-        }
-        if (await isNicknameExists(nickname)) {
-            setError('このニックネームは既に登録されています🐢');
-            return;
-        }
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const userId = userCredential.user.uid;
-            const userDocRef = doc(firestore, 'users', email);
-            await setDoc(userDocRef, {
-                PersonalName: personalName,
-                PersonalNameFurigana: personalNameKana,
-                StudentNumber: studentNumber,
-                NickName: nickname,
-                Password: password,
-                userId: userId,
-                ReservationNum: 0
-            });
-            console.log("会員登録成功");
-            setIsAlreadyUploaded(true);
-        } catch (error) {
-            console.log("会員登録失敗");
-            setError(translateFirebaseError(error.code));
-        }
-        setIsClicked(false);
-    };
-
-    return (
-        <div>
-            <form onSubmit={registerWithEmail}>
-                <input
-                    type="email"
-                    placeholder="メールアドレス(関学用)"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="パスワード"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                < input
-                    type="text"
-                    placeholder="氏名(漢字)"
-                    value={personalName}
-                    onChange={(e) => setPersonalName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="氏名(カタカナ)"
-                    value={personalNameKana}
-                    onChange={(e) => setPersonalNameKana(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="ニックネーム"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="学籍番号"
-                    value={studentNumber}
-                    onChange={(e) => setStudentNumber(e.target.value)}
-                /><br /><br />
-                {email && password && personalName && personalNameKana && nickname && studentNumber && !isalreadyuploaded && !isclicked && !error &&
-                    <button type="submit"><p className='kame_font_001'>登録</p></button>
-                }
-                {
-                    !error && isclicked && !isalreadyuploaded && <div class="loader">Loading...</div>
-                }
-                {isalreadyuploaded &&
-                    <>
-                        <Link to="/" className='kame_button_light_blue'><p className='kame_font_001'>ホーム</p></Link>
-                    </>
-                }
-            </form>
-            {error &&
-                <>
-                    <p className="kame_font_001">{error}</p>
-                    <button className='kame_button_light_blue' onClick={resetForm}><p className='kame_font_001'>修正する</p></button>
-                </>
-            }
-        </div>
+  const isStudentNumberExists = async (value) => {
+    const studentNumberRef = query(
+      collection(firestore, "users"),
+      where("StudentNumber", "==", value)
     );
+    const studentNumberSnapshot = await getDocs(studentNumberRef);
+    return !studentNumberSnapshot.empty;
+  };
+
+  const isNicknameExists = async (value) => {
+    const nicknameRef = query(collection(firestore, "users"), where("NickName", "==", value));
+    const nicknameSnapshot = await getDocs(nicknameRef);
+    return !nicknameSnapshot.empty;
+  };
+
+  const validateKatakana = (str) => /^[\u30A0-\u30FF\s]+$/.test(str);
+  const validateStudentNumber = (str) => /^\d{8}$/.test(str);
+
+  const resetForm = () => {
+    setError("");
+    setIsSubmitting(false);
+    setIsAlreadyUploaded(false);
+  };
+
+  const registerWithEmail = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setIsAlreadyUploaded(false);
+    setIsSubmitting(true);
+
+    if (!validateKatakana(personalNameKana)) {
+      setError("氏名(カタカナ)はカタカナで入力してください");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!validateStudentNumber(studentNumber)) {
+      setError("学籍番号は8桁の半角数字で入力してください");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (await isStudentNumberExists(studentNumber)) {
+      setError("この学籍番号は既に登録されています");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (await isNicknameExists(nickname)) {
+      setError("このニックネームは既に登録されています");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+      const userDocRef = doc(firestore, "users", email);
+      await setDoc(userDocRef, {
+        PersonalName: personalName,
+        PersonalNameFurigana: personalNameKana,
+        StudentNumber: studentNumber,
+        NickName: nickname,
+        Password: password,
+        userId,
+        ReservationNum: 0,
+        ...serializeAppearanceForFirestore(defaultAppearance),
+      });
+      setIsAlreadyUploaded(true);
+    } catch (firebaseError) {
+      setError(translateFirebaseError(firebaseError.code));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={registerWithEmail}>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Input
+          type="email"
+          placeholder="メールアドレス(関学用)"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="パスワード"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Input
+          placeholder="氏名(漢字)"
+          value={personalName}
+          onChange={(e) => setPersonalName(e.target.value)}
+        />
+        <Input
+          placeholder="氏名(カタカナ)"
+          value={personalNameKana}
+          onChange={(e) => setPersonalNameKana(e.target.value)}
+        />
+        <Input
+          placeholder="ニックネーム"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+        />
+        <Input
+          placeholder="学籍番号"
+          value={studentNumber}
+          onChange={(e) => setStudentNumber(e.target.value)}
+        />
+      </div>
+
+      {isSubmitting ? <Spinner className="py-4" label="登録しています..." /> : null}
+
+      {!isSubmitting && !isAlreadyUploaded ? (
+        <Button
+          type="submit"
+          fullWidth
+          disabled={!email || !password || !personalName || !personalNameKana || !nickname || !studentNumber}
+        >
+          登録
+        </Button>
+      ) : null}
+
+      {isAlreadyUploaded ? (
+        <Link to="/" className="block">
+          <Button fullWidth>ホームへ</Button>
+        </Link>
+      ) : null}
+
+      {error ? (
+        <div className="space-y-3 rounded-3xl border border-destructive/20 bg-destructive/5 p-4">
+          <p className="text-sm font-medium text-destructive">{error}</p>
+          <Button type="button" variant="outline" onClick={resetForm}>
+            修正する
+          </Button>
+        </div>
+      ) : null}
+    </form>
+  );
 }
 
 function translateFirebaseError(errorCode) {
-    const errorMessages = {
-        'auth/email-already-in-use': 'このメールアドレスは既に使用されています🐢',
-        'auth/invalid-email': 'メールアドレスが無効です🐢',
-        'auth/operation-not-allowed': 'メール/パスワード認証が無効です🐢',
-        'auth/weak-password': 'パスワードが弱すぎます🐢',
-        'auth/user-disabled': 'このアカウントは無効です🐢',
-        'auth/user-not-found': 'ユーザーが見つかりません🐢',
-        'auth/wrong-password': 'パスワードが間違っています🐢',
-        // 他のエラーコードに対するメッセージもここに追加できます
-    };
+  const errorMessages = {
+    "auth/email-already-in-use": "このメールアドレスは既に使用されています",
+    "auth/invalid-email": "メールアドレスが無効です",
+    "auth/operation-not-allowed": "メール/パスワード認証が無効です",
+    "auth/weak-password": "パスワードが弱すぎます",
+    "auth/user-disabled": "このアカウントは無効です",
+    "auth/user-not-found": "ユーザーが見つかりません",
+    "auth/wrong-password": "パスワードが間違っています",
+  };
 
-    return errorMessages[errorCode] || '予期しないエラーが発生しました🐢';
+  return errorMessages[errorCode] || "予期しないエラーが発生しました";
 }
 
 export default Register;

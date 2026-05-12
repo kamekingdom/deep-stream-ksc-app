@@ -1,23 +1,45 @@
-import React, { useContext } from 'react'
-import { Footer, Header } from '../PageParts'
-import { ReservationContext, useBlockBrowserBack } from '../App'
-import { Link } from 'react-router-dom'
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { Footer, Header } from "../PageParts";
+import { ReservationContext } from "../App";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page } from "../components/page";
+import { Textarea } from "../components/ui/textarea";
 
 function AlertReservation() {
-    const ReservationInfo = useContext(ReservationContext)
+  const reservationInfo = useContext(ReservationContext);
 
-    return (
-        <div>
-            <Header />
-            <center>
-                <div class="kame_header_003"><p class="kame_font_003">{ReservationInfo.WeekDay}曜日</p></div>
-                <p class="kame_font_003">{ReservationInfo.TimeSlot}({ReservationInfo.Time})</p>
-                <textarea class="kame_textarea" placeholder="※過去の投稿は編集できません" readOnly /><br /><br /><br /><br />
-                <Link class="kame_button_light_blue" to="/reservation"><p className='kame_font_002'>部室予約へ</p></Link>
-            </center>
-            <Footer />
-        </div>
-    )
+  return (
+    <div>
+      <Header />
+      <Page className="max-w-2xl">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {reservationInfo.WeekDay}曜日 / {reservationInfo.TimeSlot}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <p className="text-sm text-muted-foreground">{reservationInfo.Time}</p>
+            <Textarea
+              readOnly
+              value={
+                reservationInfo.Category === "予約不可"
+                  ? reservationInfo.Memo || "管理者によって予約できないように設定されています。"
+                  : "※過去の投稿は編集できません"
+              }
+              className="resize-none"
+            />
+            <Link to="/reservation" className="block">
+              <Button fullWidth>部室予約へ</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </Page>
+      <Footer />
+    </div>
+  );
 }
 
-export default AlertReservation
+export default AlertReservation;

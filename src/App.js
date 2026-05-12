@@ -1,44 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./Home/HomePage";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Register/Login";
 import Register from "./Register/Register";
 import TermsOfService from "./Document/TermsOfService";
-import Calendar from "./Home/Calendar";
 import Reservation from "./Home/Reservation";
-import Notification from "./Home/Notification";
 import FindPassword from "./Register/FindPassword";
 import Key from "./Home/Key";
 import Tool from "./Home/Tool";
 import AddReservation from "./Reservation/AddReservation";
-import { createContext, useCallback, useEffect } from "react";
+import { createContext } from "react";
 import ReservationDetail from "./Reservation/ReservationDetail";
-import AdminEventPost from "./Administrator/AdminEventPost";
 import AdminHome from "./Administrator/AdminHome";
 import AdminLogin from "./Administrator/AdminLogin";
 import AlertReservation from "./Reservation/AlertReservation";
-import AdminSchedulePost from "./Administrator/AdminSchedulePost";
-import ScheduleDetail from "./Schedule/ScheduleDetail";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
-import UserProfile from "./Register/UserProfile";
 import CreateReservationSettings from "./Administrator/CreateReservationSettings";
 import CreateReservationTemplate from "./Administrator/CreateReservationTemplate";
 import ReservationStatusPage from "./Administrator/ReservationStatusPage";
 import FixTimeSlots from "./Administrator/FixTimeSlots";
 import KeyAccess from "./Home/KeyAccess";
 import ReservationPreview from "./Home/ReservationPreview";
+import { isAdminAuthorized } from "./lib/admin";
+import { useCurrentUser } from "./lib/session-auth";
 
 const SettingInfo = {
   Year: "2023"
-}
-
-const ScheduleInfo = {
-  Month: "",
-  Date: "",
-  Day: "",
-  Title: "",
-  Content: "",
-  Link: "",
-  Category: "",
 }
 
 const ReservationInfo = {
@@ -52,44 +36,59 @@ const ReservationInfo = {
   Memo: "",       // メモ
 }
 
-
-export const ScheduleContext = createContext(ScheduleInfo);
 export const ReservationContext = createContext(ReservationInfo);
 export const SettingContext = createContext(SettingInfo);
+
+function RequireAdmin({ children }) {
+  return isAdminAuthorized() ? children : <Navigate to="/adminlogin" replace />;
+}
+
+function RequireLogin({ children }) {
+  const [user, loading] = useCurrentUser();
+
+  if (loading) {
+    return null;
+  }
+
+  return user ? children : <Navigate to="/login" replace />;
+}
+
+function LandingRedirect() {
+  const [user, loading] = useCurrentUser();
+
+  if (loading) {
+    return null;
+  }
+
+  return <Navigate to={user ? "/reservation" : "/login"} replace />;
+}
 
 function App() {
   return (
     <>
       <Router basename="/">
         <Routes>
-          <Route exact path="/" element={<HomePage />}></Route>
-          <Route exact path="/reservation" element={<Reservation />}></Route>
-          <Route exact path="/reservation-preview" element={<ReservationPreview />}></Route>
-          <Route exact path="/addreservation" element={<AddReservation />}></Route>
-          <Route exact path="/reservationdetail" element={<ReservationDetail />}></Route>
-          <Route exact path="/alertreservation" element={<AlertReservation />}></Route>
+          <Route exact path="/" element={<LandingRedirect />}></Route>
+          <Route exact path="/reservation" element={<RequireLogin><Reservation /></RequireLogin>}></Route>
+          <Route exact path="/reservation-preview" element={<RequireLogin><ReservationPreview /></RequireLogin>}></Route>
+          <Route exact path="/addreservation" element={<RequireLogin><AddReservation /></RequireLogin>}></Route>
+          <Route exact path="/reservationdetail" element={<RequireLogin><ReservationDetail /></RequireLogin>}></Route>
+          <Route exact path="/alertreservation" element={<RequireLogin><AlertReservation /></RequireLogin>}></Route>
 
-          <Route exact path="/admineventpost" element={<AdminEventPost />}></Route>
-          <Route exact path="/adminschedulepost" element={<AdminSchedulePost />}></Route>
-          <Route exact path="/adminhome" element={<AdminHome />}></Route>
+          <Route exact path="/adminhome" element={<RequireAdmin><AdminHome /></RequireAdmin>}></Route>
           <Route exact path="/adminlogin" element={<AdminLogin />}></Route>
-          <Route exact path="/create-reservation-settings" element={<CreateReservationSettings />}></Route>
-          <Route exact path="/create-reservation-template" element={<CreateReservationTemplate />}></Route>
-          <Route exact path="/reservation-check" element={<ReservationStatusPage />}></Route>
-          <Route exact path="/fix-time-slots" element={<FixTimeSlots />}></Route>
+          <Route exact path="/create-reservation-settings" element={<RequireAdmin><CreateReservationSettings /></RequireAdmin>}></Route>
+          <Route exact path="/create-reservation-template" element={<RequireAdmin><CreateReservationTemplate /></RequireAdmin>}></Route>
+          <Route exact path="/reservation-check" element={<RequireAdmin><ReservationStatusPage /></RequireAdmin>}></Route>
+          <Route exact path="/fix-time-slots" element={<RequireAdmin><FixTimeSlots /></RequireAdmin>}></Route>
 
-          <Route exact path="/calendar" element={<Calendar />}></Route>
-          <Route exact path="/key" element={<Key />}></Route>
-          <Route exact path="/key-access" element={<KeyAccess />}></Route>
-          <Route exact path="/scheduleDetail" element={<ScheduleDetail />}></Route>
-          <Route exact path="/notification" element={<Notification />}></Route>
-          <Route exact path="/tool" element={<Tool />}></Route>
-
-          <Route exact path="/login" element={<Login />}></Route>
+          <Route exact path="/key" element={<RequireLogin><Key /></RequireLogin>}></Route>
+          <Route exact path="/key-access" element={<RequireLogin><KeyAccess /></RequireLogin>}></Route>
+          <Route exact path="/tool" element={<RequireLogin><Tool /></RequireLogin>}></Route>
 
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
-          <Route exact path="/userprofile" element={<UserProfile />}></Route>
+          <Route exact path="/userprofile" element={<Navigate to="/tool" replace />}></Route>
           <Route exact path="/termsofservice" element={<TermsOfService />}></Route>
 
           <Route exact path="/findpassword" element={<FindPassword />}></Route>
@@ -100,32 +99,4 @@ function App() {
   );
 }
 
-function useBlockBrowserBack() {
-  const blockBrowserBack = useCallback(() => {
-    alert("このページはブラウザバックが禁止されています。");
-    window.history.go(1)
-  }, [])
-  useEffect(() => {
-    const handleBlockBrowserBack = (event) => {
-      event.preventDefault();
-      blockBrowserBack();
-    };
-
-    window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handleBlockBrowserBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleBlockBrowserBack);
-    };
-  }, []);
-}
-
-async function isUserDocumentExists(auth) {
-  const firestore = getFirestore();
-  const userDocRef = doc(firestore, 'users', auth.currentUser.email);
-  const docSnap = await getDoc(userDocRef);
-
-  return docSnap.exists();
-}
-
-export { App, useBlockBrowserBack, isUserDocumentExists };
+export { App };

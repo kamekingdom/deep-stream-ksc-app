@@ -1,21 +1,45 @@
-import React from 'react'
-import { Footer, Header } from '../PageParts'
-import { Link } from 'react-router-dom'
-import "../css/kame.css"
+import React from "react";
+import { Link } from "react-router-dom";
+import { Footer, Header } from "../PageParts";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page, PageHero } from "../components/page";
+
+const actions = [
+  { label: "予約不可設定", to: "/create-reservation-settings" },
+];
 
 function AdminHome() {
   return (
     <>
       <Header />
-      <p class="kame_font_003">開発者画面</p>
-      <Link to="/admineventpost" class="kame_button_light_blue"><p class="kame_font_002">提出書類作成</p></Link><br />
-      <Link to="/adminschedulepost" class="kame_button_light_blue"><p class="kame_font_002">イベント作成</p></Link><br />
-      <Link to="/create-reservation-settings" class="kame_button_light_blue"><p class="kame_font_002">緊急予約</p></Link><br />
-      <Link to="/create-reservation-template" class="kame_button_light_blue"><p class="kame_font_002">予約テンプレ</p></Link><br />
-      <a href="https://github.com/DeepStream-KSC/deepstreamksc" class="kame_button_light_blue"><p class="kame_font_002">ソースコード</p></a><br />
+      <Page className="max-w-2xl">
+        <PageHero
+          title="管理者"
+        />
+        <Card>
+          <CardHeader>
+            <CardTitle>管理メニュー</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {actions.map((action) => (
+              <Link key={action.to} to={action.to} className="block">
+                <Button fullWidth>
+                  {action.label}
+                </Button>
+              </Link>
+            ))}
+            <a href="https://github.com/DeepStream-KSC/deepstreamksc" className="block">
+              <Button fullWidth variant="secondary">
+                ソースコード
+              </Button>
+            </a>
+          </CardContent>
+        </Card>
+      </Page>
       <Footer />
     </>
-  )
+  );
 }
 
-export default AdminHome
+export default AdminHome;

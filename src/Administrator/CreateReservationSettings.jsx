@@ -1,153 +1,206 @@
-import React, { useState, useEffect } from 'react';
-import { doc, setDoc, collection, getDocs, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';  // Firebase設定ファイル
-import './CreateReservationSettings.css';  // カスタムCSSをインポート
+import React, { useState, useEffect } from "react";
+import { deleteDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import { Footer, Header } from "../PageParts";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page, PageHero } from "../components/page";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 
 const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
 const timeSlots = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
+const SYSTEM_BLOCK_TEMPLATE_ID = "SYSTEM_BLOCKED";
+const SYSTEM_BLOCK_MESSAGE = "管理者によって予約できないように設定されています。";
+
+function getNextWeekRangeLabel() {
+  const today = new Date();
+  const nextWeekStart = new Date(today);
+  nextWeekStart.setHours(0, 0, 0, 0);
+  nextWeekStart.setDate(today.getDate() - today.getDay() + 7);
+
+  const nextWeekEnd = new Date(nextWeekStart);
+  nextWeekEnd.setDate(nextWeekStart.getDate() + 6);
+
+  const formatDate = (date) => `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  return `${formatDate(nextWeekStart)}から${formatDate(nextWeekEnd)}の週`;
+}
 
 function CreateReservationSettings() {
-    const [selectedSlots, setSelectedSlots] = useState({});  // 選択されたスロットを管理
-    const [templates, setTemplates] = useState([]);  // テンプレートのリスト
-    const [selectedTemplate, setSelectedTemplate] = useState('');  // 選択されたテンプレートID
+  const [selectedSlots, setSelectedSlots] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const nextWeekRangeLabel = getNextWeekRangeLabel();
 
-    // Firestoreからテンプレートリストを取得
-    useEffect(() => {
-        const fetchTemplates = async () => {
-            const templatesSnapshot = await getDocs(collection(db, 'ReservationTemplate'));
-            const templatesList = templatesSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setTemplates(templatesList);
-        };
+  useEffect(() => {
+    const fetchBlockedSettings = async () => {
+      const schedulesSnapshot = await getDocs(collection(db, "ReservationSchedules"));
+      const nextSelectedSlots = {};
 
-        fetchTemplates();
-    }, []);
+      schedulesSnapshot.forEach((docItem) => {
+        const day = docItem.id;
+        const reservations = docItem.data().Reservations || [];
 
-    // セルがクリックされたときに選択状態をトグルする処理
-    const handleCellClick = (day, timeSlot) => {
-        const key = `${day}_${timeSlot}`;
-        setSelectedSlots((prevState) => ({
-            ...prevState,
-            [key]: !prevState[key]  // 選択状態をトグルする
-        }));
+        reservations
+          .filter((reservation) => reservation.TemplateID === SYSTEM_BLOCK_TEMPLATE_ID)
+          .forEach((reservation) => {
+            (reservation.TimeSlots || []).forEach((timeSlot) => {
+              nextSelectedSlots[`${day}_${timeSlot}`] = true;
+            });
+          });
+      });
+
+      setSelectedSlots(nextSelectedSlots);
     };
 
-    // Firestoreに予約設定データを保存する処理
-    const handleSaveSettings = async () => {
-        if (!selectedTemplate) {
-            alert('テンプレートを選択してください。');
-            return;
+    fetchBlockedSettings();
+  }, []);
+
+  const handleCellClick = (day, timeSlot) => {
+    const key = `${day}_${timeSlot}`;
+    setSelectedSlots((prevState) => ({
+      ...prevState,
+      [key]: !prevState[key],
+    }));
+  };
+
+  const handleDayToggle = (day) => {
+    const dayKeys = timeSlots.map((timeSlot) => `${day}_${timeSlot}`);
+    const isAllSelected = dayKeys.every((key) => selectedSlots[key]);
+
+    setSelectedSlots((prevState) => {
+      const nextState = { ...prevState };
+      dayKeys.forEach((key) => {
+        nextState[key] = !isAllSelected;
+      });
+      return nextState;
+    });
+  };
+
+  const handleSaveSettings = async () => {
+    setIsSaving(true);
+    const settingsData = {};
+
+    Object.keys(selectedSlots).forEach((key) => {
+      if (selectedSlots[key]) {
+        const [day, timeSlot] = key.split("_");
+        if (!settingsData[day]) {
+          settingsData[day] = [];
         }
+        settingsData[day].push(timeSlot);
+      }
+    });
 
-        const settingsData = {};
+    try {
+      const blockTemplateData = {
+        Category: "予約不可",
+        Memo: SYSTEM_BLOCK_MESSAGE,
+        NickName: "管理者設定",
+        PersonalName: "管理者設定",
+        PostUserMail: "system@deep-stream.local",
+        IsBlocked: true,
+        BlockReason: SYSTEM_BLOCK_MESSAGE,
+        TemplateID: SYSTEM_BLOCK_TEMPLATE_ID,
+      };
 
-        // 選択されたスロットをFirestoreに保存する形式に変換
-        Object.keys(selectedSlots).forEach((key) => {
-            if (selectedSlots[key]) {
-                const [day, timeSlot] = key.split('_');
-                if (!settingsData[day]) {
-                    settingsData[day] = [];
-                }
-                settingsData[day].push(timeSlot);
-            }
-        });
+      await Promise.all(
+        weekDays.map(async (day) => {
+          const blockedTimeSlots = settingsData[day] || [];
+          const docRef = doc(db, "ReservationSchedules", day);
 
-        // Firestoreに予約設定を保存
-        await Promise.all(Object.keys(settingsData).map(async (day) => {
-            const docRef = doc(db, 'ReservationSchedules', day);  // 'ReservationSchedules' コレクション
+          if (blockedTimeSlots.length === 0) {
+            await deleteDoc(docRef).catch(() => {});
+            return;
+          }
 
-            // 既存のデータを取得
-            const existingDoc = await getDoc(docRef);
+          await setDoc(docRef, {
+            Reservations: [
+              {
+                TemplateID: SYSTEM_BLOCK_TEMPLATE_ID,
+                TimeSlots: blockedTimeSlots,
+              },
+            ],
+          });
+        })
+      );
 
-            // 新しい予約データを作成
-            const newReservation = {
-                TemplateID: selectedTemplate,
-                TimeSlots: settingsData[day],
-            };
+      await setDoc(doc(db, "ReservationTemplate", SYSTEM_BLOCK_TEMPLATE_ID), blockTemplateData);
 
-            if (existingDoc.exists()) {
-                const existingData = existingDoc.data();
+      alert(`次週（${nextWeekRangeLabel}）の予約不可設定を保存しました。`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
-                // 既存のデータを保持しつつ、同じテンプレートIDの予約は上書き、他のテンプレートIDのデータは保持
-                const updatedReservations = existingData.Reservations || [];
+  return (
+    <>
+      <Header />
+      <Page>
+        <PageHero title="予約不可設定" />
+        <Card>
+          <CardHeader>
+            <CardTitle>予約不可スロット設定</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <p className="text-[1.05rem] font-semibold text-foreground">
+              {nextWeekRangeLabel} の予約不可設定
+            </p>
+            <p className="text-base text-muted-foreground">
+              曜日名を押すとその日をまとめて切り替え、セルを押すと個別に予約不可へ変更できます。ここで保存した内容は、次回の予約リセット後の週に反映されます。
+            </p>
 
-                const updatedData = updatedReservations.filter(
-                    (res) => res.TemplateID !== selectedTemplate
-                );
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Time Slot</TableHead>
+                  {weekDays.map((day) => (
+                    <TableHead key={day}>
+                      <button
+                        type="button"
+                        onClick={() => handleDayToggle(day)}
+                        className="w-full text-center font-semibold"
+                      >
+                        {day}
+                      </button>
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {timeSlots.map((timeSlot) => (
+                  <TableRow key={timeSlot}>
+                    <TableCell className="font-semibold">{timeSlot}</TableCell>
+                    {weekDays.map((day) => {
+                      const key = `${day}_${timeSlot}`;
+                      const selected = selectedSlots[key];
+                      return (
+                        <TableCell key={key}>
+                          <button
+                            type="button"
+                            onClick={() => handleCellClick(day, timeSlot)}
+                            className={`w-full rounded-2xl px-3 py-2 text-sm font-semibold ${
+                              selected
+                                ? "bg-slate-900 text-white"
+                                : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            {selected ? "予約不可" : "予約可"}
+                          </button>
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-                updatedData.push(newReservation);
-
-                await setDoc(docRef, {
-                    Reservations: updatedData
-                }, { merge: true });  // 既存のデータを保持しつつ、新しいデータを追加
-            } else {
-                // 既存データがない場合は新規作成
-                await setDoc(docRef, {
-                    Reservations: [newReservation]
-                });
-            }
-        }));
-
-        alert("予約設定が保存されました！");
-    };
-
-    return (
-        <div className="container">
-            <h2>予約設定とメッセージテンプレートの選択</h2>
-
-            {/* テンプレートの選択 */}
-            <div className="template-selection">
-                <label>テンプレートを選択:
-                    <select value={selectedTemplate} onChange={(e) => setSelectedTemplate(e.target.value)}>
-                        <option value="">-- テンプレートを選択 --</option>
-                        {templates.map((template) => (
-                            <option key={template.id} value={template.id}>
-                                {template.Category} - {template.NickName}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            </div>
-
-            <div className="table-container">
-                <h3>Reservation Settings</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Time Slot</th>
-                            {weekDays.map((day) => (
-                                <th key={day}>{day}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timeSlots.map((timeSlot) => (
-                            <tr key={timeSlot}>
-                                <td>{timeSlot}</td>
-                                {weekDays.map((day) => {
-                                    const key = `${day}_${timeSlot}`;
-                                    return (
-                                        <td
-                                            key={key}
-                                            onClick={() => handleCellClick(day, timeSlot)}
-                                            className={selectedSlots[key] ? 'selected' : 'unselected'}  // 選択状態に応じてクラスを付与
-                                        >
-                                            {selectedSlots[key] ? '★' : '○'}
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className="text-center">
-                    <button onClick={handleSaveSettings}>Save Reservation Settings</button>
-                </div>
-            </div>
-        </div>
-    );
+            <Button fullWidth onClick={handleSaveSettings} disabled={isSaving}>
+              {isSaving ? "保存中..." : "次週の予約不可設定を保存"}
+            </Button>
+          </CardContent>
+        </Card>
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
 export default CreateReservationSettings;

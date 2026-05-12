@@ -1,74 +1,82 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Footer, Header } from '../PageParts';
-import { ReservationContext } from '../App';
-import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
-import "../css/kame.css";
-import { Link } from 'react-router-dom';
-import { auth, db } from '../firebase';
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { Footer, Header } from "../PageParts";
+import { ReservationContext } from "../App";
+import { db } from "../firebase";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page } from "../components/page";
+import { Spinner } from "../components/ui/spinner";
+import { Textarea } from "../components/ui/textarea";
+import { Table, TableBody, TableCell, TableRow } from "../components/ui/table";
+import { getCurrentUserEmail } from "../lib/session-auth";
 
 function ReservationDetail() {
   const DAYOFWEEKSTR = ["日", "月", "火", "水", "木", "金", "土"];
   const date = new Date();
   const dayOfWeek = date.getDay();
-  const DayOfWeekStr = DAYOFWEEKSTR[dayOfWeek];
+  const currentDay = DAYOFWEEKSTR[dayOfWeek];
 
-  const ReservationInfo = useContext(ReservationContext);
+  const reservationInfo = useContext(ReservationContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isAlreadyDeleted, setIsAlreadyDeleted] = useState(false);
-
   const [category, setCategory] = useState("");
   const [memo, setMemo] = useState("");
   const [nickname, setNickName] = useState("");
   const [personalName, setPersonalName] = useState("");
-  const TimeSlot = ReservationInfo.TimeSlot;
-  const WeekDay = ReservationInfo.WeekDay;
-
   const [isDeleting, setIsDeleting] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
   const [reservationNum, setReservationNum] = useState(null);
 
   const handleClick = async () => {
+    const currentUserEmail = getCurrentUserEmail();
+    if (!currentUserEmail) {
+      return;
+    }
+
     setIsClicked(true);
     try {
       setIsDeleting(true);
-
-      // Delete the reservation document from Firestore
-      const docRef = doc(db, ReservationInfo.WeekDay, ReservationInfo.TimeSlot);
+      const docRef = doc(db, reservationInfo.WeekDay, reservationInfo.TimeSlot);
       await deleteDoc(docRef);
-
-      // Update the user's reservation count
-      const updatedCount = (DayOfWeekStr === ReservationInfo.WeekDay) ? reservationNum : reservationNum - 1;
-      await updateDoc(doc(db, "users", auth.currentUser.email), {
-        ReservationNum: updatedCount
+      const updatedCount =
+        currentDay === reservationInfo.WeekDay ? reservationNum : reservationNum - 1;
+      await updateDoc(doc(db, "users", currentUserEmail), {
+        ReservationNum: updatedCount,
       });
-
       setIsDeleting(false);
       setIsAlreadyDeleted(true);
     } catch (error) {
-      console.error('Error deleting document:', error);
+      console.error("Error deleting document:", error);
       setIsDeleting(false);
-      alert('Error occurred while deleting the document.');
+      alert("Error occurred while deleting the document.");
     }
   };
 
   useEffect(() => {
     async function fetchFirestoreData() {
       try {
-        let docRef = doc(db, ReservationInfo.WeekDay, ReservationInfo.TimeSlot);
-        let docSnap = await getDoc(docRef, { source: 'cache' });
+        const currentUserEmail = getCurrentUserEmail();
+        let docRef = doc(db, reservationInfo.WeekDay, reservationInfo.TimeSlot);
+        let docSnap = await getDoc(docRef, { source: "cache" });
         if (docSnap.exists()) {
           const docData = docSnap.data();
           setCategory(docData.Category);
           setMemo(docData.Memo);
           setNickName(docData.NickName);
           setPersonalName(docData.PersonalName);
-          setCanEdit(docData.PostUserMail === auth.currentUser.email);
+          setCanEdit(docData.PostUserMail === currentUserEmail);
         }
 
-        // Fetch the user's reservation count
-        docRef = doc(db, "users", auth.currentUser.email);
-        docSnap = await getDoc(docRef, { source: 'cache' });
+        if (!currentUserEmail) {
+          setIsLoaded(true);
+          return;
+        }
+
+        docRef = doc(db, "users", currentUserEmail);
+        docSnap = await getDoc(docRef, { source: "cache" });
         if (docSnap.exists()) {
           const docData = docSnap.data();
           setReservationNum(docData.ReservationNum);
@@ -80,68 +88,72 @@ function ReservationDetail() {
     }
 
     fetchFirestoreData();
-  }, []);
+  }, [reservationInfo.TimeSlot, reservationInfo.WeekDay]);
 
-  if (!isLoaded) {
-    return (
-      <>
-        <Header />
-        <div className="loader">Loading...</div>
-        <Footer />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Header />
-        <div className="kame_header_003">
-          <p className="kame_font_003">{WeekDay}曜日</p>
-        </div>
-        <p className="kame_font_003">{TimeSlot} ({ReservationInfo.Time})</p>
+  return (
+    <>
+      <Header />
+      <Page className="max-w-2xl">
+        {!isLoaded ? (
+          <Spinner label="予約内容を読み込んでいます..." />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {reservationInfo.WeekDay}曜日 / {reservationInfo.TimeSlot}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">{reservationInfo.Time}</p>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-semibold text-muted-foreground">氏名</TableCell>
+                    <TableCell>{personalName || "匿名"}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-semibold text-muted-foreground">ユーザ名</TableCell>
+                    <TableCell>{nickname}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-semibold text-muted-foreground">カテゴリ</TableCell>
+                    <TableCell>{category}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
 
-        <center>
-          <table className="kame_table_001">
-            <tr>
-              <th><p className="kame_font_002">氏名</p></th>
-              <td><p className="kame_font_002">{personalName || "匿名"}</p></td>
-            </tr>
-            <tr>
-              <th><p className="kame_font_002">ユーザ名</p></th>
-              <td><p className="kame_font_002">{nickname}</p></td>
-            </tr>
-            <tr>
-              <th><p className="kame_font_002">カテゴリ</p></th>
-              <td><p className="kame_font_002">{category}</p></td>
-            </tr>
-          </table>
-          <br /><br />
-          <textarea className="kame_textarea" placeholder={memo} readOnly />
-          <br /><br /><br />
-        </center>
+              <Textarea readOnly value={memo || ""} className="resize-none" />
 
-        {canEdit && !isAlreadyDeleted && !isClicked &&
-          <button className="kame_button_light_blue" onClick={handleClick} disabled={isDeleting}>
-            <p className="kame_font_002">消去</p>
-          </button>
-        }
-        {isDeleting && !isAlreadyDeleted && isClicked &&
-          <div className="loader">Loading...</div>
-        }
-        {isLoaded && isAlreadyDeleted &&
-          <Link to="/reservation" className="kame_button_light_blue">
-            <p className="kame_font_002">完了</p>
-          </Link>
-        }
-        {!canEdit &&
-          <Link className="kame_button_light_blue" to="/reservation">
-            <p className="kame_font_002">部室予約へ</p>
-          </Link>
-        }
+              {canEdit && !isAlreadyDeleted && !isClicked ? (
+                <Button fullWidth variant="destructive" onClick={handleClick} disabled={isDeleting}>
+                  消去
+                </Button>
+              ) : null}
 
-        <Footer />
-      </>
-    );
-  }
+              {isDeleting && !isAlreadyDeleted && isClicked ? (
+                <Spinner className="py-2" label="削除しています..." />
+              ) : null}
+
+              {isAlreadyDeleted ? (
+                <Link to="/reservation" className="block">
+                  <Button fullWidth>完了</Button>
+                </Link>
+              ) : null}
+
+              {!canEdit ? (
+                <Link to="/reservation" className="block">
+                  <Button fullWidth variant="secondary">
+                    部室予約へ
+                  </Button>
+                </Link>
+              ) : null}
+            </CardContent>
+          </Card>
+        )}
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
 export default ReservationDetail;
