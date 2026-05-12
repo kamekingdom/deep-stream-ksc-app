@@ -39,23 +39,16 @@ function Key() {
   return (
     <>
       <Header />
-      <Page>
+      <Page className="max-w-2xl">
         <PageHero
-          eyebrow="Key Status"
-          title="鍵の場所"
-          description="現在の所持者と最終利用時刻を確認し、必要に応じて利用開始・返却に進めます。"
+          title="部室利用"
         />
         {!isLoaded ? (
           <Spinner label="鍵の状態を読み込んでいます..." />
         ) : (
           <Card>
             <CardHeader className="gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <CardTitle>現在のステータス</CardTitle>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {isUsing ? "鍵は現在利用中です。" : "鍵は現在利用可能です。"}
-                </p>
-              </div>
+              <CardTitle>現在のステータス</CardTitle>
               <Badge variant={isUsing ? "destructive" : "default"} className="w-fit">
                 {isUsing ? "利用中" : "利用可能"}
               </Badge>

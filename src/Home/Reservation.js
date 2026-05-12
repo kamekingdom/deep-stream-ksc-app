@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
+import { Circle, Clock3, Star, X } from "lucide-react";
 import { Footer, Header } from "../PageParts";
 import { ReservationContext } from "../App";
 import { auth, db } from "../firebase";
@@ -8,7 +9,7 @@ import termsOfServicePdf from "../assets/2023部室利用規約.pdf";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Page, PageHero } from "../components/page";
+import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 
@@ -16,6 +17,19 @@ const TIME_SLOT_LIST = ["朝練", "１限", "チャペル", "２限", "昼練", 
 const TIME_LIST = ["8:00 ~ 8:50", "9:00 ~ 10:40", "10:40 ~ 11:10", "11:10 ~ 12:50", "12:50 ~ 13:30", "13:30 ~ 15:10", "15:20 ~ 17:00", "17:05 ~ 18:45", "18:50 ~ 19:50", "20:00 ~ 21:00"];
 const WEEK_DAY_LIST = ["　　　　", "日", "月", "火", "水", "木", "金", "土"];
 const DAY_OF_WEEK_LIST = ["日", "月", "火", "水", "木", "金", "土"];
+
+function StatusBadge({ variant = "default", icon, label, className = "" }) {
+  return (
+    <Badge
+      variant={variant}
+      className={`min-h-12 px-1 py-2 ${className}`}
+      aria-label={label}
+      title={label}
+    >
+      {icon}
+    </Badge>
+  );
+}
 
 function Reservation() {
   const [loading, setLoading] = useState(true);
@@ -68,36 +82,56 @@ function Reservation() {
     if (isFutureOrToday) {
       if (targetEmail === auth.currentUser.email) {
         return (
-          <Link to="/reservationdetail" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
-            <Badge variant="secondary">自分</Badge>
+          <Link className="block w-full" to="/reservationdetail" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
+            <StatusBadge
+              variant="secondary"
+              label="自分の予約"
+              icon={<Star className="h-7 w-7 fill-current sm:h-8 sm:w-8" strokeWidth={2.2} />}
+            />
           </Link>
         );
       }
       if (targetEmail) {
         return (
-          <Link to="/reservationdetail" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
-            <Badge variant="destructive">予約済み</Badge>
+          <Link className="block w-full" to="/reservationdetail" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
+            <StatusBadge
+              variant="destructive"
+              label="予約済み"
+              icon={<X className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.4} />}
+            />
           </Link>
         );
       }
       return (
-        <Link to="/addreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
-          <Badge>予約可</Badge>
+        <Link className="block w-full" to="/addreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
+          <StatusBadge
+            label="予約可能"
+            icon={<Circle className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.2} />}
+          />
         </Link>
       );
     }
 
     if (targetEmail === auth.currentUser.email) {
       return (
-        <Link to="/alertreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
-          <Badge variant="secondary">履歴</Badge>
+        <Link className="block w-full" to="/alertreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
+          <StatusBadge
+            variant="secondary"
+            label="自分の履歴"
+            icon={<Star className="h-7 w-7 fill-current sm:h-8 sm:w-8" strokeWidth={2.2} />}
+            className="opacity-70"
+          />
         </Link>
       );
     }
 
     return (
-      <Link to="/alertreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
-        <Badge variant="outline">締切</Badge>
+      <Link className="block w-full" to="/alertreservation" onClick={() => setReservationMeta(weekday, timeSlot, TIME_LIST[slotIndex])}>
+        <StatusBadge
+          variant="outline"
+          label="締切"
+          icon={<Clock3 className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.2} />}
+        />
       </Link>
     );
   };
@@ -105,41 +139,64 @@ function Reservation() {
   return (
     <>
       <Header />
-      <Page>
-        <PageHero
-          eyebrow="Reservation"
-          title="部室予約"
-          description="曜日と時間帯ごとの予約状況を一覧で確認し、そのまま詳細や新規予約へ進めます。"
-          actions={
-            <a href={termsOfServicePdf} target="_blank" rel="noopener noreferrer">
-              <Button variant="secondary">部室の利用規約</Button>
-            </a>
-          }
-        />
-
+      <Page className="max-w-4xl">
         {loading ? (
           <Spinner label="予約状況を読み込んでいます..." />
         ) : (
           <Card>
-            <CardHeader>
-              <CardTitle>予約テーブル</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between gap-3 p-5 sm:p-6">
+              <div className="space-y-3">
+                <CardTitle className="leading-none">部室予約</CardTitle>
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:text-base">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Circle className="h-4 w-4 text-primary" strokeWidth={2.2} />
+                    予約可能
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <X className="h-4 w-4 text-destructive" strokeWidth={2.4} />
+                    予約済み
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock3 className="h-4 w-4" strokeWidth={2.2} />
+                    締切
+                  </span>
+                </div>
+              </div>
+              <a href={termsOfServicePdf} target="_blank" rel="noopener noreferrer" className="shrink-0">
+                <Button variant="secondary">
+                  利用規約
+                </Button>
+              </a>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <Table>
+                <colgroup>
+                  <col style={{ width: "20%" }} />
+                  {DAY_OF_WEEK_LIST.map((weekday) => (
+                    <col key={weekday} style={{ width: `${80 / DAY_OF_WEEK_LIST.length}%` }} />
+                  ))}
+                </colgroup>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>時間帯</TableHead>
+                    <TableHead className="w-[20%]">時間帯</TableHead>
                     {DAY_OF_WEEK_LIST.map((weekday) => (
-                      <TableHead key={weekday}>{weekday}</TableHead>
+                      <TableHead key={weekday} className="text-center">{weekday}</TableHead>
                     ))}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {TIME_SLOT_LIST.map((timeSlot, slotIndex) => (
                     <TableRow key={timeSlot}>
-                      <TableCell className="font-semibold">{timeSlot}</TableCell>
+                      <TableCell className="text-left">
+                        <div className="font-bold leading-tight text-[1.2rem] sm:text-[1.35rem]">
+                          {timeSlot}
+                        </div>
+                        <div className="mt-1 text-[0.78rem] font-medium leading-tight text-muted-foreground sm:text-[0.9rem]">
+                          {TIME_LIST[slotIndex]}
+                        </div>
+                      </TableCell>
                       {DAY_OF_WEEK_LIST.map((weekday, weekdayIndex) => (
-                        <TableCell key={`${weekday}-${timeSlot}`}>
+                        <TableCell key={`${weekday}-${timeSlot}`} className="text-center">
                           {renderCell(weekday, weekdayIndex, timeSlot, slotIndex)}
                         </TableCell>
                       ))}

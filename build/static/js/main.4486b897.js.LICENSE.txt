@@ -319,5 +319,3 @@ PERFORMANCE OF THIS SOFTWARE.
  *
  * @license MIT
  */
-
-//! moment.js

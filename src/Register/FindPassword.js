@@ -25,7 +25,7 @@ export default function FindPassword() {
   return (
     <div>
       <Header />
-      <Page className="max-w-xl">
+      <Page className="max-w-2xl">
         <Card>
           <CardHeader>
             <CardTitle>パスワードを忘れた場合</CardTitle>

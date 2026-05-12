@@ -28,7 +28,7 @@ function Login() {
         <title>ログイン</title>
       </Helmet>
       <Header />
-      <Page className="max-w-xl">
+      <Page className="max-w-2xl">
         <Card>
           <CardHeader>
             <CardTitle>{user ? "アカウント" : "ログイン"}</CardTitle>
@@ -41,7 +41,7 @@ function Login() {
           <CardContent className="space-y-6">
             {user ? (
               <div className="space-y-3">
-                <Link to="/userprofile" className="block">
+                <Link to="/tool" className="block">
                   <Button fullWidth>登録情報</Button>
                 </Link>
                 <Link to="/" className="block">

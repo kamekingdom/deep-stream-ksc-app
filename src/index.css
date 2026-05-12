@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,26 +6,27 @@
 
 @layer base {
   :root {
-    --background: 204 33% 98%;
-    --foreground: 222 47% 11%;
+    --background: 220 16% 97%;
+    --foreground: 220 19% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 220 19% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 198 93% 48%;
+    --popover-foreground: 220 19% 12%;
+    --primary: 193 78% 34%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 197 71% 92%;
-    --accent-foreground: 222 47% 11%;
-    --destructive: 0 72% 51%;
+    --secondary: 220 11% 92%;
+    --secondary-foreground: 220 19% 12%;
+    --muted: 220 12% 94%;
+    --muted-foreground: 220 10% 40%;
+    --accent: 193 62% 92%;
+    --accent-foreground: 220 19% 12%;
+    --destructive: 0 58% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 198 93% 48%;
-    --radius: 1.5rem;
+    --border: 220 10% 84%;
+    --input: 220 10% 84%;
+    --ring: 193 78% 34%;
+    --theme-glow: 8, 145, 178;
+    --radius: 0.75rem;
   }
 
   * {
@@ -34,13 +35,33 @@
 
   html {
     @apply scroll-smooth;
+    font-size: 20px;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
   }
 
   body {
-    @apply min-h-screen bg-background bg-hero-glow font-sans text-foreground antialiased;
+    @apply min-h-screen bg-background font-sans text-foreground antialiased;
+    width: 100%;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at top, rgba(var(--theme-glow), 0.08), transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(244, 247, 249, 0.98));
+  }
+
+  #root {
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   a {
     @apply transition-colors;
+  }
+
+  .brand-wordmark {
+    font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.06em;
   }
 }

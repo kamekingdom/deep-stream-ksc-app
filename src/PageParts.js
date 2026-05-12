@@ -1,40 +1,61 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { CalendarDays, FileText, Home, KeyRound, UserCircle2, Wrench } from "lucide-react";
+import { CalendarDays, KeyRound, Settings2, Shield } from "lucide-react";
 import { auth } from "./firebase";
 import { Button } from "./components/ui/button";
 import { cn } from "./lib/utils";
+import {
+  APPEARANCE_EVENT,
+  getIconColorOption,
+  getIconOption,
+  readStoredAppearance,
+} from "./lib/appearance";
 
 const navItems = [
+  { label: "部室予約", to: "/reservation", fallback: "/reservation", icon: CalendarDays },
   { label: "部室利用", to: "/key", fallback: "/login", icon: KeyRound },
-  { label: "部室予約", to: "/reservation", fallback: "/login", icon: CalendarDays },
-  { label: "提出書類", to: "/notification", fallback: "/login", icon: FileText },
-  { label: "ツール", to: "/tool", fallback: "/login", icon: Wrench },
+  { label: "設定", to: "/tool", fallback: "/login", icon: Settings2 },
+  { label: "管理者", to: "/adminlogin", fallback: "/adminlogin", icon: Shield, admin: true },
 ];
 
 function Header() {
   const [user] = useAuthState(auth);
+  const [appearance, setAppearance] = React.useState(readStoredAppearance());
+
+  React.useEffect(() => {
+    const syncAppearance = () => {
+      setAppearance(readStoredAppearance());
+    };
+
+    window.addEventListener(APPEARANCE_EVENT, syncAppearance);
+    return () => window.removeEventListener(APPEARANCE_EVENT, syncAppearance);
+  }, []);
+
+  const AccountIcon = getIconOption(appearance.profileIcon).icon;
+  const accountIconColor = getIconColorOption(appearance.profileIconColor).value;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-3 text-foreground">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Home className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              KSC App
-            </p>
-            <p className="text-lg font-bold">Deep Stream</p>
-          </div>
+    <header className="sticky top-0 z-[100] border-b border-border/80 bg-background">
+      <div className="mx-auto flex h-[7.5rem] w-full max-w-5xl items-center justify-between px-5 sm:px-8">
+        <Link to="/reservation" className="brand-wordmark text-[2.4rem] leading-none text-foreground">
+          Deep Stream
         </Link>
-        <Link to="/login">
-          <Button variant={user ? "secondary" : "default"} size="sm">
-            <UserCircle2 className="h-4 w-4" />
-            {user ? "アカウント" : "ログイン"}
-          </Button>
+        <Link to={user ? "/tool" : "/login"}>
+          {user ? (
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-16 w-16 rounded-full border border-border bg-accent"
+              aria-label="アカウント"
+            >
+              <AccountIcon className="h-8 w-8" style={{ color: accountIconColor }} strokeWidth={2.2} />
+            </Button>
+          ) : (
+            <Button variant="secondary" size="sm" className="h-14 rounded-xl border border-border px-6 text-[1.55rem]">
+              アカウント
+            </Button>
+          )}
         </Link>
       </div>
     </header>
@@ -44,35 +65,50 @@ function Header() {
 function Footer() {
   const [user] = useAuthState(auth);
   const location = useLocation();
+  const currentYear = new Date().getFullYear();
 
   return (
     <>
-      <div className="h-24" />
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-3 pb-3 pt-2 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 rounded-[28px] border border-border/70 bg-card/90 px-2 py-2 shadow-soft">
+      <div className="h-36" />
+      <div className="fixed inset-x-0 bottom-0 z-[100] border-t border-border/80 bg-background pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
+        <div className="mx-auto grid max-w-4xl grid-cols-4 border-b border-border/70 px-2 pb-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const to = user ? item.to : item.fallback;
-            const isActive = location.pathname === item.to;
+            const isActive = item.admin
+              ? location.pathname.startsWith("/admin")
+              || location.pathname.startsWith("/create-reservation")
+              || location.pathname.startsWith("/reservation-check")
+              || location.pathname.startsWith("/fix-time-slots")
+              : location.pathname === item.to;
             return (
               <Link
                 key={item.label}
                 to={to}
                 className={cn(
-                  "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-semibold transition-colors",
+                  "flex min-w-0 flex-col items-center justify-center gap-1.5 px-1 py-3 text-[1.2rem] font-semibold transition-colors",
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-[1.4rem] w-[1.4rem]" />
                 <span className="truncate">{item.label}</span>
               </Link>
             );
           })}
         </div>
-        <p className="mt-3 text-center text-[11px] text-muted-foreground">
-          Copyright © 2024 KameKingdom & Sunghwa. All Rights Reserved.
+        <p className="mt-2 text-center text-[0.8rem] text-muted-foreground">
+          Copyright © {currentYear}{" "}
+          <a
+            href="https://kame-tech-lab.web.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-4 hover:underline"
+          >
+            KameKingdom
+          </a>
+          . All Rights Reserved.
         </p>
       </div>
     </>

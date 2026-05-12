@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { Input } from "../components/ui/input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
+import { defaultAppearance, serializeAppearanceForFirestore } from "../lib/appearance";
 
 function Register() {
   const [user] = useAuthState(auth);
@@ -132,6 +133,7 @@ function EmailRegister() {
         Password: password,
         userId,
         ReservationNum: 0,
+        ...serializeAppearanceForFirestore(defaultAppearance),
       });
       setIsAlreadyUploaded(true);
     } catch (firebaseError) {

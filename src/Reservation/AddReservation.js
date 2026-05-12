@@ -108,16 +108,18 @@ function AddReservation() {
         ) : (
           <Card>
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="leading-tight">
                 {reservationInfo.WeekDay}曜日 / {reservationInfo.TimeSlot}
               </CardTitle>
-              <p className="text-sm text-muted-foreground">{reservationInfo.Time}</p>
+              <p className="text-[1rem] font-medium text-muted-foreground sm:text-[1.1rem]">
+                {reservationInfo.Time}
+              </p>
             </CardHeader>
-            <CardContent className="space-y-5">
+            <CardContent className="space-y-6">
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-muted-foreground">練習カテゴリ</p>
+                <p className="text-base font-semibold text-muted-foreground">練習カテゴリ</p>
                 <select
-                  className="flex h-11 w-full rounded-2xl border border-input bg-background px-4 text-sm"
+                  className="flex h-14 w-full rounded-xl border border-input bg-background px-4 text-[1.1rem] font-medium text-foreground"
                   value={category}
                   onChange={(e) => {
                     setCategory(e.target.value);
@@ -133,11 +135,12 @@ function AddReservation() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-muted-foreground">メモ</p>
+                <p className="text-base font-semibold text-muted-foreground">メモ</p>
                 <Textarea
                   placeholder="(例) ずっと真夜中でいいのに。"
                   maxLength={20}
                   value={memo}
+                  className="min-h-[160px] rounded-xl px-4 py-4 text-[1.05rem]"
                   onChange={(e) => {
                     setMemo(e.target.value);
                     setIsAlreadyUploaded(false);
@@ -146,20 +149,20 @@ function AddReservation() {
                 />
               </div>
 
-              {!canReserve ? <p className="text-sm font-medium text-destructive">予約は週に2回までです。</p> : null}
-              {isAlreadyExisted ? <p className="text-sm font-medium text-destructive">既に予約されています。</p> : null}
+              {!canReserve ? <p className="text-base font-medium text-destructive">予約は週に2回までです。</p> : null}
+              {isAlreadyExisted ? <p className="text-base font-medium text-destructive">既に予約されています。</p> : null}
 
-              {isClicked && !isAlreadyUploaded ? <Spinner className="py-2" label="予約を確定しています..." /> : null}
+              {isClicked && !isAlreadyUploaded ? <Spinner className="py-3" label="予約を確定しています..." /> : null}
 
               {canReserve && !isAlreadyUploaded && !isClicked ? (
-                <Button fullWidth onClick={postButtonClick}>
+                <Button fullWidth size="lg" onClick={postButtonClick}>
                   予約
                 </Button>
               ) : null}
 
               {isAlreadyUploaded ? (
                 <Link to="/reservation" className="block">
-                  <Button fullWidth>完了</Button>
+                  <Button fullWidth size="lg">完了</Button>
                 </Link>
               ) : null}
             </CardContent>
