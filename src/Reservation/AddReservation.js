@@ -28,11 +28,34 @@ function AddReservation() {
   const [personalName, setPersonalName] = useState("");
   const [reservationNum, setReservationNum] = useState(null);
   const [canReserve, setCanReserve] = useState(true);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockMessage, setBlockMessage] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchFirestoreData() {
       const currentUserEmail = getCurrentUserEmail();
+      const reservationDocRef = doc(db, reservationInfo.WeekDay, reservationInfo.TimeSlot);
+
+      const reservationDocSnap = await getDoc(reservationDocRef);
+      if (reservationDocSnap.exists()) {
+        const reservationDocData = reservationDocSnap.data();
+        if (reservationDocData.IsBlocked) {
+          setIsBlocked(true);
+          setBlockMessage(
+            reservationDocData.BlockReason
+            || reservationDocData.Memo
+            || "管理者によって予約できないように設定されています。"
+          );
+        } else {
+          setIsBlocked(false);
+          setBlockMessage("");
+        }
+      } else {
+        setIsBlocked(false);
+        setBlockMessage("");
+      }
+
       if (!currentUserEmail) {
         setIsLoaded(true);
         return;
@@ -56,7 +79,7 @@ function AddReservation() {
       setIsLoaded(true);
     }
     fetchFirestoreData();
-  }, [currentDay, reservationInfo.WeekDay]);
+  }, [currentDay, reservationInfo.TimeSlot, reservationInfo.WeekDay]);
 
   const handleUploadClick = async () => {
     const currentUserEmail = getCurrentUserEmail();
@@ -72,6 +95,18 @@ function AddReservation() {
 
     const reservationExists = await getDoc(postDocRef);
     if (reservationExists.exists()) {
+      const reservationData = reservationExists.data();
+      if (reservationData.IsBlocked) {
+        setIsBlocked(true);
+        setBlockMessage(
+          reservationData.BlockReason
+          || reservationData.Memo
+          || "管理者によって予約できないように設定されています。"
+        );
+        setIsClicked(false);
+        return;
+      }
+
       setIsAlreadyExisted(true);
       setIsClicked(false);
       return;
@@ -163,14 +198,21 @@ function AddReservation() {
               </div>
 
               {!canReserve ? <p className="text-base font-medium text-destructive">予約は週に2回までです。</p> : null}
+              {isBlocked ? <p className="text-base font-medium text-destructive">{blockMessage}</p> : null}
               {isAlreadyExisted ? <p className="text-base font-medium text-destructive">既に予約されています。</p> : null}
 
               {isClicked && !isAlreadyUploaded ? <Spinner className="py-3" label="予約を確定しています..." /> : null}
 
-              {canReserve && !isAlreadyUploaded && !isClicked ? (
+              {canReserve && !isBlocked && !isAlreadyExisted && !isAlreadyUploaded && !isClicked ? (
                 <Button fullWidth size="lg" onClick={postButtonClick}>
                   予約
                 </Button>
+              ) : null}
+
+              {(isBlocked || isAlreadyExisted) && !isAlreadyUploaded ? (
+                <Link to="/reservation" className="block">
+                  <Button fullWidth size="lg" variant="secondary">部室予約へ戻る</Button>
+                </Link>
               ) : null}
 
               {isAlreadyUploaded ? (

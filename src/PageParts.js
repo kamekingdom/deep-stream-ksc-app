@@ -9,7 +9,6 @@ import {
   getIconOption,
   readStoredAppearance,
 } from "./lib/appearance";
-import { APP_VERSION } from "./generated/version";
 import { useCurrentUser } from "./lib/session-auth";
 
 const navItems = [
@@ -40,9 +39,6 @@ function Header() {
       <div className="mx-auto flex h-[7.5rem] w-full max-w-5xl items-center justify-between px-5 sm:px-8">
         <Link to="/reservation" className="flex flex-col">
           <span className="brand-wordmark text-[2.4rem] leading-none text-foreground">Deep Stream</span>
-          <span className="mt-2 text-[0.9rem] font-semibold tracking-[0.08em] text-muted-foreground">
-            Version {APP_VERSION}
-          </span>
         </Link>
         <Link to={user ? "/tool" : "/login"}>
           {user ? (

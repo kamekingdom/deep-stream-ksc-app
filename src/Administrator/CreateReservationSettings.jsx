@@ -10,10 +10,25 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
 const timeSlots = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
 const SYSTEM_BLOCK_TEMPLATE_ID = "SYSTEM_BLOCKED";
+const SYSTEM_BLOCK_MESSAGE = "管理者によって予約できないように設定されています。";
+
+function getNextWeekRangeLabel() {
+  const today = new Date();
+  const nextWeekStart = new Date(today);
+  nextWeekStart.setHours(0, 0, 0, 0);
+  nextWeekStart.setDate(today.getDate() - today.getDay() + 7);
+
+  const nextWeekEnd = new Date(nextWeekStart);
+  nextWeekEnd.setDate(nextWeekStart.getDate() + 6);
+
+  const formatDate = (date) => `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  return `${formatDate(nextWeekStart)}から${formatDate(nextWeekEnd)}の週`;
+}
 
 function CreateReservationSettings() {
   const [selectedSlots, setSelectedSlots] = useState({});
   const [isSaving, setIsSaving] = useState(false);
+  const nextWeekRangeLabel = getNextWeekRangeLabel();
 
   useEffect(() => {
     const fetchBlockedSettings = async () => {
@@ -75,6 +90,17 @@ function CreateReservationSettings() {
     });
 
     try {
+      const blockTemplateData = {
+        Category: "予約不可",
+        Memo: SYSTEM_BLOCK_MESSAGE,
+        NickName: "管理者設定",
+        PersonalName: "管理者設定",
+        PostUserMail: "system@deep-stream.local",
+        IsBlocked: true,
+        BlockReason: SYSTEM_BLOCK_MESSAGE,
+        TemplateID: SYSTEM_BLOCK_TEMPLATE_ID,
+      };
+
       await Promise.all(
         weekDays.map(async (day) => {
           const blockedTimeSlots = settingsData[day] || [];
@@ -96,17 +122,9 @@ function CreateReservationSettings() {
         })
       );
 
-      await setDoc(doc(db, "ReservationTemplate", SYSTEM_BLOCK_TEMPLATE_ID), {
-        Category: "予約不可",
-        Memo: "管理者によって予約できないように設定されています。",
-        NickName: "管理者設定",
-        PersonalName: "管理者設定",
-        PostUserMail: "system@deep-stream.local",
-        IsBlocked: true,
-        BlockReason: "管理者によって予約できないように設定されています。",
-      });
+      await setDoc(doc(db, "ReservationTemplate", SYSTEM_BLOCK_TEMPLATE_ID), blockTemplateData);
 
-      alert("予約不可設定を保存しました。");
+      alert(`次週（${nextWeekRangeLabel}）の予約不可設定を保存しました。`);
     } finally {
       setIsSaving(false);
     }
@@ -116,14 +134,17 @@ function CreateReservationSettings() {
     <>
       <Header />
       <Page>
-        <PageHero eyebrow="Admin" title="予約不可設定" description="予約できない曜日・時間帯を管理者が指定します。" />
+        <PageHero title="予約不可設定" />
         <Card>
           <CardHeader>
             <CardTitle>予約不可スロット設定</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
+            <p className="text-[1.05rem] font-semibold text-foreground">
+              {nextWeekRangeLabel} の予約不可設定
+            </p>
             <p className="text-base text-muted-foreground">
-              曜日名を押すとその日をまとめて切り替え、セルを押すと個別に予約不可へ変更できます。
+              曜日名を押すとその日をまとめて切り替え、セルを押すと個別に予約不可へ変更できます。ここで保存した内容は、次回の予約リセット後の週に反映されます。
             </p>
 
             <Table>
@@ -172,7 +193,7 @@ function CreateReservationSettings() {
             </Table>
 
             <Button fullWidth onClick={handleSaveSettings} disabled={isSaving}>
-              {isSaving ? "保存中..." : "予約不可設定を保存"}
+              {isSaving ? "保存中..." : "次週の予約不可設定を保存"}
             </Button>
           </CardContent>
         </Card>

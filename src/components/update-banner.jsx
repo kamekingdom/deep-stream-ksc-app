@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
-import { APP_BUILD_TIME, APP_VERSION } from "../generated/version";
+import { APP_BUILD_TIME } from "../generated/version";
 
 const CHECK_INTERVAL_MS = 60 * 1000;
 
@@ -42,10 +42,9 @@ function UpdateBanner() {
     const checkVersion = async () => {
       try {
         const latest = await fetchLatestVersion();
-        const hasNewVersion = latest?.version && latest.version !== APP_VERSION;
         const hasNewBuild = latest?.buildTime && latest.buildTime !== APP_BUILD_TIME;
 
-        if (!cancelled && (hasNewVersion || hasNewBuild)) {
+        if (!cancelled && hasNewBuild) {
           setLatestVersion(latest);
         }
       } catch (_error) {
