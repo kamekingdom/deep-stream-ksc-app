@@ -3,7 +3,7 @@ import { cn } from "../lib/utils";
 
 function Page({ className, children }) {
   return (
-    <main className={cn("mx-auto w-full max-w-2xl px-4 py-3 pb-28 sm:px-6 sm:py-4 sm:pb-32", className)}>
+    <main className={cn("mx-auto w-full max-w-2xl px-4 pb-28 pt-[8.25rem] sm:px-6 sm:pb-32 sm:pt-[8.75rem]", className)}>
       {children}
     </main>
   );

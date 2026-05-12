@@ -8,6 +8,7 @@ import {
   getTimeSlotList,
   getTodayReservationNotifications,
   getTodayWeekday,
+  isNotificationEnabled,
   markNotificationSent,
   requestNotificationPermission,
   showBrowserNotification,
@@ -41,13 +42,30 @@ async function fetchTodayReservations(email) {
 function NotificationCenter() {
   const [user] = useCurrentUser();
   const [permission, setPermission] = useState(getNotificationPermission());
+  const [enabled, setEnabled] = useState(isNotificationEnabled());
 
   useEffect(() => {
     setPermission(getNotificationPermission());
+    setEnabled(isNotificationEnabled());
   }, [user]);
 
   useEffect(() => {
-    if (!user?.email || permission !== "default") {
+    const syncNotificationSettings = () => {
+      setPermission(getNotificationPermission());
+      setEnabled(isNotificationEnabled());
+    };
+
+    window.addEventListener("focus", syncNotificationSettings);
+    document.addEventListener("visibilitychange", syncNotificationSettings);
+
+    return () => {
+      window.removeEventListener("focus", syncNotificationSettings);
+      document.removeEventListener("visibilitychange", syncNotificationSettings);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!user?.email || !enabled || permission !== "default") {
       return undefined;
     }
 
@@ -71,10 +89,10 @@ function NotificationCenter() {
     return () => {
       cancelled = true;
     };
-  }, [permission, user]);
+  }, [enabled, permission, user]);
 
   useEffect(() => {
-    if (!user?.email || permission !== "granted") {
+    if (!user?.email || !enabled || permission !== "granted") {
       return undefined;
     }
 
@@ -117,7 +135,7 @@ function NotificationCenter() {
       isMounted = false;
       window.clearInterval(intervalId);
     };
-  }, [permission, user]);
+  }, [enabled, permission, user]);
 
   return null;
 }

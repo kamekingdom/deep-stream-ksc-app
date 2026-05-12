@@ -27,7 +27,9 @@ import {
 import {
   canUseNotifications,
   getNotificationPermission,
+  isNotificationEnabled,
   requestNotificationPermission,
+  setNotificationEnabled,
 } from "../lib/notifications";
 import { clearManualSession, signOutCurrentUser, useCurrentUser } from "../lib/session-auth";
 
@@ -45,6 +47,7 @@ function Tool() {
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState(getNotificationPermission());
+  const [notificationEnabled, setNotificationEnabledState] = useState(isNotificationEnabled());
   const [profileMessage, setProfileMessage] = useState("");
   const [appearance, setAppearance] = useState(defaultAppearance);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -58,6 +61,7 @@ function Tool() {
   useEffect(() => {
     const syncNotificationPermission = () => {
       setNotificationPermission(getNotificationPermission());
+      setNotificationEnabledState(isNotificationEnabled());
     };
 
     syncNotificationPermission();
@@ -201,6 +205,18 @@ function Tool() {
   const handleEnableNotifications = async () => {
     const permission = await requestNotificationPermission();
     setNotificationPermission(permission);
+  };
+
+  const handleToggleNotifications = async (nextEnabled) => {
+    setNotificationEnabled(nextEnabled);
+    setNotificationEnabledState(nextEnabled);
+
+    if (nextEnabled && canUseNotifications() && getNotificationPermission() === "default") {
+      const permission = await requestNotificationPermission();
+      setNotificationPermission(permission);
+    } else {
+      setNotificationPermission(getNotificationPermission());
+    }
   };
 
   const handleDeleteAccount = async () => {
@@ -463,21 +479,33 @@ function Tool() {
               <CardTitle>通知</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-[1.05rem] font-medium text-foreground/90 sm:text-[1.15rem]">
-                予約の10分前に「利用開始」、終了時間に「返却」を促す通知を出します。
-              </p>
-              <p className="text-base font-semibold text-muted-foreground">
-                状態: {notificationPermissionLabel(notificationPermission)}
-              </p>
-              {notificationPermission === "granted" ? (
-                <p className="text-base font-medium text-muted-foreground">
-                  ログイン時に自動で通知が有効になります。
-                </p>
+              {canUseNotifications() ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    fullWidth
+                    variant={notificationEnabled ? "default" : "secondary"}
+                    onClick={() => handleToggleNotifications(true)}
+                  >
+                    オン
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant={!notificationEnabled ? "default" : "secondary"}
+                    onClick={() => handleToggleNotifications(false)}
+                  >
+                    オフ
+                  </Button>
+                </div>
               ) : null}
-              {canUseNotifications() && notificationPermission !== "granted" ? (
+              {canUseNotifications() && notificationEnabled && notificationPermission !== "granted" ? (
                 <Button fullWidth variant="secondary" onClick={handleEnableNotifications}>
                   通知を許可する
                 </Button>
+              ) : null}
+              {canUseNotifications() ? (
+                <p className="text-base font-semibold text-muted-foreground">
+                  状態: {notificationEnabled ? notificationPermissionLabel(notificationPermission) : "オフ"}
+                </p>
               ) : null}
               {!canUseNotifications() ? (
                 <p className="text-base font-medium text-muted-foreground">

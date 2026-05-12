@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "./ui/button";
 import { APP_BUILD_TIME, APP_VERSION } from "../generated/version";
 
-const VERSION_URL = `/version.json?t=${Date.now()}`;
 const CHECK_INTERVAL_MS = 60 * 1000;
 
 async function clearAppCaches() {
@@ -18,7 +17,7 @@ async function clearAppCaches() {
 }
 
 async function fetchLatestVersion() {
-  const response = await fetch(VERSION_URL, {
+  const response = await fetch(`/version.json?t=${Date.now()}`, {
     cache: "no-store",
     headers: {
       pragma: "no-cache",
@@ -57,9 +56,24 @@ function UpdateBanner() {
     checkVersion();
     const intervalId = window.setInterval(checkVersion, CHECK_INTERVAL_MS);
 
+    const handleFocus = () => {
+      checkVersion();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        checkVersion();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       cancelled = true;
       window.clearInterval(intervalId);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
@@ -77,7 +91,7 @@ function UpdateBanner() {
   }
 
   return (
-    <div className="fixed inset-x-0 top-[7.5rem] z-[120] border-b border-primary/20 bg-background/98 px-4 py-4 shadow-sm backdrop-blur-sm">
+    <div className="fixed inset-x-0 top-[7.5rem] z-[140] border-b-2 border-primary/25 bg-background px-4 py-4 shadow-[0_10px_28px_rgba(15,23,42,0.12)]">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <p className="text-[1rem] font-bold text-foreground">アプリの更新があります</p>

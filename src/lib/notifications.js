@@ -1,4 +1,5 @@
 const NOTIFICATION_STATE_KEY = "deepstream_notification_state";
+const NOTIFICATION_ENABLED_KEY = "deepstream_notification_enabled";
 const TIME_SLOT_LIST = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
 const TIME_SLOT_SCHEDULE = {
   朝練: { start: "08:00", end: "08:50" },
@@ -32,6 +33,27 @@ async function requestNotificationPermission() {
   }
 
   return Notification.requestPermission();
+}
+
+function isNotificationEnabled() {
+  if (typeof window === "undefined") {
+    return true;
+  }
+
+  const raw = window.localStorage.getItem(NOTIFICATION_ENABLED_KEY);
+  if (raw === null) {
+    return true;
+  }
+
+  return raw === "true";
+}
+
+function setNotificationEnabled(enabled) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(NOTIFICATION_ENABLED_KEY, String(enabled));
 }
 
 function readNotificationState() {
@@ -155,8 +177,10 @@ export {
   getTimeSlotList,
   getTodayReservationNotifications,
   getTodayWeekday,
+  isNotificationEnabled,
   markNotificationSent,
   requestNotificationPermission,
+  setNotificationEnabled,
   showBrowserNotification,
   wasNotificationSent,
 };
