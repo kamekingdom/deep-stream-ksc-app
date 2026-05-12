@@ -1,86 +1,110 @@
 import { useState, useEffect, useContext } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { Footer, Header } from "../PageParts";
-import "../css/kame.css";
-import { Link } from "react-router-dom";
-import { InfoContext, ScheduleContext } from "../App";
+import { ScheduleContext } from "../App";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Page, PageHero } from "../components/page";
 
-const Calendar = (props) => {
-    const [filePosts, setFilePosts] = useState([]);
-    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
-    const ScheduleInfo = useContext(ScheduleContext);
+const categoryMeta = [
+  { label: "メモ", variant: "secondary" },
+  { label: "注意", variant: "destructive" },
+  { label: "アンケート", variant: "default" },
+  { label: "確認", variant: "outline" },
+];
 
-    useEffect(() => {
-        const fetchFilePosts = async () => {
-            const filePostsCollectionRef = collection(db, "Schedules");
-            const q = query(filePostsCollectionRef, orderBy("__name__"));
-            const filePostsSnapshot = await getDocs(q, { cache: "cached" });
-            const filePostsData = filePostsSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setFilePosts(filePostsData);
-        };
-        fetchFilePosts();
-    }, []);
+const Calendar = () => {
+  const [filePosts, setFilePosts] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const scheduleInfo = useContext(ScheduleContext);
 
-    const postCategory = ["kame_memo", "kame_exclamation", "kame_question", "kame_check"];
-
-    const handleClick = (month) => {
-        setCurrentMonth(month);
+  useEffect(() => {
+    const fetchFilePosts = async () => {
+      const filePostsCollectionRef = collection(db, "Schedules");
+      const q = query(filePostsCollectionRef, orderBy("__name__"));
+      const filePostsSnapshot = await getDocs(q);
+      const filePostsData = filePostsSnapshot.docs.map((docItem) => ({
+        id: docItem.id,
+        ...docItem.data(),
+      }));
+      setFilePosts(filePostsData);
     };
+    fetchFilePosts();
+  }, []);
 
-    return (
-        <>
-            <Header />
-            <center>
-                <table>
-                    <tr>
-                        {Array.from({ length: 6 }, (_, i) => (<td><button className="kame_button_001" onClick={() => handleClick(i + 1)}>{i + 1}月</button></td>))}
-                    </tr>
-                    <tr>
-                        {Array.from({ length: 6 }, (_, i) => (<td><button className="kame_button_001" onClick={() => handleClick(i + 7)}>{i + 7}月</button></td>))}
-                    </tr>
-                </table>
-            </center>
-            {filePosts
-                .filter((filePost) => filePost.month === currentMonth)
-                .map((filePost) => (
-                    <div className={postCategory[filePost.category]} key={filePost.id}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <div className="box-title">
-                                        <td>
-                                            {filePost.month}/{filePost.day}({filePost.dayofweek})&nbsp;&nbsp;&nbsp;&nbsp;
-                                        </td>
-                                        <td>
-                                            <Link
-                                                to="/scheduledetail"
-                                                onClick={() => {
-                                                    ScheduleInfo.Month = filePost.month;
-                                                    ScheduleInfo.Date = filePost.day;
-                                                    ScheduleInfo.Day = filePost.dayofweek;
-                                                    ScheduleInfo.Title = filePost.title;
-                                                    ScheduleInfo.Content = filePost.content;
-                                                    ScheduleInfo.Link = filePost.link;
-                                                    ScheduleInfo.Category = filePost.category
-                                                }}
-                                                style={{ color: "green" }}>
-                                                {filePost.title}
-                                            </Link>
-                                        </td>
-                                    </div>
-                                </tr>
-
-                            </tbody>
-                        </table>
+  return (
+    <>
+      <Header />
+      <Page>
+        <PageHero
+          eyebrow="Schedule"
+          title={`${currentMonth}月の予定`}
+          description="月を切り替えながら、公開されているイベント予定を確認できます。"
+        />
+        <div className="mb-6 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+          {Array.from({ length: 12 }, (_, index) => {
+            const month = index + 1;
+            return (
+              <Button
+                key={month}
+                variant={currentMonth === month ? "default" : "secondary"}
+                onClick={() => setCurrentMonth(month)}
+                className="rounded-2xl"
+              >
+                {month}月
+              </Button>
+            );
+          })}
+        </div>
+        <div className="space-y-4">
+          {filePosts
+            .filter((filePost) => filePost.month === currentMonth)
+            .map((filePost) => {
+              const meta = categoryMeta[filePost.category] || categoryMeta[0];
+              return (
+                <Card key={filePost.id}>
+                  <CardHeader className="gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        {filePost.month}/{filePost.day}({filePost.dayofweek})
+                      </p>
+                      <CardTitle className="mt-1 text-lg">
+                        <Link
+                          to="/scheduledetail"
+                          className="text-primary underline-offset-4 hover:underline"
+                          onClick={() => {
+                            scheduleInfo.Month = filePost.month;
+                            scheduleInfo.Date = filePost.day;
+                            scheduleInfo.Day = filePost.dayofweek;
+                            scheduleInfo.Title = filePost.title;
+                            scheduleInfo.Content = filePost.content;
+                            scheduleInfo.Link = filePost.link;
+                            scheduleInfo.Category = filePost.category;
+                          }}
+                        >
+                          {filePost.title}
+                        </Link>
+                      </CardTitle>
                     </div>
-                ))}
-            <Footer />
-        </>
-    );
+                    <Badge variant={meta.variant}>{meta.label}</Badge>
+                  </CardHeader>
+                  {filePost.content ? (
+                    <CardContent className="pt-0 text-sm text-muted-foreground">
+                      {filePost.content.slice(0, 120)}
+                      {filePost.content.length > 120 ? "..." : ""}
+                    </CardContent>
+                  ) : null}
+                </Card>
+              );
+            })}
+        </div>
+      </Page>
+      <Footer />
+    </>
+  );
 };
 
 export default Calendar;

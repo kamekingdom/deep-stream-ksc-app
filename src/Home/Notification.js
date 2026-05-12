@@ -1,49 +1,74 @@
-import React, { useEffect, useState } from 'react'
-import { Footer, Header } from '../PageParts'
-import { collection, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-// get our fontawesome imports
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { collection, limit, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
+import { Footer, Header } from "../PageParts";
+import { Badge } from "../components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page, PageHero } from "../components/page";
+
+const categoryMeta = [
+  { label: "メモ", emoji: "📒", variant: "secondary" },
+  { label: "注意", emoji: "⚠", variant: "destructive" },
+  { label: "アンケート", emoji: "📝", variant: "default" },
+  { label: "確認", emoji: "☑", variant: "outline" },
+];
 
 function Notification() {
-    //firestoreのPostsから情報を取得する
-    const [FilePosts, setQuestionPosts] = useState([]);
-    useEffect(() => {
-        const FilePostsCollection = collection(db, 'NotificationPosts');
-        const q = query(FilePostsCollection, orderBy("__name__"), limit(10));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const FilePostsData = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            console.log('Firestoreのデータ読み取り完了:', FilePostsData);
-            setQuestionPosts(FilePostsData);
-        });
-    
-        return () => {
-            unsubscribe();
-        }
-    }, []);
-    
-    const PostCategory = ["kame_memo", "kame_exclamation", "kame_question", "kame_check"]
-    const PostCategoryMark = ["📒", "⚠", "📝", "☑"]
+  const [posts, setPosts] = useState([]);
 
-    return (
-        <>
-            <Header />
-            {FilePosts.slice().reverse().map((FilePost) => (
-                <>
-                    <div class={PostCategory[FilePost.Category]}>
-                        <div class="box-title">{PostCategoryMark[FilePost.Category]}{FilePost.Title}</div>
-                        {FilePost.Content}<br />
-                        <a href={FilePost.Link} style={{ color: "green" }}>{FilePost.Link.slice(0, 30)}...</a>
-                    </div>
-                </>
-            ))}
+  useEffect(() => {
+    const postsCollection = collection(db, "NotificationPosts");
+    const q = query(postsCollection, orderBy("__name__"), limit(10));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postData = querySnapshot.docs.map((docItem) => ({
+        id: docItem.id,
+        ...docItem.data(),
+      }));
+      setPosts(postData);
+    });
 
-            <Footer />
-        </>
-    )
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <Page>
+        <PageHero
+          eyebrow="Updates"
+          title="提出書類・お知らせ"
+          description="直近のお知らせをカテゴリ付きで確認できます。"
+        />
+        <div className="space-y-4">
+          {posts.slice().reverse().map((post) => {
+            const meta = categoryMeta[post.Category] || categoryMeta[0];
+            return (
+              <Card key={post.id}>
+                <CardHeader className="space-y-3">
+                  <Badge variant={meta.variant} className="w-fit">
+                    {meta.emoji} {meta.label}
+                  </Badge>
+                  <CardTitle>{post.Title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
+                  <p className="whitespace-pre-wrap text-foreground">{post.Content}</p>
+                  {post.Link ? (
+                    <a
+                      href={post.Link}
+                      className="inline-flex font-semibold text-primary underline-offset-4 hover:underline"
+                    >
+                      {post.Link}
+                    </a>
+                  ) : null}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
-export default Notification
+export default Notification;

@@ -1,100 +1,124 @@
-import React, { useState } from 'react'
-import { Footer, Header } from '../PageParts'
-import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Footer, Header } from "../PageParts";
+import { auth } from "../firebase";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Page, PageHero } from "../components/page";
 
 function AdminLogin() {
-    const [Command, setCommand] = useState("");
-    const adminCommand = "iamkamekingdom";
-    var date = new Date();
-    var NowHour = date.getHours();
-    var NowMinute = date.getMinutes();
+  const [command, setCommand] = useState("");
+  const adminCommand = "iamkamekingdom";
 
-    const handleCommand = (e) => {
-        setCommand(e.target.value);
+  const getCurrentResult = () => {
+    const normalized = command.toLowerCase();
+
+    if (command === adminCommand) {
+      return <ActionLink to="/adminhome" label="管理者画面" />;
     }
-    return (
-        <div>
-            <Header />
-            <p className="kame_font_003">コマンド</p><br />
-            <center>
-                <label>
-                    <textarea type="text" className="kame_textarea_small" onChange={handleCommand} placeholder="" value={Command} /><br /><br />
-                </label>
-            </center>
-            <br /><br />
-            {Command === adminCommand && (
-                <Link to="/adminhome" className="kame_button_light_blue">
-                    <p className="kame_font_002">管理者画面</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "preview" && (
-                <Link to="/reservation-preview" className="kame_button_light_blue">
-                    <p className="kame_font_002">予約プレビュー</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "game" && (
-                <p class="kame_font_003">現在開発中...<br />お楽しみに</p>
-            )}
-            {Command.toLowerCase() === "hello" && (<p class="kame_font_003">こんにちは。<br />{auth.currentUser.displayName}さん<br /></p>)}
-            {Command.toLowerCase() === "good morning" && (<p class="kame_font_003">おはようござんす<br />{auth.currentUser.displayName}さん<br /></p>)}
-            {Command.toLowerCase() === "good evening" && (<p class="kame_font_003">こんばんは。<br />{auth.currentUser.displayName}さん</p>)}
-            {Command.toLowerCase() === "good night" && (<p class="kame_font_003">おやすみなさい<br />{auth.currentUser.displayName}さん<br /></p>)}
-            {Command.toLowerCase() === "time" && (<p class="kame_font_003">現在時刻は<br />{NowHour}時{NowMinute}分です<br /></p>)}
-            {Command.toLowerCase() === "kame" && (<p class="kame_font_003">こんにちは、かめです🐢</p>)}
-            {Command.toLowerCase() === "cmd" && (<p class="kame_font_003">遊び心で作ってみました🐢</p>)}
-            {Command.toLowerCase() === "command" && (<p class="kame_font_003">遊び心で作ってみました🐢</p>)}
-            {Command.toLowerCase() === "reserve" && (
-                <Link to="/reservation" className="kame_button_light_blue">
-                    <p className="kame_font_002">部室予約</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "reservation" && (
-                <Link to="/reservation" className="kame_button_light_blue">
-                    <p className="kame_font_002">部室予約</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "calendar" && (
-                <Link to="/calendar" className="kame_button_light_blue">
-                    <p className="kame_font_002">カレンダー</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "event" && (
-                <Link to="/notification" className="kame_button_light_blue">
-                    <p className="kame_font_002">イベント</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "home" && (
-                <Link to="/" className="kame_button_light_blue">
-                    <p className="kame_font_002">ホーム</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "tool" && (
-                <Link to="/tool" className="kame_button_light_blue">
-                    <p className="kame_font_002">ツール</p>
-                </Link>
-            )}
-            {Command.toLowerCase() === "youtube" && (
-                <a href="https://www.youtube.com/channel/UCg9WNSATUeU8g5p2O4mHS_w" className="kame_button_light_blue">
-                    <p className="kame_font_002">YouTube</p>
-                </a>
-            )}
-            {Command.toLowerCase() === "instagram" && (
-                <a href="https://www.instagram.com/deepstreamksc/" className="kame_button_light_blue">
-                    <p className="kame_font_002">Instagram</p>
-                </a>
-            )}
-            {Command.toLowerCase() === "twitter" && (
-                <>
-                    <a href="https://www.instagram.com/deepstreamksc/" className="kame_button_light_blue">
-                        <p className="kame_font_002">Instagram</p></a>
-                    <p class="kame_font_003">あ、間違えちゃった...</p>
-                </>
-            )}
-
-            <Footer />
+    if (normalized === "preview") {
+      return <ActionLink to="/reservation-preview" label="予約プレビュー" />;
+    }
+    if (normalized === "reserve" || normalized === "reservation") {
+      return <ActionLink to="/reservation" label="部室予約" />;
+    }
+    if (normalized === "calendar") {
+      return <ActionLink to="/calendar" label="カレンダー" />;
+    }
+    if (normalized === "event") {
+      return <ActionLink to="/notification" label="イベント" />;
+    }
+    if (normalized === "home") {
+      return <ActionLink to="/" label="ホーム" />;
+    }
+    if (normalized === "tool") {
+      return <ActionLink to="/tool" label="ツール" />;
+    }
+    if (normalized === "youtube") {
+      return <ExternalAction href="https://www.youtube.com/channel/UCg9WNSATUeU8g5p2O4mHS_w" label="YouTube" />;
+    }
+    if (normalized === "instagram") {
+      return <ExternalAction href="https://www.instagram.com/deepstreamksc/" label="Instagram" />;
+    }
+    if (normalized === "twitter") {
+      return (
+        <div className="space-y-3">
+          <ExternalAction href="https://www.instagram.com/deepstreamksc/" label="Instagram" />
+          <p className="text-sm text-muted-foreground">あ、間違えちゃった...</p>
         </div>
-    )
+      );
+    }
+    if (normalized === "game") {
+      return <p className="text-sm text-muted-foreground">現在開発中です。お楽しみに。</p>;
+    }
+    if (normalized === "hello") {
+      return <p className="text-sm text-muted-foreground">こんにちは。{auth.currentUser?.displayName}さん</p>;
+    }
+    if (normalized === "good morning") {
+      return <p className="text-sm text-muted-foreground">おはようござんす。{auth.currentUser?.displayName}さん</p>;
+    }
+    if (normalized === "good evening") {
+      return <p className="text-sm text-muted-foreground">こんばんは。{auth.currentUser?.displayName}さん</p>;
+    }
+    if (normalized === "good night") {
+      return <p className="text-sm text-muted-foreground">おやすみなさい。{auth.currentUser?.displayName}さん</p>;
+    }
+    if (normalized === "time") {
+      const date = new Date();
+      return (
+        <p className="text-sm text-muted-foreground">
+          現在時刻は {date.getHours()}時{date.getMinutes()}分です。
+        </p>
+      );
+    }
+    if (normalized === "kame" || normalized === "cmd" || normalized === "command") {
+      return <p className="text-sm text-muted-foreground">遊び心で作ってみました。</p>;
+    }
+    return null;
+  };
+
+  return (
+    <>
+      <Header />
+      <Page className="max-w-2xl">
+        <PageHero
+          eyebrow="Command"
+          title="コマンド"
+          description="運営ショートカットや隠し導線を、テキストコマンドから開けます。"
+        />
+        <Card>
+          <CardHeader>
+            <CardTitle>コマンド入力</CardTitle>
+            <CardDescription>例: preview / reservation / calendar / tool</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <Input value={command} onChange={(e) => setCommand(e.target.value)} placeholder="コマンドを入力" />
+            {getCurrentResult()}
+          </CardContent>
+        </Card>
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
-export default AdminLogin
+function ActionLink({ to, label }) {
+  return (
+    <Link to={to} className="block">
+      <Button fullWidth>{label}</Button>
+    </Link>
+  );
+}
+
+function ExternalAction({ href, label }) {
+  return (
+    <a href={href} className="block">
+      <Button fullWidth variant="secondary">
+        {label}
+      </Button>
+    </a>
+  );
+}
+
+export default AdminLogin;

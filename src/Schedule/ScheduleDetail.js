@@ -1,38 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Footer, Header } from '../PageParts'
-import { InfoContext, ScheduleContext, useBlockBrowserBack } from '../App'
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import React, { useContext } from "react";
+import { Footer, Header } from "../PageParts";
+import { ScheduleContext } from "../App";
+import { Badge } from "../components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page } from "../components/page";
+import { Textarea } from "../components/ui/textarea";
 
 function ScheduleDetail() {
-    /* スケジュール情報変数 */
-    const ScheduleInfo = useContext(ScheduleContext); // 共有変数の取得
+  const scheduleInfo = useContext(ScheduleContext);
+  const categoryLabels = ["メモ", "注意", "アンケート", "確認"];
 
-    const month = ScheduleInfo.Month; // 月
-    const date = ScheduleInfo.Date; // 日
-    const day = ScheduleInfo.Day // 曜日
-    const title = ScheduleInfo.Title // タイトル
-    const content = ScheduleInfo.Content // 内容
-    const link = ScheduleInfo.Link // リンク
-    const category = ScheduleInfo.Category // カテゴリ
-
-    return (
-        <>
-            <Header />
-            <div class="kame_header_003"><p class="kame_font_004">{title}</p></div>
-            <p class="kame_font_003">{month}/{date}({day})</p>
-
-            <p class="kame_font_002">
+  return (
+    <>
+      <Header />
+      <Page className="max-w-3xl">
+        <Card>
+          <CardHeader className="space-y-4">
+            <Badge className="w-fit">{categoryLabels[scheduleInfo.Category] || "予定"}</Badge>
+            <CardTitle className="text-2xl">{scheduleInfo.Title}</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {scheduleInfo.Month}/{scheduleInfo.Date}({scheduleInfo.Day})
             </p>
-            <center>
-                <textarea class="kame_textarea" placeholder={content} readOnly />
-                {link && <a href={link}><textarea class="kame_textarea_small" value={link.slice(0,30)} style={{color:"green"}} readOnly/></a>}
-            </center>
-
-            <br /><br /><br />
-            <Footer />
-        </>
-    )
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Textarea readOnly value={scheduleInfo.Content || ""} className="min-h-[220px] resize-none" />
+            {scheduleInfo.Link ? (
+              <a
+                href={scheduleInfo.Link}
+                className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                {scheduleInfo.Link}
+              </a>
+            ) : null}
+          </CardContent>
+        </Card>
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
-export default ScheduleDetail
+export default ScheduleDetail;

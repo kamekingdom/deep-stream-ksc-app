@@ -10,7 +10,7 @@ import FindPassword from "./Register/FindPassword";
 import Key from "./Home/Key";
 import Tool from "./Home/Tool";
 import AddReservation from "./Reservation/AddReservation";
-import { createContext, useCallback, useEffect } from "react";
+import { createContext } from "react";
 import ReservationDetail from "./Reservation/ReservationDetail";
 import AdminEventPost from "./Administrator/AdminEventPost";
 import AdminHome from "./Administrator/AdminHome";
@@ -18,7 +18,6 @@ import AdminLogin from "./Administrator/AdminLogin";
 import AlertReservation from "./Reservation/AlertReservation";
 import AdminSchedulePost from "./Administrator/AdminSchedulePost";
 import ScheduleDetail from "./Schedule/ScheduleDetail";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
 import UserProfile from "./Register/UserProfile";
 import CreateReservationSettings from "./Administrator/CreateReservationSettings";
 import CreateReservationTemplate from "./Administrator/CreateReservationTemplate";
@@ -86,8 +85,6 @@ function App() {
           <Route exact path="/tool" element={<Tool />}></Route>
 
           <Route exact path="/login" element={<Login />}></Route>
-
-          <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
           <Route exact path="/userprofile" element={<UserProfile />}></Route>
           <Route exact path="/termsofservice" element={<TermsOfService />}></Route>
@@ -100,32 +97,4 @@ function App() {
   );
 }
 
-function useBlockBrowserBack() {
-  const blockBrowserBack = useCallback(() => {
-    alert("このページはブラウザバックが禁止されています。");
-    window.history.go(1)
-  }, [])
-  useEffect(() => {
-    const handleBlockBrowserBack = (event) => {
-      event.preventDefault();
-      blockBrowserBack();
-    };
-
-    window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handleBlockBrowserBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleBlockBrowserBack);
-    };
-  }, []);
-}
-
-async function isUserDocumentExists(auth) {
-  const firestore = getFirestore();
-  const userDocRef = doc(firestore, 'users', auth.currentUser.email);
-  const docSnap = await getDoc(userDocRef);
-
-  return docSnap.exists();
-}
-
-export { App, useBlockBrowserBack, isUserDocumentExists };
+export { App };

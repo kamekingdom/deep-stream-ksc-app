@@ -1,8 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Footer, Header } from '../PageParts';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { Footer, Header } from "../PageParts";
+import { db } from "../firebase";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page, PageHero } from "../components/page";
+import { Textarea } from "../components/ui/textarea";
 
 function AdminSchedulePost() {
   const [title, setTitle] = useState("");
@@ -13,78 +17,77 @@ function AdminSchedulePost() {
   const [category, setCategory] = useState("1");
   const [content, setContent] = useState("");
   const dateInputRef = useRef(null);
+  const [isAlreadyUploaded, setIsAlreadyUploaded] = useState(false);
 
-  const [isalreadyuploaded, setIsAlreadyUploaded] = useState(false);
-
-  const handleUploadClick = async (e) => {
-    const docName = "2023" + month.toString().padStart(2, "0") + day.toString().padStart(2, "0");
-    // Firestoreに投稿を追加
-    const schedulesRef = doc(db, 'Schedules', docName);
+  const handleUploadClick = async () => {
+    const docName = `2023${month.toString().padStart(2, "0")}${day.toString().padStart(2, "0")}`;
+    const schedulesRef = doc(db, "Schedules", docName);
     await setDoc(schedulesRef, {
-      title: title,
-      link: link,
+      title,
+      link,
       month: parseInt(month, 10),
       day: parseInt(day, 10),
-      dayofweek: dayofweek,
-      content: content,
-      category: category
+      dayofweek,
+      content,
+      category,
     });
     setIsAlreadyUploaded(true);
   };
 
-  const handleSelectChange1 = (e) => { setCategory(e.target.value); }
-  const handleSelectChange2 = (e) => { setTitle(e.target.value); }
-  const handleSelectChange4 = (e) => { setLink(e.target.value); }
-  const handleSelectChange8 = (e) => { setContent(e.target.value); }
-  function handleSelectChange9() {
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"]
+  const handleDateChange = () => {
+    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
     const dateString = dateInputRef.current.value;
     const dateObject = new Date(dateString);
-    setMonth(dateObject.getMonth() + 1); // 月を取得する
-    setDay(dateObject.getDate()); // 日を取得する
-    setDayofWeek(weekdays[dateObject.getDay()]); // 曜日を取得する
+    setMonth(dateObject.getMonth() + 1);
+    setDay(dateObject.getDate());
+    setDayofWeek(weekdays[dateObject.getDay()]);
+  };
 
-  }
   return (
     <>
       <Header />
-      <center>
-        <p className="kame_font_003">スケジュール投稿画面</p>
-        <input type="date" ref={dateInputRef} onChange={handleSelectChange9}
-          style={{
-            width: "400px",
-            height: "80px",
-            borderRadius: "10px",
-            border: "1px solid gray",
-            fontSize: "16px",
-            padding: "5px",
-            fontSize: "2.0em"
-          }}
-        /><br /><br /><br />
-        <form>
-          <label class="kame_select_005">
-            <select onChange={handleSelectChange1}>
+      <Page className="max-w-3xl">
+        <PageHero eyebrow="Admin" title="スケジュール投稿" description="ライブやイベント予定をカレンダー用データとして登録します。" />
+        <Card>
+          <CardHeader>
+            <CardTitle>スケジュール内容</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <input
+              type="date"
+              ref={dateInputRef}
+              onChange={handleDateChange}
+              className="flex h-11 w-full rounded-2xl border border-input bg-background px-4 text-sm"
+            />
+            <select
+              className="flex h-11 w-full rounded-2xl border border-input bg-background px-4 text-sm"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option value="1">ライブ</option>
               <option value="2">イベント</option>
               <option value="3">メモ</option>
               <option value="0">その他</option>
             </select>
-          </label>
-        </form><br />
-        <label><textarea class="kame_textarea_small" onChange={handleSelectChange2} placeholder="タイトル" minLength={"0"} maxLength={"20"} value={title} /></label>
-        <label><textarea class="kame_textarea" onChange={handleSelectChange8} placeholder="内容" value={content} /></label>
-        <label><textarea class="kame_textarea_small" style={{ fontSize: "2.0em" }} onChange={handleSelectChange4} placeholder="リンク" minLength={"0"} value={link} /></label>
-        <br /><br /><br />
-        {title && month && content && category && !isalreadyuploaded &&
-          <button class="kame_button_black" onClick={handleUploadClick}><p class="kame_font_002">送信</p></button>
-        }
-        {isalreadyuploaded &&
-          <Link to="/adminhome" class="kame_button_black"><p class="kame_font_002">完了</p></Link>
-        }
-      </center>
+            <Textarea placeholder="タイトル" maxLength={20} value={title} onChange={(e) => setTitle(e.target.value)} className="min-h-[96px]" />
+            <Textarea placeholder="内容" value={content} onChange={(e) => setContent(e.target.value)} />
+            <Textarea placeholder="リンク" value={link} onChange={(e) => setLink(e.target.value)} className="min-h-[96px]" />
+
+            {!isAlreadyUploaded ? (
+              <Button fullWidth onClick={handleUploadClick} disabled={!title || !month || !content || !category}>
+                送信
+              </Button>
+            ) : (
+              <Link to="/adminhome" className="block">
+                <Button fullWidth>完了</Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+      </Page>
       <Footer />
     </>
-  )
+  );
 }
 
-export default AdminSchedulePost
+export default AdminSchedulePost;

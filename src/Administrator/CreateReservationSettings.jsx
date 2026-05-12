@@ -1,153 +1,163 @@
-import React, { useState, useEffect } from 'react';
-import { doc, setDoc, collection, getDocs, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';  // Firebase設定ファイル
-import './CreateReservationSettings.css';  // カスタムCSSをインポート
+import React, { useState, useEffect } from "react";
+import { doc, setDoc, collection, getDocs, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { Footer, Header } from "../PageParts";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Page, PageHero } from "../components/page";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 
 const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
 const timeSlots = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
 
 function CreateReservationSettings() {
-    const [selectedSlots, setSelectedSlots] = useState({});  // 選択されたスロットを管理
-    const [templates, setTemplates] = useState([]);  // テンプレートのリスト
-    const [selectedTemplate, setSelectedTemplate] = useState('');  // 選択されたテンプレートID
+  const [selectedSlots, setSelectedSlots] = useState({});
+  const [templates, setTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState("");
 
-    // Firestoreからテンプレートリストを取得
-    useEffect(() => {
-        const fetchTemplates = async () => {
-            const templatesSnapshot = await getDocs(collection(db, 'ReservationTemplate'));
-            const templatesList = templatesSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setTemplates(templatesList);
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      const templatesSnapshot = await getDocs(collection(db, "ReservationTemplate"));
+      const templatesList = templatesSnapshot.docs.map((docItem) => ({
+        id: docItem.id,
+        ...docItem.data(),
+      }));
+      setTemplates(templatesList);
+    };
+
+    fetchTemplates();
+  }, []);
+
+  const handleCellClick = (day, timeSlot) => {
+    const key = `${day}_${timeSlot}`;
+    setSelectedSlots((prevState) => ({
+      ...prevState,
+      [key]: !prevState[key],
+    }));
+  };
+
+  const handleSaveSettings = async () => {
+    if (!selectedTemplate) {
+      alert("テンプレートを選択してください。");
+      return;
+    }
+
+    const settingsData = {};
+
+    Object.keys(selectedSlots).forEach((key) => {
+      if (selectedSlots[key]) {
+        const [day, timeSlot] = key.split("_");
+        if (!settingsData[day]) {
+          settingsData[day] = [];
+        }
+        settingsData[day].push(timeSlot);
+      }
+    });
+
+    await Promise.all(
+      Object.keys(settingsData).map(async (day) => {
+        const docRef = doc(db, "ReservationSchedules", day);
+        const existingDoc = await getDoc(docRef);
+        const newReservation = {
+          TemplateID: selectedTemplate,
+          TimeSlots: settingsData[day],
         };
 
-        fetchTemplates();
-    }, []);
+        if (existingDoc.exists()) {
+          const existingData = existingDoc.data();
+          const updatedReservations = existingData.Reservations || [];
+          const updatedData = updatedReservations.filter(
+            (res) => res.TemplateID !== selectedTemplate
+          );
+          updatedData.push(newReservation);
 
-    // セルがクリックされたときに選択状態をトグルする処理
-    const handleCellClick = (day, timeSlot) => {
-        const key = `${day}_${timeSlot}`;
-        setSelectedSlots((prevState) => ({
-            ...prevState,
-            [key]: !prevState[key]  // 選択状態をトグルする
-        }));
-    };
-
-    // Firestoreに予約設定データを保存する処理
-    const handleSaveSettings = async () => {
-        if (!selectedTemplate) {
-            alert('テンプレートを選択してください。');
-            return;
+          await setDoc(
+            docRef,
+            {
+              Reservations: updatedData,
+            },
+            { merge: true }
+          );
+        } else {
+          await setDoc(docRef, {
+            Reservations: [newReservation],
+          });
         }
-
-        const settingsData = {};
-
-        // 選択されたスロットをFirestoreに保存する形式に変換
-        Object.keys(selectedSlots).forEach((key) => {
-            if (selectedSlots[key]) {
-                const [day, timeSlot] = key.split('_');
-                if (!settingsData[day]) {
-                    settingsData[day] = [];
-                }
-                settingsData[day].push(timeSlot);
-            }
-        });
-
-        // Firestoreに予約設定を保存
-        await Promise.all(Object.keys(settingsData).map(async (day) => {
-            const docRef = doc(db, 'ReservationSchedules', day);  // 'ReservationSchedules' コレクション
-
-            // 既存のデータを取得
-            const existingDoc = await getDoc(docRef);
-
-            // 新しい予約データを作成
-            const newReservation = {
-                TemplateID: selectedTemplate,
-                TimeSlots: settingsData[day],
-            };
-
-            if (existingDoc.exists()) {
-                const existingData = existingDoc.data();
-
-                // 既存のデータを保持しつつ、同じテンプレートIDの予約は上書き、他のテンプレートIDのデータは保持
-                const updatedReservations = existingData.Reservations || [];
-
-                const updatedData = updatedReservations.filter(
-                    (res) => res.TemplateID !== selectedTemplate
-                );
-
-                updatedData.push(newReservation);
-
-                await setDoc(docRef, {
-                    Reservations: updatedData
-                }, { merge: true });  // 既存のデータを保持しつつ、新しいデータを追加
-            } else {
-                // 既存データがない場合は新規作成
-                await setDoc(docRef, {
-                    Reservations: [newReservation]
-                });
-            }
-        }));
-
-        alert("予約設定が保存されました！");
-    };
-
-    return (
-        <div className="container">
-            <h2>予約設定とメッセージテンプレートの選択</h2>
-
-            {/* テンプレートの選択 */}
-            <div className="template-selection">
-                <label>テンプレートを選択:
-                    <select value={selectedTemplate} onChange={(e) => setSelectedTemplate(e.target.value)}>
-                        <option value="">-- テンプレートを選択 --</option>
-                        {templates.map((template) => (
-                            <option key={template.id} value={template.id}>
-                                {template.Category} - {template.NickName}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            </div>
-
-            <div className="table-container">
-                <h3>Reservation Settings</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Time Slot</th>
-                            {weekDays.map((day) => (
-                                <th key={day}>{day}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timeSlots.map((timeSlot) => (
-                            <tr key={timeSlot}>
-                                <td>{timeSlot}</td>
-                                {weekDays.map((day) => {
-                                    const key = `${day}_${timeSlot}`;
-                                    return (
-                                        <td
-                                            key={key}
-                                            onClick={() => handleCellClick(day, timeSlot)}
-                                            className={selectedSlots[key] ? 'selected' : 'unselected'}  // 選択状態に応じてクラスを付与
-                                        >
-                                            {selectedSlots[key] ? '★' : '○'}
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className="text-center">
-                    <button onClick={handleSaveSettings}>Save Reservation Settings</button>
-                </div>
-            </div>
-        </div>
+      })
     );
+
+    alert("予約設定が保存されました。");
+  };
+
+  return (
+    <>
+      <Header />
+      <Page>
+        <PageHero eyebrow="Admin" title="緊急予約設定" description="テンプレートを選び、曜日と時間帯の組み合わせに一括で割り当てます。" />
+        <Card>
+          <CardHeader>
+            <CardTitle>予約スロット設定</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <select
+              className="flex h-11 w-full rounded-2xl border border-input bg-background px-4 text-sm"
+              value={selectedTemplate}
+              onChange={(e) => setSelectedTemplate(e.target.value)}
+            >
+              <option value="">-- テンプレートを選択 --</option>
+              {templates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.Category} - {template.NickName}
+                </option>
+              ))}
+            </select>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Time Slot</TableHead>
+                  {weekDays.map((day) => (
+                    <TableHead key={day}>{day}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {timeSlots.map((timeSlot) => (
+                  <TableRow key={timeSlot}>
+                    <TableCell className="font-semibold">{timeSlot}</TableCell>
+                    {weekDays.map((day) => {
+                      const key = `${day}_${timeSlot}`;
+                      const selected = selectedSlots[key];
+                      return (
+                        <TableCell key={key}>
+                          <button
+                            type="button"
+                            onClick={() => handleCellClick(day, timeSlot)}
+                            className={`w-full rounded-2xl px-3 py-2 text-sm font-semibold ${
+                              selected
+                                ? "bg-sky-500 text-white"
+                                : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            {selected ? "★" : "○"}
+                          </button>
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Button fullWidth onClick={handleSaveSettings}>
+              Save Reservation Settings
+            </Button>
+          </CardContent>
+        </Card>
+      </Page>
+      <Footer />
+    </>
+  );
 }
 
 export default CreateReservationSettings;
