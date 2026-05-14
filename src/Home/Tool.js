@@ -16,11 +16,13 @@ import {
   dispatchAppearanceChange,
   getIconColorOption,
   getIconOption,
+  getTextSizeOption,
   getThemeOption,
   iconColorOptions,
   iconOptions,
   serializeAppearanceForFirestore,
   sanitizeAppearance,
+  textSizeOptions,
   themeOptions,
   writeStoredAppearance,
 } from "../lib/appearance";
@@ -168,6 +170,7 @@ function Tool() {
         ThemeId: nextAppearance.themeId,
         ProfileIcon: nextAppearance.profileIcon,
         ProfileIconColor: nextAppearance.profileIconColor,
+        TextSizeId: nextAppearance.textSizeId,
       };
       setProfile(nextProfile);
       writeStoredAppearance(nextAppearance);
@@ -186,6 +189,7 @@ function Tool() {
   const previewIcon = getIconOption(appearance.profileIcon).icon;
   const previewColor = getIconColorOption(appearance.profileIconColor).value;
   const previewTheme = getThemeOption(appearance.themeId);
+  const previewTextSize = getTextSizeOption(appearance.textSizeId);
   const PreviewIcon = previewIcon;
 
   const handleLogout = async () => {
@@ -450,6 +454,33 @@ function Tool() {
                           style={{ backgroundColor: previewTheme.preview }}
                         />
                         <span className="text-[1.2rem] font-semibold text-foreground">{previewTheme.label}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="border-b border-border/70 py-4 last:border-b-0">
+                    <p className="text-base font-semibold text-muted-foreground">文字サイズ</p>
+                    {isEditingProfile ? (
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        {textSizeOptions.map((option) => {
+                          const selected = appearance.textSizeId === option.id;
+
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => handleAppearanceChange("textSizeId", option.id)}
+                              className={`rounded-xl border px-4 py-4 text-center text-[1.1rem] font-semibold ${
+                                selected ? "border-primary bg-accent text-foreground" : "border-border text-muted-foreground"
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-2 flex items-center gap-3">
+                        <span className="text-[1.2rem] font-semibold text-foreground">{previewTextSize.label}</span>
                       </div>
                     )}
                   </div>
