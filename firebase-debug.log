@@ -5076,3 +5076,485 @@
 [info] 
 [info] Project Console: https://console.firebase.google.com/project/deep-stream-ksc/overview
 [info] Hosting URL: https://deep-stream-ksc.web.app
+[debug] [2026-05-14T04:37:54.987Z] ----------------------------------------------------------------------
+[debug] [2026-05-14T04:37:54.989Z] Command:       /opt/homebrew/Cellar/node/25.8.0/bin/node /opt/homebrew/bin/firebase deploy --project deep-stream-ksc
+[debug] [2026-05-14T04:37:54.989Z] CLI Version:   15.8.0
+[debug] [2026-05-14T04:37:54.989Z] Platform:      darwin
+[debug] [2026-05-14T04:37:54.989Z] Node Version:  v25.8.0
+[debug] [2026-05-14T04:37:54.989Z] Time:          Thu May 14 2026 13:37:54 GMT+0900 (Japan Standard Time)
+[debug] [2026-05-14T04:37:54.989Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-14T04:37:54.990Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-05-14T04:37:55.806Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-14T04:37:55.806Z] > authorizing via signed-in user (deepstream.ksc@gmail.com)
+[debug] [2026-05-14T04:37:55.806Z] [iam] checking project deep-stream-ksc for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-14T04:37:55.807Z] Checked if tokens are valid: false, expires at: 1778564363073
+[debug] [2026-05-14T04:37:55.807Z] Checked if tokens are valid: false, expires at: 1778564363073
+[debug] [2026-05-14T04:37:55.807Z] > refreshing access token with scopes: []
+[debug] [2026-05-14T04:37:55.807Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-14T04:37:55.808Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-14T04:37:56.006Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-14T04:37:56.006Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-14T04:37:56.016Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions [none]
+[debug] [2026-05-14T04:37:56.016Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions  x-goog-user-project=deep-stream-ksc
+[debug] [2026-05-14T04:37:56.016Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-14T04:37:56.140Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-05-14T04:37:56.140Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-05-14T04:37:56.203Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions 200
+[debug] [2026-05-14T04:37:56.203Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-14T04:37:56.204Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.204Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.204Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc [none]
+[debug] [2026-05-14T04:37:56.566Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc 200
+[debug] [2026-05-14T04:37:56.566Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc {"projectId":"deep-stream-ksc","projectNumber":"523585296072","displayName":"Deep-Stream-KSC","name":"projects/deep-stream-ksc","resources":{"hostingSite":"deep-stream-ksc","realtimeDatabaseInstance":"deep-stream-ksc-default-rtdb","locationId":"asia-northeast2"},"state":"ACTIVE","etag":"1_9ad8a5ad-3818-4489-9a42-3a5ce218c1bb"}
+[info] 
+[info] === Deploying to 'deep-stream-ksc'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-05-14T04:37:56.573Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.573Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.573Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) [none]
+[debug] [2026-05-14T04:37:56.764Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) 200
+[debug] [2026-05-14T04:37:56.764Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) {"name":"projects/deep-stream-ksc/databases/(default)","uid":"9cbebd60-9468-4a7e-b346-9c309d7a83d1","createTime":"2023-05-01T05:19:41.599782Z","updateTime":"2023-05-01T05:19:41.599782Z","locationId":"asia-northeast2","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-05-14T03:37:56.768126Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"u","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IJHQocj6t5QDMOKLkfTw45ID"}
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-05-14T04:37:56.768Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.768Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:56.768Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test [none]
+[debug] [2026-05-14T04:37:56.768Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test [omitted]
+[debug] [2026-05-14T04:37:57.881Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test 200
+[debug] [2026-05-14T04:37:57.881Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-05-14T04:37:57.883Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:57.883Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:37:57.883Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions [none]
+[debug] [2026-05-14T04:37:57.883Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-14T04:38:00.119Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions 200
+[debug] [2026-05-14T04:38:00.119Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions {"name":"projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-14T04:38:00.121Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:00.121Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:00.122Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases pageSize=10&pageToken=
+[debug] [2026-05-14T04:38:01.245Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases 200
+[debug] [2026-05-14T04:38:01.245Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases {"releases":[{"name":"projects/deep-stream-ksc/releases/cloud.firestore","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e","createTime":"2023-05-01T05:19:53.476993Z","updateTime":"2026-05-12T04:49:16.994153Z"},{"name":"projects/deep-stream-ksc/releases/firebase.storage/deep-stream-ksc.appspot.com","rulesetName":"projects/deep-stream-ksc/rulesets/40eb6a7f-6ddc-41ec-a885-7505310afc2d","createTime":"2023-05-01T05:37:15.453280Z","updateTime":"2026-05-12T02:52:49.210651Z"}]}
+[debug] [2026-05-14T04:38:01.263Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:01.263Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:01.263Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e [none]
+[debug] [2026-05-14T04:38:02.392Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e 200
+[debug] [2026-05-14T04:38:02.392Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[info] i  firestore: deploying indexes... 
+[debug] [2026-05-14T04:38:02.395Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.396Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.396Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2026-05-14T04:38:02.581Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2026-05-14T04:38:02.582Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2026-05-14T04:38:02.582Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.582Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.582Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2026-05-14T04:38:02.645Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2026-05-14T04:38:02.646Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/deep-stream-ksc/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[debug] [2026-05-14T04:38:02.646Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.646Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:02.646Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) [none]
+[debug] [2026-05-14T04:38:02.786Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) 200
+[debug] [2026-05-14T04:38:02.787Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) {"name":"projects/deep-stream-ksc/databases/(default)","uid":"9cbebd60-9468-4a7e-b346-9c309d7a83d1","createTime":"2023-05-01T05:19:41.599782Z","updateTime":"2023-05-01T05:19:41.599782Z","locationId":"asia-northeast2","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-05-14T03:38:02.793886Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"u","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IPSvkcv6t5QDMOKLkfTw45ID"}
+[info] ✔  firestore: deployed indexes in firestore.indexes.json successfully for (default) database 
+[info] i  hosting[deep-stream-ksc]: beginning deploy... 
+[info] i  hosting[deep-stream-ksc]: found 13 files in build 
+[debug] [2026-05-14T04:38:02.798Z] [hosting] uploading with 200 concurrency
+[debug] [2026-05-14T04:38:03.067Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.067Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.068Z] [hosting] hash cache [YnVpbGQ] stored for 13 files
+[debug] [2026-05-14T04:38:03.068Z] [hosting][hash queue][FINAL] {"max":267,"min":2,"avg":26.76923076923077,"active":0,"complete":13,"success":13,"errored":0,"retried":0,"total":13,"elapsed":269}
+[debug] [2026-05-14T04:38:03.068Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce:populateFiles [none]
+[debug] [2026-05-14T04:38:03.068Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce:populateFiles {"files":{"/version.json":"c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d","/manifest.json":"3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be","/robots.txt":"391d14b3c2f8c9143a27a28c7399585142228d4d1bdbe2c87ac946de411fa9a2","/asset-manifest.json":"2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea","/index.html":"c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf","/404.html":"873dc261b356a4ed9bc1a72de2f8c7840388e6a9720fbc3cfd78eabca11cac9a","/static/js/main.dd5ae84d.js.LICENSE.txt":"4394fa3119762420f9839288ee79e973ebeab99790c82ea3a7ac6f7506025f92","/static/css/main.8f8ef930.css.map":"d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8","/static/css/main.8f8ef930.css":"b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727","/DeepStreamICON.jpg":"d0762725ee8c912355d8d38a8af1bf83ea9e5a948fb638692c40dcfeed38c0c6","/static/media/2023部室利用規約.3c70d2a429919970d9ea.pdf":"da8f5c4ba9337fb46e571170cd84b7c19e419756e45655cc25a880f9c6fef1ad","/static/js/main.dd5ae84d.js":"5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2","/static/js/main.dd5ae84d.js.map":"c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40"}}
+[debug] [2026-05-14T04:38:03.794Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce:populateFiles 200
+[debug] [2026-05-14T04:38:03.794Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce:populateFiles {"uploadRequiredHashes":["2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea","3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be","c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40","d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8","5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2","c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf","b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727","c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files"}
+[debug] [2026-05-14T04:38:03.795Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.795Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.795Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.795Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.796Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.796Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.796Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.796Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.796Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:03.797Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea [none]
+[debug] [2026-05-14T04:38:03.797Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea [stream]
+[debug] [2026-05-14T04:38:03.799Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be [none]
+[debug] [2026-05-14T04:38:03.799Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be [stream]
+[debug] [2026-05-14T04:38:03.800Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40 [none]
+[debug] [2026-05-14T04:38:03.800Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40 [stream]
+[debug] [2026-05-14T04:38:03.801Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8 [none]
+[debug] [2026-05-14T04:38:03.801Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8 [stream]
+[debug] [2026-05-14T04:38:03.802Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2 [none]
+[debug] [2026-05-14T04:38:03.802Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2 [stream]
+[debug] [2026-05-14T04:38:03.803Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf [none]
+[debug] [2026-05-14T04:38:03.803Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf [stream]
+[debug] [2026-05-14T04:38:03.803Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727 [none]
+[debug] [2026-05-14T04:38:03.803Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727 [stream]
+[debug] [2026-05-14T04:38:03.804Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d [none]
+[debug] [2026-05-14T04:38:03.804Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d [stream]
+[debug] [2026-05-14T04:38:03.805Z] [hosting][populate queue][FINAL] {"max":730,"min":730,"avg":730,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":738}
+[debug] [2026-05-14T04:38:03.805Z] [hosting] uploads queued: 8
+[info] i  hosting: uploading new files [0/8] (0%) 
+[debug] [2026-05-14T04:38:05.027Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2 200
+[debug] [2026-05-14T04:38:05.027Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/5487cd1d59bbab3972b0c9c4d467c656d14c47ac8f99412da971900e701df4b2 [stream]
+[debug] [2026-05-14T04:38:05.034Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea 200
+[debug] [2026-05-14T04:38:05.034Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/2807ebc514984f100d0959c86c11fbd446811be26babfb98dd880478f7a722ea [stream]
+[debug] [2026-05-14T04:38:05.143Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf 200
+[debug] [2026-05-14T04:38:05.143Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c6916f64a6a4aa2b8e9d0e003ce076a747f105ccd32284da2e5859d828364cdf [stream]
+[debug] [2026-05-14T04:38:05.171Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be 200
+[debug] [2026-05-14T04:38:05.171Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be [stream]
+[debug] [2026-05-14T04:38:05.182Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d 200
+[debug] [2026-05-14T04:38:05.182Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c1b5f8f86d078e9f4a12f2069616743be6c32c3529e1b02dc73c8d3b52f1bf7d [stream]
+[debug] [2026-05-14T04:38:05.351Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727 200
+[debug] [2026-05-14T04:38:05.352Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727 [stream]
+[debug] [2026-05-14T04:38:05.353Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8 200
+[debug] [2026-05-14T04:38:05.353Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8 [stream]
+[debug] [2026-05-14T04:38:05.388Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40 200
+[debug] [2026-05-14T04:38:05.388Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/763c68a34f09a4ce/files/c189ce14bbeb344ce1e858950e95874aa4a47fdf495f1325db67f741752d1f40 [stream]
+[debug] [2026-05-14T04:38:05.389Z] [hosting][upload queue][FINAL] {"max":1594,"min":1231,"avg":1410.5,"active":0,"complete":8,"success":8,"errored":0,"retried":0,"total":8,"elapsed":1595}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[deep-stream-ksc]: file upload complete 
+[debug] [2026-05-14T04:38:05.390Z] [hosting] deploy completed after 2601ms
+[debug] [2026-05-14T04:38:05.391Z] [rules] releasing cloud.firestore/(default) with ruleset projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e
+[debug] [2026-05-14T04:38:05.391Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:05.392Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:05.392Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) [none]
+[debug] [2026-05-14T04:38:05.392Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) {"release":{"name":"projects/deep-stream-ksc/releases/cloud.firestore/(default)","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e"}}
+[debug] [2026-05-14T04:38:06.467Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) 200
+[debug] [2026-05-14T04:38:06.468Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) {"name":"projects/deep-stream-ksc/releases/cloud.firestore","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e","createTime":"2023-05-01T05:19:53.476993Z","updateTime":"2026-05-14T04:38:06.379513Z"}
+[debug] [2026-05-14T04:38:06.468Z] [rules] updated release projects/deep-stream-ksc/releases/cloud.firestore
+[info] ✔  firestore: released rules firestore.rules to cloud.firestore 
+[debug] [2026-05-14T04:38:06.469Z] [
+  {
+    "config": {
+      "public": "build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "headers": [
+        {
+          "source": "/index.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/version.json",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/asset-manifest.json",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        },
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600"
+            }
+          ]
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "deep-stream-ksc"
+    },
+    "version": "projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce"
+  }
+]
+[info] i  hosting[deep-stream-ksc]: finalizing version... 
+[debug] [2026-05-14T04:38:06.472Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:06.472Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:06.472Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/763c68a34f09a4ce updateMask=status%2Cconfig
+[debug] [2026-05-14T04:38:06.473Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/763c68a34f09a4ce {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}],"headers":[{"glob":"/index.html","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"/version.json","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"/asset-manifest.json","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"**/*.@(js|css)","headers":{"Cache-Control":"public, max-age=31536000, immutable"}},{"glob":"**","headers":{"Cache-Control":"public, max-age=3600"}}]}}
+[debug] [2026-05-14T04:38:07.224Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/763c68a34f09a4ce 200
+[debug] [2026-05-14T04:38:07.224Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/763c68a34f09a4ce {"name":"projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-14T04:37:59.014645Z","createUser":{"email":"deepstream.ksc@gmail.com"},"finalizeTime":"2026-05-14T04:38:07.098209Z","finalizeUser":{"email":"deepstream.ksc@gmail.com"}}
+[debug] [2026-05-14T04:38:07.224Z] [hosting] finalized version for deep-stream-ksc:[object Object]
+[info] ✔  hosting[deep-stream-ksc]: version finalized 
+[info] i  hosting[deep-stream-ksc]: releasing new version... 
+[debug] [2026-05-14T04:38:07.225Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:07.225Z] Checked if tokens are valid: true, expires at: 1778737075006
+[debug] [2026-05-14T04:38:07.225Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases versionName=projects%2F523585296072%2Fsites%2Fdeep-stream-ksc%2Fversions%2F763c68a34f09a4ce
+[debug] [2026-05-14T04:38:07.225Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases {}
+[debug] [2026-05-14T04:38:08.028Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases 200
+[debug] [2026-05-14T04:38:08.029Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases {"name":"projects/523585296072/sites/deep-stream-ksc/channels/live/releases/1778733487208000","version":{"name":"projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-14T04:37:59.014645Z","createUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"},"finalizeTime":"2026-05-14T04:38:07.098209Z","finalizeUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}},"type":"DEPLOY","releaseTime":"2026-05-14T04:38:07.208Z","releaseUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}}
+[debug] [2026-05-14T04:38:08.029Z] [hosting] release: {"name":"projects/523585296072/sites/deep-stream-ksc/channels/live/releases/1778733487208000","version":{"name":"projects/523585296072/sites/deep-stream-ksc/versions/763c68a34f09a4ce","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-14T04:37:59.014645Z","createUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"},"finalizeTime":"2026-05-14T04:38:07.098209Z","finalizeUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}},"type":"DEPLOY","releaseTime":"2026-05-14T04:38:07.208Z","releaseUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}}
+[info] ✔  hosting[deep-stream-ksc]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/deep-stream-ksc/overview
+[info] Hosting URL: https://deep-stream-ksc.web.app
+[debug] [2026-05-22T09:53:30.463Z] ----------------------------------------------------------------------
+[debug] [2026-05-22T09:53:30.465Z] Command:       /opt/homebrew/Cellar/node/25.8.0/bin/node /opt/homebrew/bin/firebase deploy --project deep-stream-ksc
+[debug] [2026-05-22T09:53:30.465Z] CLI Version:   15.8.0
+[debug] [2026-05-22T09:53:30.465Z] Platform:      darwin
+[debug] [2026-05-22T09:53:30.465Z] Node Version:  v25.8.0
+[debug] [2026-05-22T09:53:30.465Z] Time:          Fri May 22 2026 18:53:30 GMT+0900 (Japan Standard Time)
+[debug] [2026-05-22T09:53:30.466Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-22T09:53:30.466Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-05-22T09:53:31.297Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-22T09:53:31.298Z] > authorizing via signed-in user (deepstream.ksc@gmail.com)
+[debug] [2026-05-22T09:53:31.298Z] [iam] checking project deep-stream-ksc for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-22T09:53:31.298Z] Checked if tokens are valid: false, expires at: 1778737075006
+[debug] [2026-05-22T09:53:31.298Z] Checked if tokens are valid: false, expires at: 1778737075006
+[debug] [2026-05-22T09:53:31.298Z] > refreshing access token with scopes: []
+[debug] [2026-05-22T09:53:31.299Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-22T09:53:31.299Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-22T09:53:31.449Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-22T09:53:31.449Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-22T09:53:31.458Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions [none]
+[debug] [2026-05-22T09:53:31.458Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions  x-goog-user-project=deep-stream-ksc
+[debug] [2026-05-22T09:53:31.458Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-22T09:53:31.673Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-05-22T09:53:31.673Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-05-22T09:53:32.149Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions 200
+[debug] [2026-05-22T09:53:32.150Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/deep-stream-ksc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-22T09:53:32.151Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.151Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.152Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc [none]
+[debug] [2026-05-22T09:53:32.550Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc 200
+[debug] [2026-05-22T09:53:32.551Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/deep-stream-ksc {"projectId":"deep-stream-ksc","projectNumber":"523585296072","displayName":"Deep-Stream-KSC","name":"projects/deep-stream-ksc","resources":{"hostingSite":"deep-stream-ksc","realtimeDatabaseInstance":"deep-stream-ksc-default-rtdb","locationId":"asia-northeast2"},"state":"ACTIVE","etag":"1_9ad8a5ad-3818-4489-9a42-3a5ce218c1bb"}
+[info] 
+[info] === Deploying to 'deep-stream-ksc'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-05-22T09:53:32.555Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.555Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.555Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) [none]
+[debug] [2026-05-22T09:53:32.796Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) 200
+[debug] [2026-05-22T09:53:32.797Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) {"name":"projects/deep-stream-ksc/databases/(default)","uid":"9cbebd60-9468-4a7e-b346-9c309d7a83d1","createTime":"2023-05-01T05:19:41.599782Z","updateTime":"2023-05-01T05:19:41.599782Z","locationId":"asia-northeast2","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-05-22T08:53:32.791580Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"u","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IJrjwIPQzJQDMOKLkfTw45ID"}
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-05-22T09:53:32.802Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.802Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:32.802Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test [none]
+[debug] [2026-05-22T09:53:32.802Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test [omitted]
+[debug] [2026-05-22T09:53:33.991Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test 200
+[debug] [2026-05-22T09:53:33.991Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-05-22T09:53:33.993Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:33.993Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:33.993Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions [none]
+[debug] [2026-05-22T09:53:33.993Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-22T09:53:35.907Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions 200
+[debug] [2026-05-22T09:53:35.907Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions {"name":"projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-22T09:53:35.909Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:35.909Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:35.910Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases pageSize=10&pageToken=
+[debug] [2026-05-22T09:53:37.072Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases 200
+[debug] [2026-05-22T09:53:37.073Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases {"releases":[{"name":"projects/deep-stream-ksc/releases/cloud.firestore","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e","createTime":"2023-05-01T05:19:53.476993Z","updateTime":"2026-05-14T04:38:06.379513Z"},{"name":"projects/deep-stream-ksc/releases/firebase.storage/deep-stream-ksc.appspot.com","rulesetName":"projects/deep-stream-ksc/rulesets/40eb6a7f-6ddc-41ec-a885-7505310afc2d","createTime":"2023-05-01T05:37:15.453280Z","updateTime":"2026-05-12T02:52:49.210651Z"}]}
+[debug] [2026-05-22T09:53:37.091Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.092Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.092Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e [none]
+[debug] [2026-05-22T09:53:37.621Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e 200
+[debug] [2026-05-22T09:53:37.621Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[info] i  firestore: deploying indexes... 
+[debug] [2026-05-22T09:53:37.624Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.625Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.625Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2026-05-22T09:53:37.716Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2026-05-22T09:53:37.716Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2026-05-22T09:53:37.716Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.717Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.717Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2026-05-22T09:53:37.790Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2026-05-22T09:53:37.790Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/deep-stream-ksc/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[debug] [2026-05-22T09:53:37.790Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.790Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:37.790Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) [none]
+[debug] [2026-05-22T09:53:37.861Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) 200
+[debug] [2026-05-22T09:53:37.861Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/deep-stream-ksc/databases/(default) {"name":"projects/deep-stream-ksc/databases/(default)","uid":"9cbebd60-9468-4a7e-b346-9c309d7a83d1","createTime":"2023-05-01T05:19:41.599782Z","updateTime":"2023-05-01T05:19:41.599782Z","locationId":"asia-northeast2","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-05-22T08:53:37.858944Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"u","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IPeG9oXQzJQDMOKLkfTw45ID"}
+[info] ✔  firestore: deployed indexes in firestore.indexes.json successfully for (default) database 
+[info] i  hosting[deep-stream-ksc]: beginning deploy... 
+[info] i  hosting[deep-stream-ksc]: found 13 files in build 
+[debug] [2026-05-22T09:53:37.876Z] [hosting] uploading with 200 concurrency
+[debug] [2026-05-22T09:53:38.147Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:38.147Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:38.148Z] [hosting] hash cache [YnVpbGQ] stored for 13 files
+[debug] [2026-05-22T09:53:38.148Z] [hosting][hash queue][FINAL] {"max":268,"min":4,"avg":28.23076923076923,"active":0,"complete":13,"success":13,"errored":0,"retried":0,"total":13,"elapsed":271}
+[debug] [2026-05-22T09:53:38.148Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568:populateFiles [none]
+[debug] [2026-05-22T09:53:38.148Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568:populateFiles {"files":{"/version.json":"9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35","/robots.txt":"391d14b3c2f8c9143a27a28c7399585142228d4d1bdbe2c87ac946de411fa9a2","/manifest.json":"3121e8cc6fffd26d67a2eb7c974d17e72b6d6b8ccedc527df86099eaf3f334be","/index.html":"945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a","/asset-manifest.json":"40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668","/404.html":"873dc261b356a4ed9bc1a72de2f8c7840388e6a9720fbc3cfd78eabca11cac9a","/static/js/main.c842ee71.js.LICENSE.txt":"4394fa3119762420f9839288ee79e973ebeab99790c82ea3a7ac6f7506025f92","/static/css/main.8f8ef930.css":"b3d5a7c571a20762f364ad75a3c8d9848d3ff6e23e089538a7575289a9610727","/static/css/main.8f8ef930.css.map":"d04b3fe5ad4f9c43f8dec27d8e8d8d1decef7d05db9c48accb14db8d12d56eb8","/DeepStreamICON.jpg":"d0762725ee8c912355d8d38a8af1bf83ea9e5a948fb638692c40dcfeed38c0c6","/static/media/2023部室利用規約.3c70d2a429919970d9ea.pdf":"da8f5c4ba9337fb46e571170cd84b7c19e419756e45655cc25a880f9c6fef1ad","/static/js/main.c842ee71.js":"8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b","/static/js/main.c842ee71.js.map":"46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428"}}
+[debug] [2026-05-22T09:53:39.162Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568:populateFiles 200
+[debug] [2026-05-22T09:53:39.163Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568:populateFiles {"uploadRequiredHashes":["945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a","40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668","8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b","46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428","9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files"}
+[debug] [2026-05-22T09:53:39.164Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.164Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.165Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.165Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.165Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.165Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.166Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.166Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.167Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.167Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:39.168Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a [none]
+[debug] [2026-05-22T09:53:39.168Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a [stream]
+[debug] [2026-05-22T09:53:39.170Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668 [none]
+[debug] [2026-05-22T09:53:39.170Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668 [stream]
+[debug] [2026-05-22T09:53:39.171Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b [none]
+[debug] [2026-05-22T09:53:39.172Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b [stream]
+[debug] [2026-05-22T09:53:39.173Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428 [none]
+[debug] [2026-05-22T09:53:39.173Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428 [stream]
+[debug] [2026-05-22T09:53:39.173Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35 [none]
+[debug] [2026-05-22T09:53:39.173Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35 [stream]
+[debug] [2026-05-22T09:53:39.174Z] [hosting][populate queue][FINAL] {"max":1020,"min":1020,"avg":1020,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1028}
+[debug] [2026-05-22T09:53:39.175Z] [hosting] uploads queued: 5
+[info] i  hosting: uploading new files [0/5] (0%) 
+[debug] [2026-05-22T09:53:40.604Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35 200
+[debug] [2026-05-22T09:53:40.604Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/9ead99335a4bda0c7590e13a57b180973434044bf90c08dd1900804cd3670f35 [stream]
+[debug] [2026-05-22T09:53:40.614Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a 200
+[debug] [2026-05-22T09:53:40.615Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/945d8ba3fb665af4e9caaa72a58180365676267b232d992a47aad4f8f809d43a [stream]
+[debug] [2026-05-22T09:53:40.771Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b 200
+[debug] [2026-05-22T09:53:40.771Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/8f4e452ab0ff3f83fbfacedd67a3d30869394f5b9406c00c2787c2371171ff9b [stream]
+[debug] [2026-05-22T09:53:40.772Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668 200
+[debug] [2026-05-22T09:53:40.772Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/40eb90156ad55a578cf2fe24f3dcf34722c308b90a8dd7033cb8e9e8531e1668 [stream]
+[debug] [2026-05-22T09:53:40.954Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428 200
+[debug] [2026-05-22T09:53:40.955Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/deep-stream-ksc/versions/849bf15354d17568/files/46a4917be7668c2b43d677a2dbb97969900e463b858b509060011ad0aef55428 [stream]
+[debug] [2026-05-22T09:53:40.955Z] [hosting][upload queue][FINAL] {"max":1789,"min":1439,"avg":1578.8,"active":0,"complete":5,"success":5,"errored":0,"retried":0,"total":5,"elapsed":1792}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[deep-stream-ksc]: file upload complete 
+[debug] [2026-05-22T09:53:40.956Z] [hosting] deploy completed after 3092ms
+[debug] [2026-05-22T09:53:40.956Z] [rules] releasing cloud.firestore/(default) with ruleset projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e
+[debug] [2026-05-22T09:53:40.957Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:40.957Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:40.957Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) [none]
+[debug] [2026-05-22T09:53:40.957Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) {"release":{"name":"projects/deep-stream-ksc/releases/cloud.firestore/(default)","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e"}}
+[debug] [2026-05-22T09:53:41.477Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) 200
+[debug] [2026-05-22T09:53:41.478Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/deep-stream-ksc/releases/cloud.firestore/(default) {"name":"projects/deep-stream-ksc/releases/cloud.firestore","rulesetName":"projects/deep-stream-ksc/rulesets/c72ce4f2-1872-4b2a-900f-4d1d16d1251e","createTime":"2023-05-01T05:19:53.476993Z","updateTime":"2026-05-22T09:53:41.376224Z"}
+[debug] [2026-05-22T09:53:41.478Z] [rules] updated release projects/deep-stream-ksc/releases/cloud.firestore
+[info] ✔  firestore: released rules firestore.rules to cloud.firestore 
+[debug] [2026-05-22T09:53:41.479Z] [
+  {
+    "config": {
+      "public": "build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "headers": [
+        {
+          "source": "/index.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/version.json",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/asset-manifest.json",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-store, no-cache, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        },
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600"
+            }
+          ]
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "deep-stream-ksc"
+    },
+    "version": "projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568"
+  }
+]
+[info] i  hosting[deep-stream-ksc]: finalizing version... 
+[debug] [2026-05-22T09:53:41.482Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:41.482Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:41.482Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/849bf15354d17568 updateMask=status%2Cconfig
+[debug] [2026-05-22T09:53:41.482Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/849bf15354d17568 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}],"headers":[{"glob":"/index.html","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"/version.json","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"/asset-manifest.json","headers":{"Cache-Control":"no-store, no-cache, must-revalidate"}},{"glob":"**/*.@(js|css)","headers":{"Cache-Control":"public, max-age=31536000, immutable"}},{"glob":"**","headers":{"Cache-Control":"public, max-age=3600"}}]}}
+[debug] [2026-05-22T09:53:42.128Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/849bf15354d17568 200
+[debug] [2026-05-22T09:53:42.128Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/versions/849bf15354d17568 {"name":"projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-22T09:53:34.829309Z","createUser":{"email":"deepstream.ksc@gmail.com"},"finalizeTime":"2026-05-22T09:53:41.980638Z","finalizeUser":{"email":"deepstream.ksc@gmail.com"}}
+[debug] [2026-05-22T09:53:42.128Z] [hosting] finalized version for deep-stream-ksc:[object Object]
+[info] ✔  hosting[deep-stream-ksc]: version finalized 
+[info] i  hosting[deep-stream-ksc]: releasing new version... 
+[debug] [2026-05-22T09:53:42.129Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:42.129Z] Checked if tokens are valid: true, expires at: 1779447210449
+[debug] [2026-05-22T09:53:42.129Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases versionName=projects%2F523585296072%2Fsites%2Fdeep-stream-ksc%2Fversions%2F849bf15354d17568
+[debug] [2026-05-22T09:53:42.129Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases {}
+[debug] [2026-05-22T09:53:42.910Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases 200
+[debug] [2026-05-22T09:53:42.910Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/deep-stream-ksc/channels/live/releases {"name":"projects/523585296072/sites/deep-stream-ksc/channels/live/releases/1779443622076000","version":{"name":"projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-22T09:53:34.829309Z","createUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"},"finalizeTime":"2026-05-22T09:53:41.980638Z","finalizeUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}},"type":"DEPLOY","releaseTime":"2026-05-22T09:53:42.076Z","releaseUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}}
+[debug] [2026-05-22T09:53:42.910Z] [hosting] release: {"name":"projects/523585296072/sites/deep-stream-ksc/channels/live/releases/1779443622076000","version":{"name":"projects/523585296072/sites/deep-stream-ksc/versions/849bf15354d17568","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/version.json"},{"headers":{"Cache-Control":"no-store, no-cache, must-revalidate"},"glob":"/asset-manifest.json"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"**/*.@(js|css)"},{"headers":{"Cache-Control":"public, max-age=3600"},"glob":"**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-22T09:53:34.829309Z","createUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"},"finalizeTime":"2026-05-22T09:53:41.980638Z","finalizeUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}},"type":"DEPLOY","releaseTime":"2026-05-22T09:53:42.076Z","releaseUser":{"email":"deepstream.ksc@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKL9UYaudyLcVGwVECoe7sJTzOmfkscfguP0J0Xw2fG8lW9vA=mo"}}
+[info] ✔  hosting[deep-stream-ksc]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/deep-stream-ksc/overview
+[info] Hosting URL: https://deep-stream-ksc.web.app

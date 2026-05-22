@@ -91,7 +91,7 @@ function HomePage() {
       }
 
       const docRef = doc(db, "Setting", "Reservation");
-      const docSnap = await getDoc(docRef, { source: "cache" });
+      const docSnap = await getDoc(docRef);
       const sunday = today.clone().startOf("week");
       if (docSnap.exists() && docSnap.data().LastResetDate === sunday.format("YYYYMMDD")) {
         return;
