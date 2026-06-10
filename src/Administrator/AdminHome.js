@@ -29,7 +29,7 @@ function AdminHome() {
                 </Button>
               </Link>
             ))}
-            <a href="https://github.com/DeepStream-KSC/deepstreamksc" className="block">
+            <a href="https://github.com/kamekingdom/deep-stream-ksc-app" className="block">
               <Button fullWidth variant="secondary">
                 ソースコード
               </Button>
