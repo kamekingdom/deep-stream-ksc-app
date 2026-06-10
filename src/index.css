@@ -24,6 +24,7 @@
     --input: 220 10% 84%;
     --ring: 193 78% 34%;
     --theme-glow: 8, 145, 178;
+    --app-font-size: 20px;
     --radius: 0.75rem;
   }
 
@@ -33,7 +34,7 @@
 
   html {
     @apply scroll-smooth;
-    font-size: 20px;
+    font-size: var(--app-font-size);
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
     overscroll-behavior-x: none;

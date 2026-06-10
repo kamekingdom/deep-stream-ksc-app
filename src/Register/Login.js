@@ -5,6 +5,7 @@ import { Header } from "../PageParts";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
+import { PasswordInput } from "../components/ui/password-input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { loginWithEmailFallback, useCurrentUser } from "../lib/session-auth";
@@ -91,8 +92,7 @@ function EmailLogin() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <Input
-        type="password"
+      <PasswordInput
         placeholder="パスワード"
         value={password}
         onChange={(e) => setPassword(e.target.value)}

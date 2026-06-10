@@ -9,6 +9,18 @@ const SESSION_EVENT = "deepstream:manual-session-changed";
 const FIRESTORE_LOGIN_TIMEOUT_MS = 8000;
 const MANUAL_SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 
+function normalizeEmailForLogin(email) {
+  return email.trim();
+}
+
+function getUserDocumentIdCandidates(email) {
+  const trimmedEmail = normalizeEmailForLogin(email);
+  const lowercaseEmail = trimmedEmail.toLowerCase();
+  return [trimmedEmail, lowercaseEmail].filter((candidate, index, candidates) => (
+    candidate && candidates.indexOf(candidate) === index
+  ));
+}
+
 function getStorage() {
   if (typeof window === "undefined") {
     return null;
@@ -154,24 +166,39 @@ function useCurrentUser() {
 }
 
 async function loginWithEmailFallback(email, password) {
-  const trimmedEmail = email.trim();
-  const userDoc = await withTimeout(
-    getDoc(doc(db, "users", trimmedEmail)),
-    FIRESTORE_LOGIN_TIMEOUT_MS,
-    "auth/firestore-timeout"
-  );
+  const userDocCandidates = getUserDocumentIdCandidates(email);
+  let userDoc = null;
+  let userDocId = null;
 
-  if (!userDoc.exists()) {
+  if (userDocCandidates.length === 0) {
+    throw createAuthLikeError("auth/invalid-email");
+  }
+
+  for (const candidate of userDocCandidates) {
+    const candidateDoc = await withTimeout(
+      getDoc(doc(db, "users", candidate)),
+      FIRESTORE_LOGIN_TIMEOUT_MS,
+      "auth/firestore-timeout"
+    );
+
+    if (candidateDoc.exists()) {
+      userDoc = candidateDoc;
+      userDocId = candidate;
+      break;
+    }
+  }
+
+  if (!userDoc?.exists()) {
     throw createAuthLikeError("auth/user-not-found");
   }
 
   const userData = userDoc.data();
-  if (userData.Password !== password) {
+  if (userData.Password == null || String(userData.Password) !== password) {
     throw createAuthLikeError("auth/wrong-password");
   }
 
-  writeManualSession(trimmedEmail);
-  return { email: trimmedEmail, isManualSession: true };
+  writeManualSession(userDocId);
+  return { email: userDocId, isManualSession: true };
 }
 
 async function signOutCurrentUser() {

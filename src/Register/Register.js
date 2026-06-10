@@ -8,6 +8,7 @@ import { auth } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
+import { PasswordInput } from "../components/ui/password-input";
 import { Page } from "../components/page";
 import { Spinner } from "../components/ui/spinner";
 import { defaultAppearance, serializeAppearanceForFirestore } from "../lib/appearance";
@@ -66,6 +67,7 @@ function EmailRegister() {
   const [isAlreadyUploaded, setIsAlreadyUploaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const firestore = getFirestore();
+  const normalizedEmail = email.trim().toLowerCase();
 
   const isStudentNumberExists = async (value) => {
     const studentNumberRef = query(
@@ -122,9 +124,9 @@ function EmailRegister() {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
       const userId = userCredential.user.uid;
-      const userDocRef = doc(firestore, "users", email);
+      const userDocRef = doc(firestore, "users", normalizedEmail);
       await setDoc(userDocRef, {
         PersonalName: personalName,
         PersonalNameFurigana: personalNameKana,
@@ -152,8 +154,7 @@ function EmailRegister() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
-          type="password"
+        <PasswordInput
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

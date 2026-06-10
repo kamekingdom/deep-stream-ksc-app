@@ -5,7 +5,7 @@ import { Footer, Header } from "../PageParts";
 import { db } from "../firebase";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Input } from "../components/ui/input";
+import { PasswordInput } from "../components/ui/password-input";
 import { Page, PageHero } from "../components/page";
 import {
   authorizeAdmin,
@@ -89,8 +89,7 @@ function AdminLogin() {
                 </>
               ) : (
                 <form className="space-y-4" onSubmit={handleUnlock}>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="管理者パスワード"

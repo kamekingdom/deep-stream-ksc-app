@@ -3,6 +3,11 @@
 # dependencies
 node_modules/
 
+# build outputs
+build/
+.firebase/
+firebase-debug.log
+
 # Expo
 .expo/
 dist/
@@ -30,6 +35,10 @@ yarn-error.*
 
 # local env files
 .env*.local
+
+# generated version files
+public/version.json
+src/generated/version.js
 
 # typescript
 *.tsbuildinfo

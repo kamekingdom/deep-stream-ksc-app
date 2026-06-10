@@ -67,6 +67,12 @@ const themeOptions = [
   },
 ];
 
+const textSizeOptions = [
+  { id: "large", label: "大", value: "24px" },
+  { id: "standard", label: "標準", value: "22px" },
+  { id: "small", label: "小", value: "20px" },
+];
+
 const iconOptions = [
   { id: "music", label: "音符", icon: Music2 },
   { id: "guitar", label: "ギター", icon: Guitar },
@@ -99,6 +105,7 @@ const defaultAppearance = {
   themeId: "ocean",
   profileIcon: "music",
   profileIconColor: "teal",
+  textSizeId: "small",
 };
 
 function getThemeOption(themeId) {
@@ -113,15 +120,21 @@ function getIconColorOption(colorId) {
   return iconColorOptions.find((option) => option.id === colorId) || iconColorOptions[0];
 }
 
+function getTextSizeOption(textSizeId) {
+  return textSizeOptions.find((option) => option.id === textSizeId) || textSizeOptions[2];
+}
+
 function sanitizeAppearance(rawAppearance = {}) {
   const themeId = rawAppearance.themeId || rawAppearance.ThemeId;
   const profileIcon = rawAppearance.profileIcon || rawAppearance.ProfileIcon;
   const profileIconColor = rawAppearance.profileIconColor || rawAppearance.ProfileIconColor;
+  const textSizeId = rawAppearance.textSizeId || rawAppearance.TextSizeId;
 
   return {
     themeId: getThemeOption(themeId).id,
     profileIcon: getIconOption(profileIcon).id,
     profileIconColor: getIconColorOption(profileIconColor).id,
+    textSizeId: getTextSizeOption(textSizeId).id,
   };
 }
 
@@ -132,6 +145,7 @@ function serializeAppearanceForFirestore(appearance) {
     ThemeId: nextAppearance.themeId,
     ProfileIcon: nextAppearance.profileIcon,
     ProfileIconColor: nextAppearance.profileIconColor,
+    TextSizeId: nextAppearance.textSizeId,
   };
 }
 
@@ -168,12 +182,14 @@ function applyAppearanceToDocument(appearance) {
 
   const nextAppearance = sanitizeAppearance(appearance);
   const theme = getThemeOption(nextAppearance.themeId);
+  const textSize = getTextSizeOption(nextAppearance.textSizeId);
   const root = document.documentElement;
 
   root.style.setProperty("--primary", theme.values.primary);
   root.style.setProperty("--accent", theme.values.accent);
   root.style.setProperty("--ring", theme.values.ring);
   root.style.setProperty("--theme-glow", theme.values.themeGlow);
+  root.style.setProperty("--app-font-size", textSize.value);
 }
 
 function dispatchAppearanceChange() {
@@ -188,9 +204,11 @@ export {
   APPEARANCE_EVENT,
   defaultAppearance,
   themeOptions,
+  textSizeOptions,
   iconOptions,
   iconColorOptions,
   getThemeOption,
+  getTextSizeOption,
   getIconOption,
   getIconColorOption,
   sanitizeAppearance,

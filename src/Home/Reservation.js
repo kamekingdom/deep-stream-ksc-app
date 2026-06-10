@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { Ban, Circle, Clock3, Star, X } from "lucide-react";
@@ -35,7 +35,11 @@ function StatusBadge({ variant = "default", icon, label, className = "" }) {
 function Reservation() {
   const [user, userLoading] = useCurrentUser();
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
   const reservationInfo = useContext(ReservationContext);
+  const pullStartYRef = useRef(null);
+  const canPullRef = useRef(false);
 
   const currentDate = new Date();
   const currentDayIndex = currentDate.getDay();
@@ -48,33 +52,81 @@ function Reservation() {
     isAvailableReservationDay.push(i > dayOfWeekStrIndex - 1);
   }
 
-  useEffect(() => {
+  const findFirestoreData = useCallback(async (showLoadingSpinner = false) => {
     if (!user) {
       setLoading(false);
+      setIsRefreshing(false);
       return;
     }
 
-    async function findFirestoreData() {
-      try {
-        const newData = await Promise.all(
-          WEEK_DAY_LIST.map(async (weekday) =>
-            Promise.all(
-              TIME_SLOT_LIST.map(async (slot) => {
-                const docRef = doc(db, weekday, slot);
-                const docSnap = await getDoc(docRef);
-                return docSnap.exists() ? docSnap.data() : null;
-              })
-            )
-          )
-        );
-        setReserve(newData);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
+    if (showLoadingSpinner) {
+      setLoading(true);
     }
-    findFirestoreData();
+
+    try {
+      const newData = await Promise.all(
+        WEEK_DAY_LIST.map(async (weekday) =>
+          Promise.all(
+            TIME_SLOT_LIST.map(async (slot) => {
+              const docRef = doc(db, weekday, slot);
+              const docSnap = await getDoc(docRef);
+              return docSnap.exists() ? docSnap.data() : null;
+            })
+          )
+        )
+      );
+      setReserve(newData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+      setPullDistance(0);
+    }
   }, [user]);
+
+  useEffect(() => {
+    findFirestoreData(true);
+  }, [findFirestoreData]);
+
+  const handleTouchStart = (event) => {
+    if (loading || isRefreshing || window.scrollY > 4) {
+      canPullRef.current = false;
+      pullStartYRef.current = null;
+      return;
+    }
+
+    pullStartYRef.current = event.touches[0].clientY;
+    canPullRef.current = true;
+  };
+
+  const handleTouchMove = (event) => {
+    if (!canPullRef.current || pullStartYRef.current === null) {
+      return;
+    }
+
+    const distance = event.touches[0].clientY - pullStartYRef.current;
+    if (distance <= 0) {
+      setPullDistance(0);
+      return;
+    }
+
+    setPullDistance(Math.min(distance, 96));
+  };
+
+  const handleTouchEnd = async () => {
+    const shouldRefresh = pullDistance >= 72 && !isRefreshing;
+    pullStartYRef.current = null;
+    canPullRef.current = false;
+
+    if (!shouldRefresh) {
+      setPullDistance(0);
+      return;
+    }
+
+    setIsRefreshing(true);
+    await findFirestoreData(false);
+  };
 
   if (!userLoading && !user) {
     return <Navigate to="/login" replace />;
@@ -180,73 +232,88 @@ function Reservation() {
         {loading ? (
           <Spinner label="予約状況を読み込んでいます..." />
         ) : (
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between gap-3 p-5 sm:p-6">
-              <div className="space-y-3">
-                <CardTitle className="leading-none">部室予約</CardTitle>
-                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:text-base">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Circle className="h-4 w-4 text-primary" strokeWidth={2.2} />
-                    予約可能
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <X className="h-4 w-4 text-destructive" strokeWidth={2.4} />
-                    予約済み
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Clock3 className="h-4 w-4" strokeWidth={2.2} />
-                    締切
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Ban className="h-4 w-4" strokeWidth={2.2} />
-                    予約不可
-                  </span>
-                </div>
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+          >
+            <div
+              className="flex items-end justify-center overflow-hidden transition-[height] duration-150 ease-out"
+              style={{ height: `${pullDistance}px` }}
+            >
+              <div className="pb-3 text-center text-sm font-semibold text-muted-foreground">
+                {isRefreshing ? "更新しています..." : pullDistance >= 72 ? "指を離して更新" : "下に引っ張って更新"}
               </div>
-              <a href={termsOfServicePdf} target="_blank" rel="noopener noreferrer" className="shrink-0">
-                <Button variant="secondary">
-                  利用規約
-                </Button>
-              </a>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <colgroup>
-                  <col style={{ width: "20%" }} />
-                  {DAY_OF_WEEK_LIST.map((weekday) => (
-                    <col key={weekday} style={{ width: `${80 / DAY_OF_WEEK_LIST.length}%` }} />
-                  ))}
-                </colgroup>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[20%]">時間帯</TableHead>
+            </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between gap-3 p-5 sm:p-6">
+                <div className="space-y-3">
+                  <CardTitle className="leading-none">部室予約</CardTitle>
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:text-base">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Circle className="h-4 w-4 text-primary" strokeWidth={2.2} />
+                      予約可能
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <X className="h-4 w-4 text-destructive" strokeWidth={2.4} />
+                      予約済み
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock3 className="h-4 w-4" strokeWidth={2.2} />
+                      締切
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Ban className="h-4 w-4" strokeWidth={2.2} />
+                      予約不可
+                    </span>
+                  </div>
+                </div>
+                <a href={termsOfServicePdf} target="_blank" rel="noopener noreferrer" className="shrink-0">
+                  <Button variant="secondary">
+                    利用規約
+                  </Button>
+                </a>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Table>
+                  <colgroup>
+                    <col style={{ width: "20%" }} />
                     {DAY_OF_WEEK_LIST.map((weekday) => (
-                      <TableHead key={weekday} className="text-center">{weekday}</TableHead>
+                      <col key={weekday} style={{ width: `${80 / DAY_OF_WEEK_LIST.length}%` }} />
                     ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {TIME_SLOT_LIST.map((timeSlot, slotIndex) => (
-                    <TableRow key={timeSlot}>
-                      <TableCell className="text-left">
-                        <div className="font-bold leading-tight text-[1.2rem] sm:text-[1.35rem]">
-                          {timeSlot}
-                        </div>
-                        <div className="mt-1 text-[0.78rem] font-medium leading-tight text-muted-foreground sm:text-[0.9rem]">
-                          {TIME_LIST[slotIndex]}
-                        </div>
-                      </TableCell>
-                      {DAY_OF_WEEK_LIST.map((weekday, weekdayIndex) => (
-                        <TableCell key={`${weekday}-${timeSlot}`} className="text-center">
-                          {renderCell(weekday, weekdayIndex, timeSlot, slotIndex)}
-                        </TableCell>
+                  </colgroup>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[20%]">時間帯</TableHead>
+                      {DAY_OF_WEEK_LIST.map((weekday) => (
+                        <TableHead key={weekday} className="text-center">{weekday}</TableHead>
                       ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                  </TableHeader>
+                  <TableBody>
+                    {TIME_SLOT_LIST.map((timeSlot, slotIndex) => (
+                      <TableRow key={timeSlot}>
+                        <TableCell className="text-left">
+                          <div className="font-bold leading-tight text-[1.2rem] sm:text-[1.35rem]">
+                            {timeSlot}
+                          </div>
+                          <div className="mt-1 text-[0.78rem] font-medium leading-tight text-muted-foreground sm:text-[0.9rem]">
+                            {TIME_LIST[slotIndex]}
+                          </div>
+                        </TableCell>
+                        {DAY_OF_WEEK_LIST.map((weekday, weekdayIndex) => (
+                          <TableCell key={`${weekday}-${timeSlot}`} className="text-center">
+                            {renderCell(weekday, weekdayIndex, timeSlot, slotIndex)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </Page>
       <Footer />
