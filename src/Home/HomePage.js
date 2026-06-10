@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  writeBatch,
-} from "firebase/firestore";
-import moment from "moment";
 import packageInfo from "../../package.json";
 import { Footer, Header } from "../PageParts";
-import { db } from "../firebase";
 import useIsMobile from "../function/isMobile";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -27,104 +16,6 @@ function HomePage() {
     }, 1800);
 
     return () => clearTimeout(timeoutId);
-  }, []);
-
-  async function addReservations() {
-    let batch = writeBatch(db);
-    let batchSize = 0;
-    const maxBatchSize = 500;
-    const schedulesSnapshot = await getDocs(collection(db, "ReservationSchedules"));
-
-    for (const scheduleDoc of schedulesSnapshot.docs) {
-      const day = scheduleDoc.id;
-      const { Reservations } = scheduleDoc.data();
-
-      for (const reservation of Reservations) {
-        const { TemplateID, TimeSlots } = reservation;
-        const templateDoc = await getDoc(doc(db, "ReservationTemplate", TemplateID));
-        if (!templateDoc.exists()) {
-          continue;
-        }
-
-        const templateData = templateDoc.data();
-
-        for (const timeSlot of TimeSlots) {
-          const reservationDoc = doc(db, day, timeSlot);
-          batch.set(reservationDoc, {
-            ...templateData,
-            TimeSlot: timeSlot,
-            WeekDay: day,
-            ReservationNum: 0,
-          });
-
-          batchSize++;
-          if (batchSize >= maxBatchSize) {
-            await batch.commit();
-            batch = writeBatch(db);
-            batchSize = 0;
-          }
-        }
-      }
-    }
-
-    if (batchSize > 0) {
-      await batch.commit();
-    }
-  }
-
-  async function deleteReservationSettings() {
-    try {
-      const settingsSnapshot = await getDocs(collection(db, "ReservationSettings"));
-      const deleteOps = settingsSnapshot.docs.map(async (docItem) => deleteDoc(docItem.ref));
-      await Promise.all(deleteOps);
-    } catch (error) {
-      console.error("ReservationSettingsの削除中にエラーが発生しました:", error);
-    }
-  }
-
-  useEffect(() => {
-    async function fetchFirestoreData() {
-      const today = moment();
-      const dayOfWeek = today.day();
-      if (dayOfWeek !== 0 && dayOfWeek !== 1 && dayOfWeek !== 2) {
-        return;
-      }
-
-      const docRef = doc(db, "Setting", "Reservation");
-      const docSnap = await getDoc(docRef);
-      const sunday = today.clone().startOf("week");
-      if (docSnap.exists() && docSnap.data().LastResetDate === sunday.format("YYYYMMDD")) {
-        return;
-      }
-
-      const batch = writeBatch(db);
-      const settingRef = doc(db, "Setting", "Reservation");
-      batch.set(settingRef, { LastResetDate: sunday.format("YYYYMMDD") });
-      const usersRef = collection(db, "users");
-      const reservationNumQuery = query(usersRef);
-      const userDocs = await getDocs(reservationNumQuery);
-      userDocs.forEach((docItem) => {
-        batch.update(docItem.ref, { ReservationNum: 0 });
-      });
-
-      const deleteOps = [];
-      const weekDayList = ["月", "火", "水", "木", "金", "土", "日"];
-      const timeSlotList = ["朝練", "１限", "チャペル", "２限", "昼練", "３限", "４限", "５限", "夜練Ⅰ", "夜練Ⅱ"];
-
-      weekDayList.forEach((weekday) => {
-        timeSlotList.forEach((timeslot) => {
-          const docToDelete = doc(db, weekday, timeslot);
-          deleteOps.push(deleteDoc(docToDelete));
-        });
-      });
-
-      await Promise.all(deleteOps);
-      await batch.commit();
-      await addReservations();
-      await deleteReservationSettings();
-    }
-
-    fetchFirestoreData();
   }, []);
 
   if (show) {
