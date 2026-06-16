@@ -1,4 +1,4 @@
-import { signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -167,11 +167,26 @@ function useCurrentUser() {
 
 async function loginWithEmailFallback(email, password) {
   const userDocCandidates = getUserDocumentIdCandidates(email);
+  let firebaseLoginError = null;
   let userDoc = null;
   let userDocId = null;
 
   if (userDocCandidates.length === 0) {
     throw createAuthLikeError("auth/invalid-email");
+  }
+
+  for (const candidate of userDocCandidates) {
+    try {
+      const userCredential = await withTimeout(
+        signInWithEmailAndPassword(auth, candidate, password),
+        FIRESTORE_LOGIN_TIMEOUT_MS,
+        "auth/request-timeout"
+      );
+      clearManualSession();
+      return userCredential.user;
+    } catch (error) {
+      firebaseLoginError = error;
+    }
   }
 
   for (const candidate of userDocCandidates) {
@@ -194,7 +209,7 @@ async function loginWithEmailFallback(email, password) {
 
   const userData = userDoc.data();
   if (userData.Password == null || String(userData.Password) !== password) {
-    throw createAuthLikeError("auth/wrong-password");
+    throw firebaseLoginError || createAuthLikeError("auth/wrong-password");
   }
 
   writeManualSession(userDocId);

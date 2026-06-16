@@ -77,7 +77,7 @@ function EmailLogin() {
     try {
       await loginWithEmailFallback(email, password);
     } catch (error) {
-      console.error("Fallback login failed:", error);
+      console.error("Email login failed:", error);
       setError(translateFirebaseError(error?.code));
     } finally {
       setIsSubmitting(false);
